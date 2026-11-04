@@ -1,0 +1,35 @@
+{
+  "//": "Einstellungen der Vorschau-Fabrik. Die Agentur-Angaben erscheinen in Briefen und im Demo-Banner der Entwürfe – bitte prüfen.",
+  "agentur": {
+    "name": "Steinhauer Media",
+    "claim": "Webdesign · Konstanz / Bodensee",
+    "ansprechpartner": "Lennert Dockweiler",
+    "strasse": "Von-Emmich-Str. 6b",
+    "plz": "78467",
+    "ort": "Konstanz",
+    "telefon": "+49 152 23657154",
+    "email": "info@steinhauermedia.de",
+    "website": "https://steinhauermedia.de",
+    "datenschutzUrl": "https://steinhauermedia.de/datenschutz/",
+    "ustId": ""
+  },
+  "template": {
+    "pfad": "../../handwerker-template",
+    "//pfad": "Ordner des handwerker-templates (relativ zu diesem Ordner oder absolut). Alternativ Umgebungsvariable FABRIK_TEMPLATE."
+  },
+  "vorschau": {
+    "region": "",
+    "//region": "Standard-Region mit Präposition, z. B. \"am Bodensee\". Pro Lauf überschreibbar mit --region.",
+    "radiusKm": 25,
+    "anzahl": 10,
+    "maxScore": 60,
+    "loeschenNachWochen": 6
+  },
+  "brief": {
+    "anrede": "auto",
+    "//anrede": "auto = „Guten Tag Vorname Nachname“, wenn der Inhaber im Impressum steht, sonst „Sehr geehrte Damen und Herren“. neutral = immer Letzteres.",
+    "unterschrift": "",
+    "//unterschrift": "Optional: Pfad zu einer PNG-Unterschrift (transparent), z. B. ./unterschrift.png"
+  },
+  "sperrliste": "./sperrliste.txt"
+}

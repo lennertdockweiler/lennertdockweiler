@@ -1,0 +1,3 @@
+# Betriebe, die der Werbung widersprochen haben (Art. 21 DSGVO) – werden nie wieder angeschrieben.
+# Eine Zeile pro Betrieb: Name | PLZ (PLZ optional). Datei als sperrliste.txt speichern und dauerhaft aufbewahren.
+Malerbetrieb Beispiel GmbH | 78462

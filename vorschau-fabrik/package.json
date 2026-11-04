@@ -1,0 +1,20 @@
+{
+  "name": "vorschau-fabrik",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Vom Lead zur fertigen Demo-Website und zum Brief – automatisch, auf Basis des handwerker-templates.",
+  "engines": { "node": ">=20" },
+  "bin": { "fabrik": "./src/cli.mjs" },
+  "scripts": {
+    "fabrik": "node src/cli.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1",
+    "qrcode": "^1.5.4"
+  },
+  "optionalDependencies": {
+    "playwright": "^1.50.0"
+  }
+}
