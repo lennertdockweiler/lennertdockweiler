@@ -1,0 +1,1736 @@
+<title>Lennerts Reiseplaner</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Overpass:wght@400;500;600;700&family=Overpass+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: App-Shell. Handy: Reisen-Liste und Reise-Detail als zwei Ansichten, Tabs unten fixiert.
+   Desktop ab 960px: links Abflugtafel + Reisen, rechts die gewählte Reise mit Tabs oben. */
+:root {
+  --bg: #ECEFF4;
+  --surface: #FFFFFF;
+  --surface-2: #F3F5F9;
+  --ink: #0F1B2D;
+  --muted: #566176;
+  --faint: #8792A5;
+  --line: #D7DDE7;
+  --board: #0E2241;
+  --board-2: #19335E;
+  --board-ink: #E7EDF7;
+  --board-dim: #93A6C8;
+  --board-line: #2A4573;
+  --flap: #FFC52E;
+  --btn: #0E2241;
+  --btn-ink: #FFFFFF;
+  --link: #1C4DB5;
+  --focus: #2C66F0;
+  --ok: #1B7346; --ok-bg: #E1F2E7;
+  --warn: #8A5000; --warn-bg: #FCEFD5;
+  --bad: #B3261E; --bad-bg: #FBE8E6; --bad-ink: #FFFFFF;
+  --tag-move: #1C4DB5; --tag-move-bg: #E3EAF8;
+  --tag-stay: #1B7346; --tag-stay-bg: #E1F2E7;
+  --tag-do: #8A5000; --tag-do-bg: #FCEFD5;
+  --tag-note: #4D586A; --tag-note-bg: #E8ECF2;
+  --scrim: rgb(15 27 45 / .45);
+  --toast-bg: #0F1B2D; --toast-ink: #FFFFFF;
+  --shadow: 0 1px 2px rgb(15 27 45 / .06), 0 12px 32px rgb(15 27 45 / .12);
+  --font-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --font-body: "Overpass", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Overpass Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0A101B; --surface: #111A29; --surface-2: #172234; --ink: #E5EBF4; --muted: #9DA9BC; --faint: #6E7A8F; --line: #243149;
+    --board: #10264A; --board-2: #1B375F; --board-ink: #E7EDF7; --board-dim: #93A6C8; --board-line: #2E4C7C; --flap: #FFC93D;
+    --btn: #FFC93D; --btn-ink: #0E2241; --link: #8DB2FF; --focus: #8DB2FF;
+    --ok: #5CC48C; --ok-bg: #12301F; --warn: #F2B65A; --warn-bg: #33250C; --bad: #FF8A80; --bad-bg: #3A1512; --bad-ink: #2A0B08;
+    --tag-move: #9BB9FF; --tag-move-bg: #18284A; --tag-stay: #6FD09B; --tag-stay-bg: #12301F; --tag-do: #F2B65A; --tag-do-bg: #33250C; --tag-note: #B4BECD; --tag-note-bg: #1E293A;
+    --scrim: rgb(0 0 0 / .6); --toast-bg: #E5EBF4; --toast-ink: #0F1B2D;
+    --shadow: 0 1px 2px rgb(0 0 0 / .4), 0 12px 32px rgb(0 0 0 / .4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0A101B; --surface: #111A29; --surface-2: #172234; --ink: #E5EBF4; --muted: #9DA9BC; --faint: #6E7A8F; --line: #243149;
+  --board: #10264A; --board-2: #1B375F; --board-ink: #E7EDF7; --board-dim: #93A6C8; --board-line: #2E4C7C; --flap: #FFC93D;
+  --btn: #FFC93D; --btn-ink: #0E2241; --link: #8DB2FF; --focus: #8DB2FF;
+  --ok: #5CC48C; --ok-bg: #12301F; --warn: #F2B65A; --warn-bg: #33250C; --bad: #FF8A80; --bad-bg: #3A1512; --bad-ink: #2A0B08;
+  --tag-move: #9BB9FF; --tag-move-bg: #18284A; --tag-stay: #6FD09B; --tag-stay-bg: #12301F; --tag-do: #F2B65A; --tag-do-bg: #33250C; --tag-note: #B4BECD; --tag-note-bg: #1E293A;
+  --scrim: rgb(0 0 0 / .6); --toast-bg: #E5EBF4; --toast-ink: #0F1B2D;
+  --shadow: 0 1px 2px rgb(0 0 0 / .4), 0 12px 32px rgb(0 0 0 / .4);
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+h1, h2, h3, p, ul, dl, dd { margin: 0; }
+ul { padding: 0; list-style: none; }
+h1, h2, h3 { text-wrap: balance; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--link); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.icon { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.pad { padding: 16px 4px; }
+.hint { color: var(--muted); font-size: 13.5px; }
+.sec-h { display: flex; align-items: baseline; gap: 8px; font-family: var(--font-display); font-weight: 600; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.sec-h .mono { letter-spacing: 0; font-size: 12px; color: var(--faint); }
+
+/* Felder */
+input:not([type=checkbox]):not([type=radio]):not([type=file]), select, textarea {
+  width: 100%; min-height: 44px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 9px;
+  background: var(--surface); color: var(--ink); font-size: 16px;
+}
+textarea { min-height: auto; resize: vertical; line-height: 1.45; }
+input::placeholder, textarea::placeholder { color: var(--faint); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 0 14px;
+  border-radius: 9px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  font-weight: 600; font-size: 14.5px; line-height: 1; cursor: pointer; white-space: nowrap; transition: border-color .15s, filter .15s;
+}
+.btn:hover { border-color: var(--faint); }
+.btn.primary { background: var(--btn); color: var(--btn-ink); border-color: transparent; }
+.btn.primary:hover { filter: brightness(1.1); }
+.btn.small { min-height: 34px; padding: 0 11px; font-size: 13.5px; }
+.btn.ghost { background: transparent; border-color: transparent; color: var(--link); }
+.btn.danger { color: var(--bad); }
+.btn.danger-fill { background: var(--bad); color: var(--bad-ink); border-color: transparent; }
+.btn:disabled { opacity: .5; cursor: default; filter: none; }
+.btn .icon { width: 18px; height: 18px; }
+.icon-btn { display: inline-grid; place-items: center; width: 42px; height: 42px; border-radius: 9px; border: 0; background: transparent; color: var(--ink); cursor: pointer; flex: none; }
+.icon-btn:hover { background: var(--surface-2); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* App-Shell */
+.app { max-width: 1240px; margin: 0 auto; padding-block: 8px 28px; }
+.side, .main { min-width: 0; }
+.app[data-view="list"] .main { display: none; }
+.app[data-view="trip"] .side { display: none; }
+.brand { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; }
+.wordmark { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 23px; letter-spacing: .08em; text-transform: uppercase; }
+.gate { width: 24px; height: 24px; border-radius: 6px; background: var(--board); display: grid; place-items: center; }
+.gate::before { content: ""; width: 9px; height: 9px; border-radius: 2px; background: var(--flap); }
+.ro-chip { font-size: 12.5px; font-weight: 600; color: var(--warn); background: var(--warn-bg); padding: 4px 9px; border-radius: 99px; }
+
+/* Abflugtafel */
+.board { background: var(--board); color: var(--board-ink); border-radius: 14px; padding: 14px 16px 16px; box-shadow: var(--shadow); }
+.board-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-family: var(--font-display); font-weight: 600; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--board-dim); }
+.board-clock { letter-spacing: .04em; font-size: 13px; color: var(--flap); }
+.board-main { display: flex; align-items: center; gap: 14px; width: 100%; margin-top: 10px; padding: 0; border: 0; background: none; color: inherit; text-align: left; cursor: pointer; border-radius: 8px; }
+.board-main.is-empty { cursor: default; }
+.board-dest { font-family: var(--font-display); font-weight: 600; font-size: 26px; line-height: 1.05; text-transform: uppercase; letter-spacing: .04em; min-width: 0; overflow-wrap: anywhere; }
+.board-row { display: flex; justify-content: space-between; gap: 6px 12px; flex-wrap: wrap; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--board-line); font-size: 14px; color: var(--board-dim); }
+.board-count { color: var(--flap); font-weight: 600; }
+.board-sub { margin-top: 10px; font-size: 13.5px; color: var(--board-dim); }
+.flaps { display: inline-flex; gap: 3px; font-size: 42px; flex: none; }
+.flap { position: relative; display: inline-grid; place-items: center; width: 1em; height: 1.28em; border-radius: 5px; background: var(--board-2); color: var(--flap); font-family: var(--font-mono); font-weight: 600; line-height: 1; }
+.flap::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--board); }
+
+/* Reisen-Liste */
+.side-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-block: 14px 4px; }
+.trips .sec-h { margin: 18px 4px 8px; }
+.rows, .day-rows, .pk-list, .ex-list { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.trip-row { display: grid; grid-template-columns: 50px 40px minmax(0, 1fr) auto; align-items: center; gap: 10px; width: 100%; padding: 12px 14px; border: 0; border-top: 1px solid var(--line); background: transparent; text-align: left; cursor: pointer; }
+.rows > :first-child { border-top: 0; }
+.trip-row:hover, .trip-row.is-sel { background: var(--surface-2); }
+.trip-row.is-sel .tr-title { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; text-decoration-color: var(--flap); }
+.tr-date { font-size: 13.5px; color: var(--muted); }
+.tr-code { font-weight: 600; font-size: 15px; letter-spacing: .06em; }
+.tr-name { display: flex; flex-direction: column; min-width: 0; }
+.tr-title { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tr-name small { color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tr-st { font-size: 12.5px; font-weight: 600; padding: 3px 8px; border-radius: 99px; background: var(--surface-2); color: var(--muted); white-space: nowrap; }
+.st-now .tr-st { background: var(--ok-bg); color: var(--ok); }
+.st-soon .tr-st { background: var(--tag-move-bg); color: var(--tag-move); }
+.st-past { opacity: .72; }
+.ex { font-style: normal; font-size: 11.5px; font-weight: 600; color: var(--warn); background: var(--warn-bg); padding: 1px 6px; border-radius: 4px; }
+.stale { font-size: 13px; color: var(--warn); margin: 8px 4px 0; }
+
+/* Reise-Kopf */
+.trip-bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; display: flex; align-items: center; gap: 4px; min-height: 52px; background: var(--bg); margin-inline: -8px; }
+.bar-title { flex: 1; min-width: 0; font-weight: 700; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.th { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px 14px; align-items: center; padding-block: 4px 14px; }
+.th-flaps { font-size: 26px; }
+.th-main h1 { font-family: var(--font-display); font-weight: 700; font-size: 30px; line-height: 1.02; letter-spacing: .01em; overflow-wrap: anywhere; }
+.th-meta { color: var(--muted); margin-top: 4px; font-size: 14px; }
+.th-people { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; margin-top: 2px; }
+.th-people .icon { width: 16px; height: 16px; }
+.th-side { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.st-chip { display: inline-block; font-size: 13px; font-weight: 600; padding: 5px 10px; border-radius: 99px; background: var(--tag-move-bg); color: var(--tag-move); }
+.st-chip.st-now { background: var(--ok-bg); color: var(--ok); }
+.st-chip.st-past, .st-chip.st-open { background: var(--surface-2); color: var(--muted); }
+.th-edit { display: none; }
+.example-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: var(--warn-bg); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+
+/* Tabs: Handy unten fixiert */
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; display: grid; grid-template-columns: repeat(4, 1fr); background: var(--surface); border-top: 1px solid var(--line);
+  padding: 4px max(16px, env(safe-area-inset-right, 0px)) calc(4px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.tabs button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 54px; border: 0; background: none; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; border-radius: 10px; }
+.tabs button[aria-selected="true"] { color: var(--ink); }
+.tabs button[aria-selected="true"] .icon { stroke-width: 2.3; }
+.tabs small { display: none; }
+#tripView { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+.tab-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.tab-actions .btn.primary { flex: 1 1 100%; }
+.tab-actions .btn:not(.primary) { flex: 1 1 0; }
+
+/* Ablauf */
+.day { margin-bottom: 18px; }
+.day-h { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; padding: 0 2px 8px; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: .1em; font-size: 15px; }
+.day-n { color: var(--faint); font-size: 13px; letter-spacing: .12em; }
+.today { font-family: var(--font-body); text-transform: none; letter-spacing: 0; font-size: 12px; font-weight: 700; color: var(--ok); background: var(--ok-bg); padding: 2px 8px; border-radius: 99px; }
+.tl-row { display: grid; grid-template-columns: 44px 54px minmax(0, 1fr) auto; align-items: start; gap: 10px; width: 100%; padding: 12px 14px; border: 0; border-top: 1px solid var(--line); background: transparent; text-align: left; cursor: pointer; }
+.day-rows > :first-child { border-top: 0; }
+.tl-row:hover { background: var(--surface-2); }
+.tl-time { font-size: 14.5px; font-weight: 600; padding-top: 1px; }
+.allday { color: var(--faint); font-weight: 400; }
+.tag { display: inline-flex; justify-content: center; align-items: center; font-family: var(--font-display); font-weight: 600; font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; line-height: 1.25; margin-top: 1px; }
+.g-move { color: var(--tag-move); background: var(--tag-move-bg); }
+.g-stay { color: var(--tag-stay); background: var(--tag-stay-bg); }
+.g-do { color: var(--tag-do); background: var(--tag-do-bg); }
+.g-note { color: var(--tag-note); background: var(--tag-note-bg); }
+.tl-body { display: flex; flex-direction: column; min-width: 0; }
+.tl-title { font-weight: 600; overflow-wrap: anywhere; }
+.tl-sub { color: var(--muted); font-size: 13.5px; overflow-wrap: anywhere; }
+.tl-code { font-size: 12.5px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 5px; padding: 2px 6px; letter-spacing: .04em; margin-top: 1px; }
+.tl-free { display: block; width: 100%; padding: 12px 14px; border: 0; background: transparent; color: var(--faint); text-align: left; font-size: 14px; }
+button.tl-free { cursor: pointer; }
+button.tl-free:hover { color: var(--link); }
+
+/* Packliste */
+.prog { margin-bottom: 12px; }
+.prog-top { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+.bar { height: 8px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.bar span { display: block; height: 100%; background: var(--ok); border-radius: 99px; transition: width .3s; }
+.pack-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 132px) auto; gap: 8px; margin-bottom: 10px; }
+.pack-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: 16px; }
+.toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); cursor: pointer; }
+.toggle input { width: 18px; height: 18px; accent-color: var(--btn); }
+.pk-cat { margin-bottom: 16px; }
+.pk-cat .sec-h { margin: 0 2px 8px; }
+.pk-row { display: flex; align-items: center; gap: 4px; border-top: 1px solid var(--line); padding-right: 4px; }
+.pk-list > li:first-child { border-top: 0; }
+.pk-check { position: relative; flex: 1; display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 6px 12px; cursor: pointer; min-width: 0; }
+.pk-check input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.box { width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--faint); display: grid; place-items: center; flex: none; color: transparent; transition: background .15s, border-color .15s; }
+.box .icon { width: 16px; height: 16px; stroke-width: 2.8; }
+.pk-check input:checked + .box { background: var(--ok); border-color: var(--ok); color: var(--surface); }
+.pk-check input:focus-visible + .box { outline: 2px solid var(--focus); outline-offset: 2px; }
+.pk-text { overflow-wrap: anywhere; }
+.is-done .pk-text { color: var(--faint); text-decoration: line-through; }
+.pk-del { width: 36px; height: 36px; color: var(--faint); }
+
+/* Kosten */
+.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.tile span { font-size: 12.5px; color: var(--muted); font-family: var(--font-display); letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
+.tile b { font-size: 20px; overflow-wrap: anywhere; }
+.settle { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; display: grid; gap: 4px; }
+.settle li { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 8px 0; border-top: 1px dashed var(--line); }
+.settle li:first-child { border-top: 0; }
+.settle-h { margin-bottom: 2px; }
+.ex-row { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 10px; align-items: center; width: 100%; padding: 12px 14px; border: 0; border-top: 1px solid var(--line); background: transparent; text-align: left; cursor: pointer; }
+.ex-list > li:first-child .ex-row { border-top: 0; }
+.ex-row:hover { background: var(--surface-2); }
+.ex-main { display: flex; flex-direction: column; min-width: 0; }
+.ex-main span { font-weight: 600; overflow-wrap: anywhere; }
+.ex-main small { color: var(--muted); font-size: 13px; }
+.ex-amt { font-weight: 600; }
+.ex-date { font-size: 13px; color: var(--muted); }
+
+/* Infos */
+.info-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin-bottom: 12px; display: grid; gap: 10px; }
+.kv { display: grid; gap: 8px; }
+.kv > div { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 10px; }
+.kv dt { color: var(--muted); font-size: 13.5px; }
+.kv dd { overflow-wrap: anywhere; white-space: pre-line; }
+.danger-zone { padding-top: 4px; }
+
+/* Leere Zustände, Hinweise */
+.empty-card { background: var(--surface); border: 1px dashed var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 8px; }
+.empty-card h3 { font-size: 17px; }
+.empty-card p { color: var(--muted); }
+.trip-empty { padding-block: 24px; }
+.err { color: var(--bad); background: var(--bad-bg); padding: 10px 12px; border-radius: 10px; font-size: 14px; }
+.ok-note { color: var(--ok); background: var(--ok-bg); padding: 10px 12px; border-radius: 10px; font-size: 14px; font-weight: 600; }
+
+/* Sheets */
+#sheetRoot { position: fixed; inset: 0; z-index: 50; }
+.sheet-back { position: absolute; inset: 0; background: var(--scrim); }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; max-height: calc(100% - env(safe-area-inset-top, 0px) - 16px); display: flex; flex-direction: column; background: var(--surface); border-radius: 16px 16px 0 0; box-shadow: var(--shadow);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); animation: sheetUp .22s ease-out; }
+.sheet:focus { outline: none; }
+.sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-block: 12px 4px; }
+.sheet-head h2 { font-family: var(--font-display); font-size: 23px; font-weight: 700; letter-spacing: .02em; }
+.sheet-body { overflow: auto; padding-block: 6px 16px; display: grid; gap: 14px; min-height: 0; overscroll-behavior: contain; }
+.sheet-foot { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; padding-block: 12px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); }
+.sheet-foot:empty { display: none; }
+.sheet-foot .btn { flex: 1 1 auto; }
+@keyframes sheetUp { from { transform: translateY(24px); opacity: .6; } to { transform: none; opacity: 1; } }
+html.sheet-open, html.sheet-open body { overflow: hidden; }
+
+/* Formulare */
+.form { display: grid; gap: 12px; }
+.fld { display: grid; gap: 5px; min-width: 0; border: 0; padding: 0; margin: 0; }
+.fld > span, .fld > legend { font-size: 13px; font-weight: 600; color: var(--muted); padding: 0; }
+.fld-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(136px, 1fr)); gap: 10px; }
+.fld-row.dest { grid-template-columns: minmax(0, 1fr) 92px; }
+.fld.code input { text-transform: uppercase; font-family: var(--font-mono); letter-spacing: .1em; }
+.form-err { color: var(--bad); font-size: 14px; font-weight: 600; }
+.form-err:empty { display: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip-cb { position: relative; display: inline-flex; }
+.chip-cb input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; }
+.chip-cb span { padding: 8px 12px; border-radius: 99px; border: 1px solid var(--line); font-weight: 600; font-size: 14px; }
+.chip-cb input:checked + span { background: var(--btn); color: var(--btn-ink); border-color: transparent; }
+.chip-cb input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Detail */
+.det-top { display: grid; gap: 8px; justify-items: start; }
+.det-top h3 { font-size: 20px; }
+.det-code { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; padding: 12px; border-radius: 12px; background: var(--surface-2); }
+.det-code .lbl { width: 100%; font-size: 12.5px; color: var(--muted); font-family: var(--font-display); letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
+.det-code .big { font-size: 22px; font-weight: 600; letter-spacing: .08em; }
+
+/* Import */
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; background: var(--surface-2); border-radius: 10px; border: 1px solid var(--line); }
+.seg button { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; border: 0; border-radius: 7px; background: transparent; font-weight: 600; font-size: 14px; color: var(--muted); cursor: pointer; }
+.seg button .icon { width: 17px; height: 17px; }
+.seg button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px var(--scrim); }
+.imp-pane { display: grid; gap: 10px; }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.gm-list { border: 1px solid var(--line); border-radius: 12px; overflow: hidden auto; max-height: 340px; }
+.gm-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px; border-top: 1px solid var(--line); cursor: pointer; }
+.gm-list > li:first-child .gm-row { border-top: 0; }
+.gm-row input, .pv-row input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--btn); flex: none; }
+.gm-text, .pv-main { display: flex; flex-direction: column; min-width: 0; }
+.gm-text b, .pv-main b { font-weight: 600; overflow-wrap: anywhere; }
+.gm-text small, .pv-main small { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+.drop { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 120px; border: 2px dashed var(--line); border-radius: 12px; color: var(--muted); text-align: center; padding: 16px; cursor: pointer; }
+.drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.thumbs { display: flex; gap: 8px; flex-wrap: wrap; }
+.thumbs img { width: 76px; height: 76px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
+.busy { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--surface-2); border-radius: 12px; font-weight: 600; }
+.spinner { width: 20px; height: 20px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--btn); animation: spin .8s linear infinite; flex: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.pv-list { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.pv-row { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px 12px; border-top: 1px solid var(--line); cursor: pointer; }
+.pv-list > li:first-child .pv-row { border-top: 0; }
+.is-dup { opacity: .6; }
+.imp-trip { display: grid; gap: 10px; padding: 12px; border-radius: 12px; background: var(--surface-2); }
+
+/* Toast */
+.toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 12px); z-index: 60; width: max-content; max-width: min(520px, calc(100% - 32px)); padding: 11px 16px; border-radius: 10px; background: var(--toast-bg); color: var(--toast-ink); font-weight: 600; font-size: 14px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.bad { background: var(--bad); color: var(--bad-ink); }
+
+@media (max-width: 539px) { .tl-code { display: none; } .tl-row { grid-template-columns: 42px 52px minmax(0, 1fr); } }
+@media (min-width: 720px) {
+  .sheet { left: 50%; right: auto; bottom: auto; top: 50%; width: min(600px, calc(100% - 48px)); transform: translate(-50%, -50%); border-radius: 16px; max-height: min(780px, calc(100% - 48px)); padding-inline: 22px; animation: none; }
+  .sheet-foot { padding-bottom: 16px; }
+  .sheet-foot .btn { flex: 0 0 auto; }
+}
+@media (min-width: 960px) {
+  .app { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 32px; align-items: start; padding-block: 20px 48px; }
+  .app[data-view="list"] .main, .app[data-view="trip"] .side { display: block; }
+  .side { position: sticky; top: calc(20px + env(safe-area-inset-top, 0px)); }
+  .trip-bar { display: none; }
+  #tripView { padding-bottom: 0; }
+  .th { grid-template-columns: auto minmax(0, 1fr) auto; padding-block: 2px 4px; }
+  .th-flaps { font-size: 34px; }
+  .th-main h1 { font-size: 38px; }
+  .th-side { grid-column: auto; justify-content: flex-end; }
+  .th-edit { display: inline-flex; }
+  .tabs { position: sticky; top: env(safe-area-inset-top, 0px); display: flex; gap: 2px; padding: 0; margin-block: 14px 18px; background: var(--bg); border-top: 0; border-bottom: 1px solid var(--line); }
+  .tabs button { flex-direction: row; gap: 8px; min-height: 48px; padding: 0 14px; border-radius: 0; font-size: 14.5px; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+  .tabs button[aria-selected="true"] { border-bottom-color: var(--btn); }
+  .tabs small { display: inline; font-family: var(--font-mono); font-size: 12px; color: var(--faint); font-weight: 500; }
+  .tab-actions .btn.primary, .tab-actions .btn:not(.primary) { flex: 0 0 auto; }
+  .toast { bottom: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet { animation: none; }
+  .spinner { animation-duration: 2.4s; }
+  .toast, .bar span, .btn { transition: none; }
+}
+body.ro .w { display: none !important; }
+</style>
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3.5l1.9 5.6 5.6 1.9-5.6 1.9L12 18.5l-1.9-5.6L4.5 11l5.6-1.9z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17v3z"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><circle cx="5.5" cy="6.5" r="1.4"/><circle cx="5.5" cy="12" r="1.4"/><circle cx="5.5" cy="17.5" r="1.4"/><path d="M10 6.5h10M10 12h10M10 17.5h10"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><rect x="3.5" y="7.5" width="17" height="12.5" rx="2"/><path d="M9 7.5v-2A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5v2M8 7.5V20M16 7.5V20"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M15.5 14.5h2.5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.2"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M20.5 16l-5-5-8.5 8.5"/></symbol>
+  <symbol id="i-text" viewBox="0 0 24 24"><path d="M5 6h14M5 10h14M5 14h9M5 18h6"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.8 5.5-4.8s4.9 1.8 5.5 4.8"/><circle cx="17" cy="9.5" r="2.5"/><path d="M15.8 14.6c2.2.2 3.9 1.8 4.4 4.4"/></symbol>
+</svg>
+
+<div class="app" id="app" data-view="list">
+  <aside class="side" id="side" aria-label="Reisen">
+    <header class="brand">
+      <div class="wordmark"><span class="gate" aria-hidden="true"></span>Reiseplaner</div>
+      <span class="ro-chip" id="roChip" hidden>Nur Ansicht</span>
+    </header>
+    <section class="board" id="board" aria-live="polite"></section>
+    <div class="side-actions w" id="sideActions">
+      <button class="btn primary" type="button" data-act="new-trip"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>Neue Reise</button>
+      <button class="btn" type="button" data-act="import-new" id="btnImportNew"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>Aus Buchung</button>
+    </div>
+    <section class="trips" id="tripList"></section>
+  </aside>
+
+  <main class="main" id="main">
+    <div id="tripEmpty" class="trip-empty"></div>
+    <div id="tripView" hidden>
+      <header class="trip-bar">
+        <button class="icon-btn" type="button" data-act="back" aria-label="Zurück zu den Reisen"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+        <span class="bar-title" id="barTitle"></span>
+        <button class="icon-btn w" type="button" data-act="edit-trip" aria-label="Reise bearbeiten"><svg class="icon" aria-hidden="true"><use href="#i-edit"/></svg></button>
+      </header>
+      <div id="tripHead"></div>
+      <nav class="tabs" id="tabs" role="tablist" aria-label="Bereiche der Reise">
+        <button type="button" role="tab" data-act="tab" data-tab="plan"><svg class="icon" aria-hidden="true"><use href="#i-list"/></svg><span>Ablauf</span><small id="cnt-plan"></small></button>
+        <button type="button" role="tab" data-act="tab" data-tab="pack"><svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg><span>Packliste</span><small id="cnt-pack"></small></button>
+        <button type="button" role="tab" data-act="tab" data-tab="cost"><svg class="icon" aria-hidden="true"><use href="#i-wallet"/></svg><span>Kosten</span><small id="cnt-cost"></small></button>
+        <button type="button" role="tab" data-act="tab" data-tab="info"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg><span>Infos</span><small></small></button>
+      </nav>
+
+      <section class="tab" id="tab-plan" role="tabpanel" aria-label="Ablauf">
+        <div class="tab-actions w">
+          <button class="btn primary" type="button" data-act="import-add" id="btnImportAdd"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>Buchung importieren</button>
+          <button class="btn" type="button" data-act="add-item"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>Eintrag</button>
+          <button class="btn" type="button" data-act="cal"><svg class="icon" aria-hidden="true"><use href="#i-cal"/></svg>Kalender</button>
+        </div>
+        <div id="timeline"></div>
+      </section>
+
+      <section class="tab" id="tab-pack" role="tabpanel" aria-label="Packliste" hidden>
+        <div id="packProg" class="prog"></div>
+        <form id="packForm" class="pack-form w" autocomplete="off">
+          <input id="packText" maxlength="60" placeholder="Was muss noch mit?" aria-label="Neues Teil für die Packliste">
+          <select id="packCat" aria-label="Kategorie"></select>
+          <button class="btn primary" type="submit" aria-label="Zur Packliste hinzufügen"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+        </form>
+        <div class="pack-tools">
+          <button class="btn small w" type="button" data-act="pack-ai" id="btnPackAI"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>Mit Claude ergänzen</button>
+          <label class="toggle"><input type="checkbox" id="packOpen"> Nur offene</label>
+          <button class="btn small ghost w" type="button" data-act="pack-reset">Haken zurücksetzen</button>
+        </div>
+        <div id="packList"></div>
+      </section>
+
+      <section class="tab" id="tab-cost" role="tabpanel" aria-label="Kosten" hidden>
+        <div class="tab-actions w"><button class="btn primary" type="button" data-act="add-expense"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>Ausgabe eintragen</button></div>
+        <div id="costBody"></div>
+      </section>
+
+      <section class="tab" id="tab-info" role="tabpanel" aria-label="Infos" hidden>
+        <div class="info-card" id="infoTrip"></div>
+        <div class="info-card">
+          <h3 class="sec-h">Notizen</h3>
+          <textarea id="notes" rows="7" maxlength="20000" placeholder="Adressen, Öffnungszeiten, Ideen, Notfallnummern …" aria-label="Notizen zur Reise"></textarea>
+          <p class="hint" id="notesState"></p>
+        </div>
+        <div class="info-card" id="infoMore"></div>
+      </section>
+    </div>
+  </main>
+</div>
+<div id="sheetRoot" hidden></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+'use strict';
+
+/* ---------- Hilfsfunktionen ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ESC[c]);
+const str = (v, max = 200) => (typeof v === 'string' ? v : (typeof v === 'number' && Number.isFinite(v) ? String(v) : '')).replace(/\s+/g, ' ').trim().slice(0, max);
+const strML = (v, max = 2000) => (typeof v === 'string' ? v : '').replace(/\r/g, '').replace(/\n{3,}/g, '\n\n').trim().slice(0, max);
+const pad = (n) => String(n).padStart(2, '0');
+const icon = (id) => `<svg class="icon" aria-hidden="true"><use href="#i-${id}"/></svg>`;
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const isDesktop = () => matchMedia('(min-width: 960px)').matches;
+const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+
+/* Datum & Zeit (Wandzeit, ohne Zeitzonen-Verschiebung) */
+const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const RE_DT = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/;
+function validYMD(y, m, d) { if (m < 1 || m > 12 || d < 1 || d > 31) return false; return new Date(Date.UTC(y, m - 1, d)).getUTCMonth() === m - 1; }
+function isoDate(v) { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(str(v, 40)); return m && validYMD(+m[1], +m[2], +m[3]) ? `${m[1]}-${m[2]}-${m[3]}` : ''; }
+function isoDT(v) {
+  const s = str(v, 40).replace(' ', 'T'); const d = isoDate(s); if (!d) return '';
+  const m = /T(\d{1,2}):(\d{2})/.exec(s);
+  return m && +m[1] < 24 && +m[2] < 60 ? `${d}T${pad(+m[1])}:${m[2]}` : d;
+}
+const datePart = (s) => (typeof s === 'string' && /^\d{4}-\d{2}-\d{2}/.test(s) ? s.slice(0, 10) : '');
+const timePart = (s) => { const m = typeof s === 'string' ? /T(\d{2}:\d{2})/.exec(s) : null; return m ? m[1] : ''; };
+const dayNum = (iso) => { const [y, m, d] = iso.split('-').map(Number); return Math.round(Date.UTC(y, m - 1, d) / 864e5); };
+const addDays = (iso, n) => new Date((dayNum(iso) + n) * 864e5).toISOString().slice(0, 10);
+const utcDate = (iso) => new Date(dayNum(iso) * 864e5);
+const WD = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+const fmtD = (iso, year = false) => { const [y, m, d] = iso.split('-'); return `${d}.${m}.${year ? y : ''}`; };
+const fmtDay = (iso) => `${WD[utcDate(iso).getUTCDay()]} ${fmtD(iso)}`;
+const LONG = new Intl.DateTimeFormat('de-DE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const MONTH = new Intl.DateTimeFormat('de-DE', { month: 'long', timeZone: 'UTC' });
+const fmtLong = (iso) => LONG.format(utcDate(iso));
+function fmtRange(a, b) { if (!a) return 'Datum offen'; if (!b || b === a) return fmtD(a, true); return `${fmtD(a, a.slice(0, 4) !== b.slice(0, 4))} – ${fmtD(b, true)}`; }
+function fmtWhen(s) { const d = datePart(s); if (!d) return ''; const t = timePart(s); return `${fmtLong(d)}${t ? ` · ${t} Uhr` : ''}`; }
+const fmtShort = (s) => { const d = datePart(s); return d ? `${fmtDay(d)}${timePart(s) ? ' ' + timePart(s) : ''}` : 'ohne Datum'; };
+const hhmm = () => { const d = new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+
+/* Geld */
+const CURS = ['EUR', 'USD', 'GBP', 'CHF', 'DKK', 'SEK', 'NOK', 'PLN', 'CZK', 'HUF', 'TRY', 'JPY', 'THB', 'AUD', 'CAD'];
+function fmtMoney(v, cur, digits) {
+  const c = /^[A-Z]{3}$/.test(cur || '') ? cur : 'EUR';
+  try { return new Intl.NumberFormat('de-DE', { style: 'currency', currency: c, ...(digits === 0 ? { maximumFractionDigits: 0, minimumFractionDigits: 0 } : {}) }).format(v || 0); }
+  catch { return `${(v || 0).toFixed(digits === 0 ? 0 : 2)} ${c}`; }
+}
+function parseAmount(s) { let t = String(s ?? '').replace(/[^\d,.\-]/g, ''); if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.'); const n = Number(t); return t && Number.isFinite(n) ? Math.round(n * 100) / 100 : NaN; }
+const cur3 = (v) => { const s = str(v, 3).toUpperCase(); return /^[A-Z]{3}$/.test(s) ? s : ''; };
+function num(v) {
+  if (typeof v === 'number' && Number.isFinite(v)) return Math.round(v * 100) / 100;
+  if (typeof v === 'string' && v.trim()) { const n = parseAmount(v); return Number.isFinite(n) ? n : null; }
+  return null;
+}
+
+/* Zeitzonen (für Kalendereinträge über Zeitzonen hinweg) */
+function validTz(v) {
+  const s = str(v, 60);
+  if (!s || !/^[A-Za-z_]+(\/[A-Za-z0-9_+\-]+)*$/.test(s)) return '';
+  try { new Intl.DateTimeFormat('en-US', { timeZone: s }); return s; } catch { return ''; }
+}
+const LOCAL_TZ = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch { return ''; } })();
+function tzOffsetMin(tz, utcMs) {
+  const f = new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const p = {}; for (const x of f.formatToParts(new Date(utcMs))) p[x.type] = x.value;
+  return Math.round((Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute, +p.second) - utcMs) / 60000);
+}
+function wallToUtc(wall, tz) {
+  const m = RE_DT.exec(wall); if (!m) return NaN;
+  const guess = Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]);
+  if (!tz) return guess;
+  const first = guess - tzOffsetMin(tz, guess) * 60000;
+  return guess - tzOffsetMin(tz, first) * 60000;
+}
+const utcToWall = (utc, tz) => new Date(utc + (tz ? tzOffsetMin(tz, utc) : 0) * 60000).toISOString().slice(0, 16);
+const tzCity = (tz) => tz.split('/').pop().replace(/_/g, ' ');
+
+/* Eintragstypen */
+const TYPES = {
+  flight: { label: 'Flug', tag: 'Flug', g: 'move', dur: 120 },
+  train: { label: 'Zug', tag: 'Zug', g: 'move', dur: 120 },
+  bus: { label: 'Bus', tag: 'Bus', g: 'move', dur: 120 },
+  car: { label: 'Mietwagen / Auto', tag: 'Auto', g: 'move', dur: 60 },
+  ferry: { label: 'Fähre / Schiff', tag: 'Fähre', g: 'move', dur: 120 },
+  stay: { label: 'Unterkunft', tag: 'Hotel', g: 'stay', dur: 60 },
+  activity: { label: 'Aktivität', tag: 'Aktiv', g: 'do', dur: 120 },
+  food: { label: 'Essen', tag: 'Essen', g: 'do', dur: 90 },
+  note: { label: 'Notiz', tag: 'Notiz', g: 'note', dur: 60 },
+};
+const typeOf = (it) => (TYPES[it?.type] ? it.type : 'note');
+const PACK_CATS = ['Dokumente', 'Kleidung', 'Hygiene', 'Gesundheit', 'Elektronik', 'Sonstiges'];
+const BASE_PACK = {
+  Dokumente: ['Personalausweis oder Reisepass', 'Tickets und Buchungen', 'Krankenversicherungskarte', 'Bank- und Kreditkarte'],
+  Kleidung: ['Unterwäsche', 'Socken', 'T-Shirts', 'Pullover oder Jacke', 'Bequeme Schuhe', 'Schlafsachen'],
+  Hygiene: ['Zahnbürste und Zahnpasta', 'Duschgel und Shampoo', 'Deo', 'Sonnencreme'],
+  Gesundheit: ['Persönliche Medikamente', 'Pflaster', 'Schmerztabletten'],
+  Elektronik: ['Handy-Ladekabel', 'Powerbank', 'Reiseadapter', 'Kopfhörer'],
+  Sonstiges: ['Wasserflasche', 'Snacks für unterwegs', 'Hausschlüssel'],
+};
+
+/* ---------- Zustand ---------- */
+const S = {
+  db: null, user: null, sample: null, mcp: null, perms: null,
+  ready: false, noDb: false, canWrite: true, writeUnknown: false, myId: null,
+  sampleOk: false, imgLimits: null,
+  trips: [], tripsSeen: false, tripsLoaded: false, tripsStale: false, tripsError: null,
+  sel: null, tab: 'plan', subs: [],
+  items: [], packing: [], expenses: [], loaded: { items: false, packing: false, expenses: false },
+  packOpen: false, notesDirty: false, calLocal: new Set(), boardKey: null, autoPicked: false, ignoreHash: null, lastFocus: null,
+};
+
+/* ---------- Schreiben: eine Schreibaktion pro Dokument gleichzeitig ---------- */
+const Q = new Map();
+function queued(path, fn) {
+  const prev = Q.get(path) || Promise.resolve();
+  const next = prev.then(fn, fn);
+  Q.set(path, next);
+  const done = () => { if (Q.get(path) === next) Q.delete(path); };
+  next.then(done, done);
+  return next;
+}
+function dbWrite(kind, path, data) {
+  if (!S.db) return Promise.reject({ code: 'unavailable' });
+  return queued(path, () => {
+    const ref = S.db.doc(path);
+    return kind === 'set' ? ref.set(data) : kind === 'update' ? ref.update(data) : ref.delete();
+  });
+}
+function writeFailed(e) {
+  const c = e?.code;
+  if (c === 'invalid_argument' && S.writeUnknown) { S.canWrite = false; applyRO(); toast('Du kannst diesen Reiseplaner nur ansehen.', 'bad'); return; }
+  if (c === 'quota_exceeded') return toast('Der Speicher ist voll. Lösche alte Reisen, um Platz zu schaffen.', 'bad');
+  if (c === 'resource_exhausted') return toast('Zu viele Änderungen auf einmal. Warte kurz und versuch es noch mal.', 'bad');
+  if (c === 'revoked') return toast('Dein Zugriff auf den Reiseplaner hat sich geändert.', 'bad');
+  toast('Speichern hat nicht geklappt. Prüf deine Verbindung und versuch es noch mal.', 'bad');
+}
+function guardWrite() { if (S.canWrite && S.db) return true; toast(S.db ? 'Du kannst diesen Reiseplaner nur ansehen.' : 'Die Reisedaten sind in dieser Ansicht nicht verfügbar.', 'bad'); return false; }
+function applyRO() { document.body.classList.toggle('ro', !S.canWrite || !S.db); $('#roChip').hidden = !(S.db && !S.canWrite); }
+
+let toastTimer;
+function toast(msg, kind = '') {
+  const el = $('#toast'); el.textContent = msg; el.className = `toast show ${kind}`;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.className = 'toast'; }, 3800);
+}
+
+/* ---------- Reisen: Ableitungen ---------- */
+const curTrip = () => S.trips.find((t) => t.id === S.sel) || null;
+const travelers = (t) => (Array.isArray(t?.travelers) ? t.travelers.map((x) => str(x, 40)).filter(Boolean).slice(0, 12) : []);
+function tripCode(t) {
+  const c = str(t?.code, 4).toUpperCase().replace(/[^A-ZÄÖÜ0-9]/g, '');
+  if (c.length >= 2) return c.slice(0, 3);
+  return str(t?.destination || t?.title, 60).toUpperCase().replace(/[^A-ZÄÖÜ]/g, '').slice(0, 3) || '···';
+}
+const tripName = (t) => str(t?.title, 80) || str(t?.destination, 80) || 'Reise';
+const nights = (t) => (t?.start && t?.end ? Math.max(0, dayNum(t.end) - dayNum(t.start)) : null);
+function status(t) {
+  const today = todayISO();
+  if (!t?.start) return { key: 'open', label: 'Datum offen', short: 'offen' };
+  const end = t.end || t.start;
+  if (today < t.start) { const d = dayNum(t.start) - dayNum(today); return { key: 'soon', label: d === 1 ? 'morgen geht’s los' : `in ${d} Tagen`, short: d === 1 ? 'morgen' : `in ${d} T.` }; }
+  if (today > end) return { key: 'past', label: 'vorbei', short: 'vorbei' };
+  const day = dayNum(today) - dayNum(t.start) + 1, total = dayNum(end) - dayNum(t.start) + 1;
+  return { key: 'now', label: today === t.start ? 'heute geht’s los' : `unterwegs · Tag ${day} von ${total}`, short: 'unterwegs' };
+}
+const sortedTrips = () => S.trips.slice().sort((a, b) => (a.start || '9999').localeCompare(b.start || '9999') || tripName(a).localeCompare(tripName(b)));
+function nextTrip() { const ts = sortedTrips(); return ts.find((t) => status(t).key === 'now') || ts.find((t) => status(t).key === 'soon') || null; }
+const flapsHtml = (code, cls = '') => `<span class="flaps ${cls}" aria-hidden="true">${[...code].map((c) => `<span class="flap">${esc(c)}</span>`).join('')}</span>`;
+
+/* ---------- Seitenleiste: Abflugtafel & Reisen ---------- */
+function flapAnimate(root) {
+  if (reduceMotion()) return;
+  const A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  $$('.flap', root).forEach((f, i) => {
+    const final = f.textContent; let n = 0; const max = 5 + i * 3;
+    const tick = () => { if (n++ >= max) { f.textContent = final; return; } f.textContent = A[Math.floor(Math.random() * 26)]; setTimeout(tick, 48); };
+    tick();
+  });
+}
+function renderBoard() {
+  const el = $('#board');
+  const t = S.tripsSeen ? nextTrip() : null;
+  const clock = `<span class="board-clock mono" id="boardClock" title="Deine Uhrzeit">${hhmm()}</span>`;
+  if (!t) {
+    const msg = S.noDb ? 'Nicht verbunden' : !S.tripsSeen ? 'Tafel lädt' : 'Keine Abreise geplant';
+    const sub = S.noDb ? 'Öffne den Reiseplaner in claude.ai, um deine Reisen zu sehen.' : S.tripsSeen ? 'Leg eine Reise an oder lass Claude eine Buchungsbestätigung auslesen.' : '';
+    el.innerHTML = `<div class="board-top"><span>Nächste Abreise</span>${clock}</div>
+      <div class="board-main is-empty">${flapsHtml('–––')}<span class="board-dest">${esc(msg)}</span></div>${sub ? `<p class="board-sub">${esc(sub)}</p>` : ''}`;
+    S.boardKey = null; return;
+  }
+  const st = status(t), code = tripCode(t);
+  el.innerHTML = `<div class="board-top"><span>${st.key === 'now' ? 'Gerade unterwegs' : 'Nächste Abreise'}</span>${clock}</div>
+    <button class="board-main" type="button" data-act="open-trip" data-id="${esc(t.id)}" aria-label="${esc(tripName(t))} öffnen">
+      ${flapsHtml(code)}<span class="board-dest">${esc(str(t.destination, 40) || tripName(t))}</span>
+    </button>
+    <div class="board-row"><span class="mono">${esc(fmtRange(t.start, t.end))}</span><span class="board-count">${esc(st.label)}</span></div>`;
+  if (S.boardKey !== t.id + code) { S.boardKey = t.id + code; flapAnimate(el); }
+}
+function tripRow(t) {
+  const st = status(t), n = nights(t);
+  const meta = [str(t.destination, 60), n != null ? plural(n, 'Nacht', 'Nächte') : ''].filter(Boolean).join(' · ');
+  return `<button class="trip-row st-${st.key}${t.id === S.sel ? ' is-sel' : ''}" type="button" data-act="open-trip" data-id="${esc(t.id)}">
+    <span class="tr-date mono">${t.start ? esc(fmtD(t.start)) : '––.––.'}</span>
+    <span class="tr-code mono">${esc(tripCode(t))}</span>
+    <span class="tr-name"><span class="tr-title">${esc(tripName(t))}</span><small>${t.example ? '<em class="ex">Beispiel</em> ' : ''}${esc(meta)}</small></span>
+    <span class="tr-st">${esc(st.short)}</span>
+  </button>`;
+}
+function renderSide() {
+  renderBoard();
+  const el = $('#tripList');
+  $('#btnImportNew').hidden = !S.sampleOk;
+  if (S.noDb) {
+    el.innerHTML = `<div class="empty-card" style="margin-top:14px"><h3>Reisen nicht verfügbar</h3><p>Diese Ansicht hat keinen Zugriff auf die Reisedaten. Öffne den Reiseplaner in claude.ai und melde dich an.</p></div>`;
+    return;
+  }
+  if (!S.tripsSeen) {
+    el.innerHTML = `<p class="muted pad">${S.tripsError ? 'Die Reisen konnten nicht geladen werden. Lade die Seite neu.' : S.tripsStale ? 'Die Reisen sind gerade nicht erreichbar. Die Liste erscheint automatisch, sobald die Verbindung wieder steht.' : 'Reisen werden geladen …'}</p>`;
+    return;
+  }
+  const ts = sortedTrips();
+  if (!ts.length) {
+    el.innerHTML = `<div class="empty-card" style="margin-top:14px"><h3>Noch keine Reisen</h3><p>${S.canWrite ? 'Leg oben eine neue Reise an – oder lass Claude eine Buchungsbestätigung aus Gmail auslesen. Daraus entstehen Ablauf, Kalendereinträge und Packliste.' : 'Hier erscheinen die Reisen, sobald jemand eine anlegt.'}</p></div>`;
+    return;
+  }
+  const groups = { now: [], soon: [], open: [], past: [] };
+  for (const t of ts) groups[status(t).key].push(t);
+  groups.past.reverse();
+  const sec = (k, label) => (groups[k].length ? `<h2 class="sec-h">${label}</h2><div class="rows">${groups[k].map(tripRow).join('')}</div>` : '');
+  el.innerHTML = sec('now', 'Unterwegs') + sec('soon', 'Geplant') + sec('open', 'Ohne Datum') + sec('past', 'Vergangen')
+    + (S.tripsStale ? '<p class="stale">Möglicherweise nicht aktuell – keine Verbindung zum Speicher.</p>' : '');
+}
+
+/* ---------- Reise-Ansicht ---------- */
+function cmpItems(a, b) {
+  return (datePart(a.start) || '9999').localeCompare(datePart(b.start) || '9999') || timePart(a.start).localeCompare(timePart(b.start)) || str(a.title).localeCompare(str(b.title));
+}
+function itemSub(it, kind) {
+  const p = [], ty = TYPES[typeOf(it)];
+  if (kind === 'out') { if (it.location) p.push(str(it.location, 100)); return p.join(' · '); }
+  if (ty.g === 'move') {
+    const route = [str(it.from, 60), str(it.to, 60)].filter(Boolean).join(' → ');
+    if (route) p.push(route);
+    const arr = timePart(it.end), sd = datePart(it.start), ed = datePart(it.end);
+    if (arr) p.push(`an ${arr}${sd && ed && ed !== sd ? ` (+${dayNum(ed) - dayNum(sd)})` : ''}`);
+    if (it.provider) p.push(str(it.provider, 60));
+  } else if (ty.g === 'stay') {
+    p.push(`Check-in${timePart(it.start) ? ' ab ' + timePart(it.start) : ''}`);
+    if (datePart(it.end)) p.push(`bis ${fmtDay(datePart(it.end))}`);
+    if (it.location) p.push(str(it.location, 100)); else if (it.provider) p.push(str(it.provider, 60));
+  } else {
+    if (it.location) p.push(str(it.location, 100));
+    if (it.provider && str(it.provider) !== str(it.title)) p.push(str(it.provider, 60));
+  }
+  return p.join(' · ');
+}
+function renderTripHead(t) {
+  const st = status(t), n = nights(t), people = travelers(t);
+  $('#barTitle').textContent = tripName(t);
+  $('#tripHead').innerHTML = `
+    ${t.example ? `<div class="example-bar"><span>Beispielreise – so sieht eine geplante Reise aus.</span><button class="btn small w" type="button" data-act="delete-trip">Beispiel löschen</button></div>` : ''}
+    <div class="th">
+      ${flapsHtml(tripCode(t), 'th-flaps')}
+      <div class="th-main">
+        <h1>${esc(tripName(t))}</h1>
+        <p class="th-meta">${esc([str(t.destination, 60), fmtRange(t.start, t.end), n != null ? plural(n, 'Nacht', 'Nächte') : ''].filter(Boolean).join(' · '))}</p>
+        ${people.length ? `<p class="th-people">${icon('users')}${esc(people.join(', '))}</p>` : ''}
+      </div>
+      <div class="th-side"><span class="st-chip st-${st.key}">${esc(st.label)}</span><button class="btn small th-edit w" type="button" data-act="edit-trip">${icon('edit')}Bearbeiten</button></div>
+    </div>`;
+}
+function renderTabs(t) {
+  for (const b of $$('#tabs [data-tab]')) b.setAttribute('aria-selected', b.dataset.tab === S.tab ? 'true' : 'false');
+  for (const s of $$('.tab')) s.hidden = s.id !== `tab-${S.tab}`;
+  const done = S.packing.filter((p) => p.done).length;
+  const total = S.expenses.reduce((a, e) => a + (num(e.amount) || 0), 0);
+  $('#cnt-plan').textContent = S.items.length || '';
+  $('#cnt-pack').textContent = S.packing.length ? `${done}/${S.packing.length}` : '';
+  $('#cnt-cost').textContent = total ? fmtMoney(total, t.currency, 0) : '';
+  $('#btnImportAdd').hidden = !S.sampleOk;
+  $('#btnPackAI').hidden = !S.sampleOk || !S.packing.length;
+}
+
+function rowHtml(r) {
+  const it = r.it, ty = TYPES[typeOf(it)];
+  const title = r.kind === 'out' ? `Check-out · ${str(it.title, 100)}` : str(it.title, 120) || ty.label;
+  const sub = itemSub(it, r.kind);
+  return `<button class="tl-row" type="button" data-act="item" data-id="${esc(it.id)}">
+    <span class="tl-time mono">${r.time ? esc(r.time) : '<span class="allday">—</span>'}</span>
+    <span class="tag g-${ty.g}">${esc(r.kind === 'out' ? 'Hotel' : ty.tag)}</span>
+    <span class="tl-body"><span class="tl-title">${esc(title)}</span>${sub ? `<span class="tl-sub">${esc(sub)}</span>` : ''}</span>
+    ${it.code && r.kind !== 'out' ? `<span class="tl-code mono">${esc(str(it.code, 20))}</span>` : ''}
+  </button>`;
+}
+function renderPlan(t) {
+  const el = $('#timeline');
+  if (!S.loaded.items) { el.innerHTML = '<p class="muted pad">Ablauf wird geladen …</p>'; return; }
+  if (!S.items.length) {
+    el.innerHTML = `<div class="empty-card"><h3>Noch kein Ablauf</h3><p>${S.canWrite ? 'Lass Claude eine Buchungsbestätigung auslesen – aus Gmail, als eingefügter Text oder als Screenshot. Daraus werden Einträge mit Zeiten, Orten und Buchungsnummern.' : 'Für diese Reise ist noch nichts geplant.'}</p>
+      <div class="btn-row w">${S.sampleOk ? `<button class="btn primary" type="button" data-act="import-add">${icon('spark')}Buchung importieren</button>` : ''}<button class="btn" type="button" data-act="add-item">${icon('plus')}Eintrag hinzufügen</button></div></div>`;
+    return;
+  }
+  const rows = [];
+  for (const it of S.items) {
+    const sd = datePart(it.start);
+    rows.push({ it, kind: 'main', day: sd, time: timePart(it.start) });
+    if (typeOf(it) === 'stay' && datePart(it.end) && datePart(it.end) !== sd) rows.push({ it, kind: 'out', day: datePart(it.end), time: timePart(it.end) });
+  }
+  const byDay = new Map();
+  if (t.start && t.end && t.end >= t.start && dayNum(t.end) - dayNum(t.start) <= 62) for (let d = t.start; d <= t.end; d = addDays(d, 1)) byDay.set(d, []);
+  for (const r of rows) { const k = r.day || 'zz'; if (!byDay.has(k)) byDay.set(k, []); byDay.get(k).push(r); }
+  const today = todayISO();
+  el.innerHTML = [...byDay.keys()].sort().map((k) => {
+    const list = byDay.get(k).sort((a, b) => a.time.localeCompare(b.time) || (a.kind === 'out' ? -1 : 0) - (b.kind === 'out' ? -1 : 0) || str(a.it.title).localeCompare(str(b.it.title)));
+    const inTrip = t.start && k !== 'zz' && k >= t.start && (!t.end || k <= t.end);
+    const head = k === 'zz' ? '<h3 class="day-h">Ohne Datum</h3>'
+      : `<h3 class="day-h"><span>${esc(fmtDay(k))}</span>${inTrip ? `<span class="day-n">Tag ${dayNum(k) - dayNum(t.start) + 1}</span>` : ''}${k === today ? '<span class="today">Heute</span>' : ''}</h3>`;
+    const body = list.length ? list.map(rowHtml).join('')
+      : (S.canWrite ? `<button class="tl-free" type="button" data-act="add-item" data-day="${esc(k)}">Noch nichts geplant · Eintrag hinzufügen</button>` : '<div class="tl-free">Noch nichts geplant</div>');
+    return `<section class="day">${head}<div class="day-rows">${body}</div></section>`;
+  }).join('');
+}
+
+function renderPack() {
+  const el = $('#packList');
+  const list = S.packing.slice().sort((a, b) => (num(a.order) || 0) - (num(b.order) || 0) || str(a.text).localeCompare(str(b.text)));
+  const done = list.filter((p) => p.done).length;
+  $('#packProg').innerHTML = list.length ? `<div class="prog-top"><span><b>${done} von ${list.length}</b> eingepackt</span><span class="mono muted">${Math.round((done / list.length) * 100)} %</span></div><div class="bar"><span style="width:${Math.round((done / list.length) * 100)}%"></span></div>` : '';
+  if (!S.loaded.packing) { el.innerHTML = '<p class="muted pad">Packliste wird geladen …</p>'; return; }
+  if (!list.length) {
+    el.innerHTML = `<div class="empty-card"><h3>Packliste ist leer</h3><p>${S.sampleOk ? 'Claude stellt dir eine Liste passend zu Ziel, Jahreszeit, Dauer und deinen geplanten Aktivitäten zusammen.' : 'Füg eine Grundliste ein und ergänze, was du brauchst.'}</p>
+      <div class="btn-row w">${S.sampleOk ? `<button class="btn primary" type="button" data-act="pack-ai">${icon('spark')}Liste mit Claude erstellen</button>` : ''}<button class="btn" type="button" data-act="pack-base">Grundliste einfügen</button></div></div>`;
+    return;
+  }
+  const cats = new Map(PACK_CATS.map((c) => [c, []]));
+  for (const p of list) { const c = str(p.category, 30) || 'Sonstiges'; if (!cats.has(c)) cats.set(c, []); cats.get(c).push(p); }
+  const html = [...cats.entries()].filter(([, ps]) => ps.length).map(([c, ps]) => {
+    const shown = S.packOpen ? ps.filter((p) => !p.done) : ps;
+    if (!shown.length) return '';
+    return `<section class="pk-cat"><h3 class="sec-h">${esc(c)} <span class="mono">${ps.filter((p) => p.done).length}/${ps.length}</span></h3><ul class="pk-list">${shown.map((p) => `
+      <li class="pk-row${p.done ? ' is-done' : ''}">
+        <label class="pk-check"><input type="checkbox" data-act="pack-toggle" data-id="${esc(p.id)}"${p.done ? ' checked' : ''}${S.canWrite ? '' : ' disabled'}><span class="box">${icon('check')}</span><span class="pk-text">${esc(str(p.text, 80))}</span></label>
+        <button class="icon-btn pk-del w" type="button" data-act="pack-del" data-id="${esc(p.id)}" aria-label="${esc(str(p.text, 80))} entfernen">${icon('x')}</button>
+      </li>`).join('')}</ul></section>`;
+  }).join('');
+  el.innerHTML = html || '<p class="ok-note">Alles eingepackt. Gute Reise!</p>';
+}
+
+function balances(people, ex) {
+  const bal = Object.fromEntries(people.map((p) => [p, 0]));
+  let skipped = 0;
+  for (const e of ex) {
+    const cents = Math.round((num(e.amount) || 0) * 100);
+    const split = (Array.isArray(e.split) && e.split.length ? e.split : people).filter((p) => people.includes(p));
+    if (!cents) continue;
+    if (!people.includes(e.paidBy) || !split.length) { skipped++; continue; }
+    bal[e.paidBy] += cents;
+    const share = Math.floor(cents / split.length); let rest = cents - share * split.length;
+    for (const p of split) { bal[p] -= share + (rest > 0 ? 1 : 0); if (rest > 0) rest--; }
+  }
+  return { bal, skipped };
+}
+function settle(bal) {
+  const deb = [], cre = [];
+  for (const [p, v] of Object.entries(bal)) { if (v < 0) deb.push([p, -v]); else if (v > 0) cre.push([p, v]); }
+  deb.sort((a, b) => b[1] - a[1]); cre.sort((a, b) => b[1] - a[1]);
+  const out = []; let i = 0, j = 0;
+  while (i < deb.length && j < cre.length) {
+    const x = Math.min(deb[i][1], cre[j][1]);
+    if (x > 0) out.push({ from: deb[i][0], to: cre[j][0], cents: x });
+    deb[i][1] -= x; cre[j][1] -= x;
+    if (!deb[i][1]) i++; if (!cre[j][1]) j++;
+  }
+  return out;
+}
+function renderCost(t) {
+  const el = $('#costBody'), cur = t.currency || 'EUR', people = travelers(t);
+  if (!S.loaded.expenses) { el.innerHTML = '<p class="muted pad">Ausgaben werden geladen …</p>'; return; }
+  const ex = S.expenses.slice().sort((a, b) => str(b.date).localeCompare(str(a.date)) || (num(b.createdAt) || 0) - (num(a.createdAt) || 0));
+  const total = ex.reduce((s, e) => s + (num(e.amount) || 0), 0);
+  let html = `<div class="tiles"><div class="tile"><span>Gesamt</span><b class="mono">${esc(fmtMoney(total, cur))}</b></div>${people.length > 1 ? `<div class="tile"><span>Pro Person</span><b class="mono">${esc(fmtMoney(total / people.length, cur))}</b></div>` : `<div class="tile"><span>Ausgaben</span><b class="mono">${ex.length}</b></div>`}</div>`;
+  if (people.length > 1 && ex.length) {
+    const { bal, skipped } = balances(people, ex), moves = settle(bal);
+    html += `<div class="settle"><h3 class="sec-h settle-h">Ausgleich</h3>${moves.length ? `<ul>${moves.map((m) => `<li><span><b>${esc(m.from)}</b> zahlt <b>${esc(m.to)}</b></span><b class="mono">${esc(fmtMoney(m.cents / 100, cur))}</b></li>`).join('')}</ul>` : '<p class="muted">Alles ausgeglichen.</p>'}${skipped ? `<p class="hint">${plural(skipped, 'Ausgabe ohne passende Person wird', 'Ausgaben ohne passende Person werden')} nicht aufgeteilt.</p>` : ''}</div>`;
+  } else if (people.length < 2) {
+    html += `<p class="hint" style="margin-bottom:14px">Trag unter „Infos“ ein, wer mitreist – dann rechnet die Reisekasse aus, wer wem wie viel schuldet.</p>`;
+  }
+  html += ex.length ? `<ul class="ex-list">${ex.map((e) => {
+    const split = Array.isArray(e.split) ? e.split.filter((p) => people.includes(p)) : [];
+    const meta = [e.paidBy ? `bezahlt von ${str(e.paidBy, 40)}` : '', split.length && split.length < people.length ? `für ${split.join(', ')}` : ''].filter(Boolean).join(' · ');
+    return `<li><button class="ex-row" type="button" data-act="expense" data-id="${esc(e.id)}"><span class="ex-date mono">${datePart(e.date) ? esc(fmtD(datePart(e.date))) : ''}</span><span class="ex-main"><span>${esc(str(e.title, 80) || 'Ausgabe')}</span>${meta ? `<small>${esc(meta)}</small>` : ''}</span><b class="ex-amt mono">${esc(fmtMoney(num(e.amount) || 0, cur))}</b></button></li>`;
+  }).join('')}</ul>` : `<div class="empty-card"><h3>Noch keine Ausgaben</h3><p>Trag ein, wer was bezahlt hat – Tickets, Essen, Eintritte. Die Reisekasse teilt fair auf.</p></div>`;
+  el.innerHTML = html;
+}
+
+function renderInfo(t) {
+  const notes = $('#notes');
+  const saved = typeof t.notes === 'string' ? t.notes : '';
+  if (notes.dataset.trip !== t.id) { notes.dataset.trip = t.id; notes.value = saved; S.notesDirty = false; $('#notesState').textContent = ''; }
+  else if (document.activeElement !== notes && !S.notesDirty && notes.value !== saved) notes.value = saved;
+  notes.readOnly = !S.canWrite;
+  const people = travelers(t), n = nights(t);
+  $('#infoTrip').innerHTML = `<h3 class="sec-h">Reise</h3>
+    <dl class="kv">
+      <div><dt>Ziel</dt><dd>${esc(str(t.destination, 80) || '–')}</dd></div>
+      <div><dt>Zeitraum</dt><dd>${esc(fmtRange(t.start, t.end))}${n != null ? ` · ${plural(n, 'Nacht', 'Nächte')}` : ''}</dd></div>
+      <div><dt>Reisende</dt><dd>${esc(people.join(', ') || 'noch niemand eingetragen')}</dd></div>
+      <div><dt>Währung</dt><dd>${esc(t.currency || 'EUR')}</dd></div>
+    </dl>
+    <div class="btn-row w"><button class="btn" type="button" data-act="edit-trip">${icon('edit')}Reise bearbeiten</button></div>`;
+  $('#infoMore').innerHTML = `<h3 class="sec-h">Kalender &amp; Teilen</h3>
+    <p class="hint">Trag den Ablauf in deinen Google Kalender ein oder kopier ihn als Text für WhatsApp, Mail oder Notizen.</p>
+    <div class="btn-row"><button class="btn" type="button" data-act="cal">${icon('cal')}Google Kalender</button><button class="btn" type="button" data-act="copy-plan">${icon('copy')}Ablauf kopieren</button></div>
+    <p class="hint">Mitreisende lädst du über „Teilen“ in claude.ai ein. Damit sie mitplanen, abhaken und Ausgaben eintragen können, brauchen sie mindestens die Rolle „Contributor“. Wer nur „Viewer“ ist, sieht keine Reisedaten. Alle mit Zugriff sehen alle Reisen in diesem Planer.</p>
+    <div class="danger-zone w"><button class="btn danger" type="button" data-act="delete-trip">${icon('trash')}Reise löschen</button></div>`;
+}
+
+function renderTrip() {
+  const t = curTrip(), view = $('#tripView'), empty = $('#tripEmpty');
+  const act = document.activeElement, sig = act && act.dataset && act.dataset.act && act.dataset.id ? `[data-act="${act.dataset.act}"][data-id="${CSS.escape(act.dataset.id)}"]` : null;
+  if (!S.sel || !t) {
+    view.hidden = true; empty.hidden = false;
+    empty.innerHTML = S.sel
+      ? `<p class="muted pad">${S.tripsLoaded ? 'Diese Reise gibt es nicht mehr.' : 'Reise wird geladen …'}</p>`
+      : `<div class="empty-card"><h3>Wähle eine Reise</h3><p>Links siehst du deine Reisen. Öffne eine, um Ablauf, Packliste, Kosten und Notizen zu sehen.</p></div>`;
+    return;
+  }
+  empty.hidden = true; view.hidden = false;
+  renderTripHead(t); renderTabs(t);
+  if (S.tab === 'plan') renderPlan(t); else if (S.tab === 'pack') renderPack(t); else if (S.tab === 'cost') renderCost(t); else renderInfo(t);
+  if (sig) { const again = $(sig); if (again && again !== act) again.focus({ preventScroll: true }); }
+}
+function renderAll() {
+  $('#app').dataset.view = S.sel ? 'trip' : 'list';
+  applyRO();
+  renderSide();
+  renderTrip();
+}
+
+/* ---------- Sheets (Dialoge) ---------- */
+let IMP = null, PACKCTL = null, CALRUN = null;
+function openSheet({ title, body, foot = '', onMount, keep = false }) {
+  closeSheet(true, keep);
+  if (!S.lastFocus) S.lastFocus = document.activeElement;
+  const root = $('#sheetRoot');
+  root.innerHTML = `<div class="sheet-back" data-act="close-sheet"></div>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" tabindex="-1">
+      <header class="sheet-head"><h2 id="sheetTitle">${esc(title)}</h2><button class="icon-btn" type="button" data-act="close-sheet" aria-label="Schließen">${icon('x')}</button></header>
+      <div class="sheet-body">${body}</div>
+      <footer class="sheet-foot" id="sheetFoot">${foot}</footer>
+    </div>`;
+  root.hidden = false;
+  document.documentElement.classList.add('sheet-open');
+  const sheet = $('.sheet', root);
+  if (onMount) onMount(sheet);
+  setTimeout(() => {
+    const f = !matchMedia('(pointer: coarse)').matches && sheet.querySelector('input:not([type=checkbox]):not([type=file]):not([readonly]), textarea:not([readonly])');
+    (f || sheet).focus({ preventScroll: true });
+  }, 40);
+}
+function closeSheet(keepFocus, keepState) {
+  if (!keepState) {
+    if (IMP?.ctl) { try { IMP.ctl.abort(); } catch {} }
+    IMP = null; CALRUN = null;
+  }
+  const root = $('#sheetRoot');
+  if (root.hidden) return;
+  root.innerHTML = ''; root.hidden = true;
+  document.documentElement.classList.remove('sheet-open');
+  if (!keepFocus) { const f = S.lastFocus; S.lastFocus = null; if (f && document.contains(f)) f.focus?.({ preventScroll: true }); }
+}
+const sheetOpen = () => !$('#sheetRoot').hidden;
+
+async function copyText(text, done) {
+  try { await navigator.clipboard.writeText(text); toast(done); }
+  catch {
+    openSheet({ title: 'Zum Kopieren markieren', body: `<textarea id="copyBox" rows="12" readonly>${esc(text)}</textarea><p class="hint">Der Text ist markiert – kopiere ihn mit „Kopieren“ aus dem Menü deines Geräts.</p>`,
+      foot: '<button class="btn primary" type="button" data-act="close-sheet">Fertig</button>',
+      onMount: (sh) => { const b = $('#copyBox', sh); setTimeout(() => { b.focus(); b.select(); }, 60); } });
+  }
+}
+
+/* Reise anlegen / bearbeiten */
+function openTripForm(t) {
+  const d = t || { currency: 'EUR' };
+  openSheet({
+    title: t ? 'Reise bearbeiten' : 'Neue Reise',
+    body: `<form id="tripForm" class="form" novalidate>
+      <label class="fld"><span>Name der Reise</span><input id="tfTitle" maxlength="80" placeholder="z. B. Lissabon im Mai" value="${esc(d.title || '')}"></label>
+      <div class="fld-row dest">
+        <label class="fld"><span>Ziel</span><input id="tfDest" maxlength="80" placeholder="Stadt oder Region" value="${esc(d.destination || '')}"></label>
+        <label class="fld code"><span>Kürzel</span><input id="tfCode" maxlength="3" placeholder="LIS" autocapitalize="characters" value="${esc(d.code || '')}"></label>
+      </div>
+      <div class="fld-row">
+        <label class="fld"><span>Hinreise</span><input id="tfStart" type="date" value="${esc(d.start || '')}"></label>
+        <label class="fld"><span>Rückreise</span><input id="tfEnd" type="date" value="${esc(d.end || '')}"></label>
+      </div>
+      <label class="fld"><span>Wer reist mit?</span><input id="tfPeople" maxlength="200" placeholder="Namen mit Komma trennen, z. B. Lennert, Alex" value="${esc(travelers(d).join(', '))}"></label>
+      <label class="fld"><span>Währung der Reisekasse</span><select id="tfCur">${CURS.map((c) => `<option${(d.currency || 'EUR') === c ? ' selected' : ''}>${c}</option>`).join('')}</select></label>
+      <p class="form-err" id="tfErr" role="alert"></p>
+    </form>`,
+    foot: `<button class="btn" type="button" data-act="close-sheet">Abbrechen</button><button class="btn primary" type="button" id="tfSave">${t ? 'Speichern' : 'Reise anlegen'}</button>`,
+    onMount: (sh) => { $('#tfSave', sh).onclick = () => submitTrip(t); $('#tripForm', sh).onsubmit = (e) => { e.preventDefault(); submitTrip(t); }; },
+  });
+}
+async function submitTrip(t) {
+  const title = $('#tfTitle').value.trim(), dest = $('#tfDest').value.trim();
+  const code = $('#tfCode').value.trim().toUpperCase().replace(/[^A-ZÄÖÜ0-9]/g, '').slice(0, 3);
+  const start = isoDate($('#tfStart').value), end = isoDate($('#tfEnd').value);
+  const people = [...new Set($('#tfPeople').value.split(/[,;\n]/).map((s) => str(s, 40)).filter(Boolean))].slice(0, 12);
+  const err = $('#tfErr');
+  if (!title && !dest) { err.textContent = 'Gib der Reise einen Namen oder ein Ziel.'; return; }
+  if (start && end && end < start) { err.textContent = 'Die Rückreise liegt vor der Hinreise. Prüf die Daten.'; return; }
+  const data = { title: title || dest, destination: dest, code, start, end: end || start, travelers: people, currency: $('#tfCur').value, updatedAt: Date.now() };
+  const btn = $('#tfSave'); btn.disabled = true;
+  try {
+    if (t) { await dbWrite('update', `trips/${t.id}`, data); closeSheet(); toast('Reise gespeichert'); }
+    else { const id = newId(); await dbWrite('set', `trips/${id}`, { ...data, notes: '', createdAt: Date.now() }); closeSheet(true); S.lastFocus = null; selectTrip(id); toast('Reise angelegt'); }
+  } catch (e) { btn.disabled = false; writeFailed(e); }
+}
+
+/* Eintrag: Formular */
+function itemLabels(type) {
+  const g = TYPES[type].g;
+  if (type === 'car') return ['Abholung', 'Rückgabe'];
+  if (g === 'move') return ['Abfahrt', 'Ankunft'];
+  if (g === 'stay') return ['Anreise', 'Abreise'];
+  return ['Beginn', 'Ende'];
+}
+function openItemForm(it, day) {
+  const d = it ? { ...it } : { type: 'activity', start: day || '' };
+  const ty = typeOf(d), [l1, l2] = itemLabels(ty);
+  openSheet({
+    title: it ? 'Eintrag bearbeiten' : 'Neuer Eintrag',
+    body: `<form id="itemForm" class="form" novalidate>
+      <label class="fld"><span>Art</span><select id="ifType">${Object.entries(TYPES).map(([k, v]) => `<option value="${k}"${k === ty ? ' selected' : ''}>${esc(v.label)}</option>`).join('')}</select></label>
+      <label class="fld"><span>Titel</span><input id="ifTitle" maxlength="120" placeholder="z. B. Flug LH 1172, Hotel Lumen, Surfkurs" value="${esc(d.title || '')}"></label>
+      <div class="fld-row"><label class="fld"><span id="ifL1">${l1}</span><input id="ifSD" type="date" value="${esc(datePart(d.start))}"></label><label class="fld"><span>Uhrzeit</span><input id="ifST" type="time" value="${esc(timePart(d.start))}"></label></div>
+      <div class="fld-row"><label class="fld"><span id="ifL2">${l2}</span><input id="ifED" type="date" value="${esc(datePart(d.end))}"></label><label class="fld"><span>Uhrzeit</span><input id="ifET" type="time" value="${esc(timePart(d.end))}"></label></div>
+      <div class="fld-row" id="ifRoute"${TYPES[ty].g === 'move' ? '' : ' hidden'}><label class="fld"><span>Von</span><input id="ifFrom" maxlength="80" placeholder="Frankfurt (FRA)" value="${esc(d.from || '')}"></label><label class="fld"><span>Nach</span><input id="ifTo" maxlength="80" placeholder="Lissabon (LIS)" value="${esc(d.to || '')}"></label></div>
+      <label class="fld"><span>Ort / Adresse</span><input id="ifLoc" maxlength="160" value="${esc(d.location || '')}"></label>
+      <div class="fld-row"><label class="fld"><span>Anbieter</span><input id="ifProv" maxlength="80" placeholder="Airline, Hotel, Veranstalter" value="${esc(d.provider || '')}"></label><label class="fld"><span>Buchungsnummer</span><input id="ifCode" class="mono" maxlength="40" value="${esc(d.code || '')}"></label></div>
+      <label class="fld"><span>Details</span><textarea id="ifDet" rows="3" maxlength="800" placeholder="Sitzplatz, Gepäck, Zimmer, Hinweise …">${esc(d.details || '')}</textarea></label>
+      <div class="fld-row"><label class="fld"><span>Kosten</span><input id="ifCost" inputmode="decimal" placeholder="0,00" value="${d.cost != null && d.cost !== '' ? esc(String(d.cost).replace('.', ',')) : ''}"></label><label class="fld"><span>Link zur Buchung</span><input id="ifUrl" type="url" placeholder="https://…" value="${esc(d.url || '')}"></label></div>
+      <p class="form-err" id="ifErr" role="alert"></p>
+    </form>`,
+    foot: `<button class="btn" type="button" data-act="close-sheet">Abbrechen</button><button class="btn primary" type="button" id="ifSave">${it ? 'Speichern' : 'Hinzufügen'}</button>`,
+    onMount: (sh) => {
+      $('#ifType', sh).onchange = (e) => { const k = e.target.value, [a, b] = itemLabels(k); $('#ifL1').textContent = a; $('#ifL2').textContent = b; $('#ifRoute').hidden = TYPES[k].g !== 'move'; };
+      $('#ifSave', sh).onclick = () => submitItem(it);
+      $('#itemForm', sh).onsubmit = (e) => { e.preventDefault(); submitItem(it); };
+    },
+  });
+}
+const joinDT = (d, t) => (d ? (t ? `${d}T${t}` : d) : '');
+async function submitItem(it) {
+  const t = curTrip(); if (!t) return;
+  const type = $('#ifType').value, err = $('#ifErr');
+  const sd = isoDate($('#ifSD').value), st = $('#ifST').value, ed = isoDate($('#ifED').value) || ($('#ifET').value && sd ? sd : ''), et = $('#ifET').value;
+  const start = isoDT(joinDT(sd, st)), end = isoDT(joinDT(ed, et));
+  const costRaw = $('#ifCost').value.trim(), cost = costRaw ? parseAmount(costRaw) : null;
+  if (!$('#ifTitle').value.trim()) { err.textContent = 'Gib dem Eintrag einen Titel.'; return; }
+  if (start && end && end < start) { err.textContent = `${itemLabels(type)[1]} liegt vor ${itemLabels(type)[0]}. Prüf Datum und Uhrzeit.`; return; }
+  if (costRaw && !Number.isFinite(cost)) { err.textContent = 'Die Kosten verstehe ich nicht. Schreib sie z. B. als 49,90.'; return; }
+  const data = cleanItem({ ...(it || {}), type, title: $('#ifTitle').value, start, end, from: TYPES[type].g === 'move' ? $('#ifFrom').value : '', to: TYPES[type].g === 'move' ? $('#ifTo').value : '',
+    location: $('#ifLoc').value, provider: $('#ifProv').value, code: $('#ifCode').value, details: $('#ifDet').value, cost, currency: it?.currency || t.currency || 'EUR', url: $('#ifUrl').value });
+  const btn = $('#ifSave'); btn.disabled = true;
+  try {
+    if (it) await dbWrite('update', `trips/${t.id}/items/${it.id}`, { ...data, updatedAt: Date.now() });
+    else await dbWrite('set', `trips/${t.id}/items/${newId()}`, { ...data, createdAt: Date.now() });
+    closeSheet(); toast(it ? 'Eintrag gespeichert' : 'Eintrag hinzugefügt');
+  } catch (e) { btn.disabled = false; writeFailed(e); }
+}
+const stripSecrets = (s) => s.split('\n').filter((l) => !/\b(PIN|Passwort|Password|Kennwort|CVC|CVV|Kartennummer)\b/i.test(l)).join('\n').trim();
+function safeUrl(v) { const s = str(v, 500); if (!s) return ''; try { const u = new URL(s); return u.protocol === 'https:' || u.protocol === 'http:' ? u.href : ''; } catch { return ''; } }
+function cleanItem(it) {
+  const type = typeOf(it);
+  return {
+    type, title: str(it.title, 120) || TYPES[type].label, start: isoDT(it.start), end: isoDT(it.end), tz: validTz(it.tz), endTz: validTz(it.endTz),
+    from: str(it.from, 80), to: str(it.to, 80), location: str(it.location, 160), provider: str(it.provider, 80), code: str(it.code, 40),
+    details: stripSecrets(strML(it.details, 800)), cost: num(it.cost), currency: cur3(it.currency), url: safeUrl(it.url),
+  };
+}
+
+/* Eintrag: Details */
+const isOnCal = (it) => (S.myId && Array.isArray(it.calendarBy) && it.calendarBy.includes(S.myId)) || S.calLocal.has(it.id);
+function tzNote(tz) { return tz && tz !== LOCAL_TZ ? ` (Ortszeit ${tzCity(tz)})` : ''; }
+function openItem(id) {
+  const it = S.items.find((x) => x.id === id); if (!it) return;
+  const t = curTrip(), ty = TYPES[typeOf(it)], [l1, l2] = itemLabels(typeOf(it));
+  const kv = [];
+  if (datePart(it.start)) kv.push([l1, fmtWhen(it.start) + tzNote(validTz(it.tz))]);
+  if (datePart(it.end)) kv.push([l2, fmtWhen(it.end) + tzNote(validTz(it.endTz) || validTz(it.tz))]);
+  if (it.from || it.to) kv.push(['Strecke', [str(it.from, 80), str(it.to, 80)].filter(Boolean).join(' → ')]);
+  if (it.location) kv.push(['Ort', str(it.location, 160)]);
+  if (it.provider) kv.push(['Anbieter', str(it.provider, 80)]);
+  if (it.details) kv.push(['Details', strML(it.details, 800)]);
+  if (num(it.cost) != null) kv.push(['Kosten', fmtMoney(num(it.cost), it.currency || t?.currency)]);
+  const url = safeUrl(it.url);
+  openSheet({
+    title: ty.label,
+    body: `<div class="det-top"><span class="tag g-${ty.g}">${esc(ty.tag)}</span><h3>${esc(str(it.title, 120))}</h3></div>
+      ${it.code ? `<div class="det-code"><span class="lbl">Buchungsnummer</span><span class="mono big">${esc(str(it.code, 40))}</span><button class="btn small" type="button" data-act="copy" data-text="${esc(str(it.code, 40))}">${icon('copy')}Kopieren</button></div>` : ''}
+      ${kv.length ? `<dl class="kv">${kv.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>` : ''}
+      ${url ? `<p><a href="${esc(url)}" target="_blank" rel="noopener noreferrer">Buchung öffnen ↗</a></p>` : ''}
+      ${isOnCal(it) ? '<p class="ok-note">Steht in deinem Google Kalender.</p>' : ''}
+      <div id="detMsg" aria-live="polite"></div>`,
+    foot: `<button class="btn danger w" type="button" id="detDel">${icon('trash')}Löschen</button>
+      ${S.mcp && datePart(it.start) && !isOnCal(it) ? `<button class="btn" type="button" id="detCal">${icon('cal')}In Kalender</button>` : ''}
+      <button class="btn primary w" type="button" id="detEdit">${icon('edit')}Bearbeiten</button>`,
+    onMount: (sh) => {
+      $('#detEdit', sh).onclick = () => { if (guardWrite()) openItemForm(it); };
+      $('#detCal', sh)?.addEventListener('click', () => runCalendar([it], $('#detMsg'), $('#detCal')));
+      $('#detDel', sh).onclick = () => {
+        if (!guardWrite()) return;
+        $('#sheetFoot').innerHTML = `<span class="hint" style="flex:1 1 100%">Eintrag wirklich löschen?</span><button class="btn" type="button" data-act="close-sheet">Abbrechen</button><button class="btn danger-fill" type="button" id="detDelGo">${icon('trash')}Löschen</button>`;
+        $('#detDelGo').onclick = async () => {
+          try { await dbWrite('delete', `trips/${t.id}/items/${it.id}`); closeSheet(); toast('Eintrag gelöscht'); } catch (e) { writeFailed(e); }
+        };
+      };
+    },
+  });
+}
+
+/* Ausgaben */
+function defaultExpenseDate(t) { const d = todayISO(); return t.start && (d < t.start || (t.end && d > t.end)) ? t.start : d; }
+function openExpenseForm(e) {
+  const t = curTrip(); if (!t) return;
+  const people = travelers(t), d = e || { date: defaultExpenseDate(t), paidBy: people[0] || '', split: people };
+  const ro = !S.canWrite;
+  openSheet({
+    title: e ? 'Ausgabe' : 'Neue Ausgabe',
+    body: `<form id="exForm" class="form" novalidate>
+      <label class="fld"><span>Wofür?</span><input id="exTitle" maxlength="80" placeholder="z. B. Abendessen, Museum, Taxi" value="${esc(d.title || '')}"${ro ? ' readonly' : ''}></label>
+      <div class="fld-row"><label class="fld"><span>Betrag (${esc(t.currency || 'EUR')})</span><input id="exAmt" inputmode="decimal" placeholder="0,00" value="${num(d.amount) != null ? esc(String(num(d.amount)).replace('.', ',')) : ''}"${ro ? ' readonly' : ''}></label><label class="fld"><span>Datum</span><input id="exDate" type="date" value="${esc(datePart(d.date))}"${ro ? ' readonly' : ''}></label></div>
+      ${people.length ? `<label class="fld"><span>Bezahlt von</span><select id="exPaid"${ro ? ' disabled' : ''}>${[...new Set([...people, ...(d.paidBy && !people.includes(d.paidBy) ? [d.paidBy] : [])])].map((p) => `<option${p === d.paidBy ? ' selected' : ''}>${esc(p)}</option>`).join('')}</select></label>
+      <fieldset class="fld"><legend>Aufteilen auf</legend><div class="chips">${people.map((p) => `<label class="chip-cb"><input type="checkbox" name="exSplit" value="${esc(p)}"${!Array.isArray(d.split) || !d.split.length || d.split.includes(p) ? ' checked' : ''}${ro ? ' disabled' : ''}><span>${esc(p)}</span></label>`).join('')}</div></fieldset>`
+        : '<p class="hint">Trag unter „Infos“ ein, wer mitreist, um Ausgaben aufzuteilen.</p>'}
+      <p class="form-err" id="exErr" role="alert"></p>
+    </form>`,
+    foot: ro ? '<button class="btn primary" type="button" data-act="close-sheet">Schließen</button>'
+      : `${e ? `<button class="btn danger" type="button" id="exDel">${icon('trash')}Löschen</button>` : '<button class="btn" type="button" data-act="close-sheet">Abbrechen</button>'}<button class="btn primary" type="button" id="exSave">Speichern</button>`,
+    onMount: (sh) => {
+      if (ro) return;
+      $('#exSave', sh).onclick = () => submitExpense(e);
+      $('#exForm', sh).onsubmit = (ev) => { ev.preventDefault(); submitExpense(e); };
+      $('#exDel', sh)?.addEventListener('click', async () => { try { await dbWrite('delete', `trips/${t.id}/expenses/${e.id}`); closeSheet(); toast('Ausgabe gelöscht'); } catch (x) { writeFailed(x); } });
+    },
+  });
+}
+async function submitExpense(e) {
+  const t = curTrip(); if (!t) return;
+  const amount = parseAmount($('#exAmt').value), err = $('#exErr');
+  if (!Number.isFinite(amount) || amount <= 0) { err.textContent = 'Gib einen Betrag größer als 0 ein, z. B. 24,50.'; return; }
+  const split = $$('input[name="exSplit"]').filter((c) => c.checked).map((c) => c.value);
+  if ($$('input[name="exSplit"]').length && !split.length) { err.textContent = 'Wähle mindestens eine Person zum Aufteilen.'; return; }
+  const data = { title: str($('#exTitle').value, 80) || 'Ausgabe', amount, date: isoDate($('#exDate').value), paidBy: $('#exPaid') ? $('#exPaid').value : '', split, updatedAt: Date.now() };
+  const btn = $('#exSave'); btn.disabled = true;
+  try {
+    if (e) await dbWrite('update', `trips/${t.id}/expenses/${e.id}`, data);
+    else await dbWrite('set', `trips/${t.id}/expenses/${newId()}`, { ...data, createdAt: Date.now() });
+    closeSheet(); toast('Ausgabe gespeichert');
+  } catch (x) { btn.disabled = false; writeFailed(x); }
+}
+
+/* Reise löschen */
+function confirmDeleteTrip() {
+  const t = curTrip(); if (!t || !guardWrite()) return;
+  openSheet({
+    title: t.example ? 'Beispielreise löschen?' : 'Reise löschen?',
+    body: `<p>„${esc(tripName(t))}“ wird mit Ablauf, Packliste und Ausgaben gelöscht – auch für alle, mit denen du den Reiseplaner teilst. Das lässt sich nicht rückgängig machen.</p><p class="hint" id="delStatus" aria-live="polite"></p>`,
+    foot: `<button class="btn" type="button" data-act="close-sheet">Abbrechen</button><button class="btn danger-fill" type="button" id="delGo">${icon('trash')}Endgültig löschen</button>`,
+    onMount: (sh) => { $('#delGo', sh).onclick = () => deleteTrip(t.id); },
+  });
+}
+async function deleteTrip(id) {
+  const btn = $('#delGo'), st = $('#delStatus'); btn.disabled = true; st.textContent = 'Wird gelöscht …';
+  try {
+    const base = S.db.doc(`trips/${id}`);
+    for (const c of ['items', 'packing', 'expenses']) {
+      const snap = await base.collection(c).get();
+      for (const d of snap.docs) await dbWrite('delete', `trips/${id}/${c}/${d.id}`);
+    }
+    await dbWrite('delete', `trips/${id}`);
+    closeSheet(true); S.lastFocus = null;
+    if (S.sel === id) selectTrip(null);
+    toast('Reise gelöscht');
+  } catch (e) { btn.disabled = false; st.textContent = ''; writeFailed(e); }
+}
+
+/* ---------- Fehlertexte ---------- */
+const SAMPLE_GONE = new Set(['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed']);
+function sampleErrText(e) {
+  switch (e?.code) {
+    case 'not_granted': return 'Du hast dem Reiseplaner nicht erlaubt, Claude zu nutzen. Das kannst du im Berechtigungsmenü des Reiseplaners ändern.';
+    case 'sampling_disabled': case 'not_declared': case 'capability_disabled': case 'capability_removed': return 'Claude ist in dieser Ansicht nicht verfügbar.';
+    case 'rate_limited': return 'Gerade gehen zu viele Anfragen an Claude. Warte einen Moment und versuch es dann noch mal.';
+    case 'session_expired': return 'Deine Anmeldung ist abgelaufen. Melde dich in claude.ai neu an.';
+    case 'prompt_too_large': return 'Das ist zu viel auf einmal. Wähle weniger Mails oder kürze den Text.';
+    case 'image_rejected': case 'images_unavailable': return 'Dieses Bild konnte Claude nicht lesen. Nimm einen anderen Screenshot (JPG oder PNG).';
+    case 'refused': case 'empty_completion': return 'Claude konnte daraus keine Buchung lesen. Versuch einen anderen Ausschnitt.';
+    case 'invalid_json': return 'Die Antwort kam unvollständig an. Versuch es noch mal.';
+    default: return 'Die Verbindung zu Claude ist abgebrochen. Versuch es noch mal.';
+  }
+}
+function mcpErrText(e, name, isWrite) {
+  switch (e?.code) {
+    case 'server_not_connected': return `${name} ist nicht verbunden. Verbinde ${name} in claude.ai unter Einstellungen → Konnektoren und versuch es dann noch mal.`;
+    case 'needs_reauth': return `Die Verbindung zu ${name} ist abgelaufen. Verbinde ${name} in claude.ai unter Einstellungen → Konnektoren neu.`;
+    case 'selection_required': return `Du hast ${name} mehrfach verbunden. Wähle in claude.ai aus, welches Konto der Reiseplaner nutzen soll.`;
+    case 'not_in_manifest': return `Der Reiseplaner darf ${name} gerade nicht nutzen. Erlaube den Zugriff im Berechtigungsmenü des Reiseplaners.`;
+    case 'approval_required': return `${name} braucht deine Zustimmung. Tippe auf „Erneut versuchen“ und erlaube den Zugriff.`;
+    case 'blocked_by_policy': return `Deine Organisation erlaubt den Zugriff auf ${name} hier nicht.`;
+    case 'server_unavailable': return isWrite ? `${name} hat nicht geantwortet. Schau in deinen Kalender, bevor du es noch mal versuchst – der Termin wurde vielleicht schon angelegt.` : `${name} antwortet gerade nicht. Versuch es gleich noch mal.`;
+    case 'tool_error': return isWrite ? `${name} hat den Termin abgelehnt. Prüf Datum und Uhrzeit des Eintrags.` : `${name} meldet einen Fehler. Versuch es mit einer anderen Suche.`;
+    case 'not_granted': case 'capability_disabled': case 'capability_removed': return `${name} ist in dieser Ansicht nicht verfügbar.`;
+    default: return isWrite ? `Die Verbindung zu ${name} ist abgebrochen. Schau in deinen Kalender, bevor du es noch mal versuchst.` : `Die Verbindung zu ${name} ist abgebrochen. Versuch es noch mal.`;
+  }
+}
+const permBtn = (e) => (e?.code === 'not_in_manifest' || e?.code === 'not_granted' ? ` <button class="btn small" type="button" data-act="perm">Berechtigungen öffnen</button>` : '');
+async function openPermissions() {
+  try { const p = S.perms || (await window.claude?.use?.('permissions')); if (!p) throw 0; await p.manage(); }
+  catch { toast('Öffne das Berechtigungsmenü des Reiseplaners oben in claude.ai.'); }
+}
+
+/* ---------- Google Kalender ---------- */
+function buildEvent(it, t) {
+  const ty = TYPES[typeOf(it)], sd = datePart(it.start);
+  if (!sd) return null;
+  const tz = validTz(it.tz), st = timePart(it.start), ed = datePart(it.end);
+  const route = ty.g === 'move' && it.from && it.to ? ` (${str(it.from, 40)} → ${str(it.to, 40)})` : '';
+  const ev = {
+    summary: `${str(it.title, 100) || ty.label}${route}`,
+    description: [it.code ? `Buchungsnummer: ${str(it.code, 40)}` : '', it.provider ? `Anbieter: ${str(it.provider, 80)}` : '', strML(it.details, 800), t ? `Reise: ${tripName(t)} (Reiseplaner)` : ''].filter(Boolean).join('\n'),
+  };
+  const loc = str(it.location, 160) || str(it.from, 80); if (loc) ev.location = loc;
+  if (!st || (ty.g === 'stay' && ed && ed > sd)) {
+    const endDay = ty.g === 'stay' && ed && ed > sd ? ed : addDays(ed && ed >= sd ? ed : sd, 1);
+    return { ...ev, allDay: true, startTime: `${sd}T00:00:00`, endTime: `${endDay}T00:00:00` };
+  }
+  const startUtc = wallToUtc(it.start, tz);
+  let endWall = '';
+  if (ed && timePart(it.end)) { const etz = validTz(it.endTz) || tz; endWall = tz && etz && etz !== tz ? utcToWall(wallToUtc(it.end, etz), tz) : it.end; }
+  if (!endWall || !(wallToUtc(endWall, tz) > startUtc)) endWall = utcToWall(startUtc + ty.dur * 60000, tz);
+  return { ...ev, startTime: `${it.start}:00`, endTime: `${endWall}:00`, ...(tz ? { timeZone: tz } : {}) };
+}
+async function markCal(it) {
+  S.calLocal.add(it.id);
+  const t = curTrip();
+  if (!S.myId || !S.canWrite || !t) return;
+  const cur = Array.isArray(it.calendarBy) ? it.calendarBy.filter((x) => typeof x === 'string') : [];
+  if (cur.includes(S.myId)) return;
+  try { await dbWrite('update', `trips/${t.id}/items/${it.id}`, { calendarBy: [...cur, S.myId].slice(-20) }); } catch {}
+}
+async function runCalendar(list, out, btn) {
+  if (!S.mcp || !list.length) return;
+  const run = {}; CALRUN = run;
+  if (btn) btn.disabled = true;
+  let ok = 0;
+  for (const it of list) {
+    if (CALRUN !== run) return;
+    const ev = buildEvent(it, curTrip()); if (!ev) continue;
+    out.innerHTML = `<div class="busy"><span class="spinner"></span><span>Trage ein … ${ok + 1} von ${list.length}</span></div>`;
+    try { await S.mcp.callTool('Google Calendar', 'create_event', ev); ok++; await markCal(it); }
+    catch (e) {
+      if (CALRUN !== run) return;
+      out.innerHTML = `<p class="err">${esc(mcpErrText(e, 'Google Kalender', true))}${permBtn(e)}</p>${ok ? `<p class="ok-note">${plural(ok, 'Termin wurde', 'Termine wurden')} schon eingetragen.</p>` : ''}`;
+      if (btn) { btn.disabled = false; btn.textContent = 'Erneut versuchen'; }
+      return;
+    }
+  }
+  if (CALRUN !== run) return;
+  out.innerHTML = `<p class="ok-note">${plural(ok, 'Termin', 'Termine')} in deinem Google Kalender eingetragen.</p>`;
+  if (btn) btn.remove();
+  toast(`${plural(ok, 'Termin', 'Termine')} im Google Kalender`);
+}
+function openCalendar() {
+  const t = curTrip(); if (!t) return;
+  const dated = S.items.filter((it) => datePart(it.start)).sort(cmpItems);
+  const todo = dated.filter((it) => !isOnCal(it)), done = dated.length - todo.length;
+  const gcal = !S.mcp ? '<p class="muted">Google Kalender ist in dieser Ansicht nicht verfügbar.</p>'
+    : !dated.length ? '<p class="muted">Noch keine Einträge mit Datum.</p>'
+    : `<p>${todo.length ? `<b>${plural(todo.length, 'Termin', 'Termine')}</b> neu` : 'Alles ist schon eingetragen'}${done ? ` · ${done} schon im Kalender` : ''}.</p>
+       <p class="hint">Flüge und Fahrten bekommen die Ortszeit des Abflugs, Unterkünfte werden als ganztägige Termine über die Nächte eingetragen. Es landet alles in deinem eigenen Kalender.</p>`;
+  openSheet({
+    title: 'Kalender & Teilen',
+    body: `<section class="imp-pane"><h3 class="sec-h">Google Kalender</h3>${gcal}<div id="calOut" aria-live="polite"></div></section>
+      <section class="imp-pane"><h3 class="sec-h">Als Text</h3><p class="hint">Der ganze Ablauf als Text – zum Einfügen in WhatsApp, Mail oder Notizen.</p><div><button class="btn" type="button" data-act="copy-plan">${icon('copy')}Ablauf kopieren</button></div></section>`,
+    foot: `<button class="btn" type="button" data-act="close-sheet">Schließen</button>${S.mcp && todo.length ? `<button class="btn primary" type="button" id="calGo">${icon('cal')}${plural(todo.length, 'Termin', 'Termine')} eintragen</button>` : ''}`,
+    onMount: (sh) => { $('#calGo', sh)?.addEventListener('click', () => runCalendar(S.items.filter((it) => datePart(it.start) && !isOnCal(it)).sort(cmpItems), $('#calOut'), $('#calGo'))); },
+  });
+}
+function planText(t) {
+  const lines = [`${tripName(t)}${t.start ? ` · ${fmtRange(t.start, t.end)}` : ''}`];
+  let day = null;
+  for (const it of S.items.slice().sort(cmpItems)) {
+    const d = datePart(it.start) || 'ohne';
+    if (d !== day) { day = d; lines.push('', d === 'ohne' ? 'Ohne Datum' : fmtLong(d)); }
+    const sub = itemSub(it, 'main');
+    lines.push(`${timePart(it.start) || '–'}  ${str(it.title, 120)}${sub ? ` – ${sub}` : ''}${it.code ? ` (Buchung ${str(it.code, 40)})` : ''}`);
+  }
+  if (!S.items.length) lines.push('', 'Noch kein Ablauf geplant.');
+  return lines.join('\n');
+}
+
+/* ---------- Packliste ---------- */
+function normCat(name) {
+  const n = str(name, 30).toLowerCase();
+  if (/dok|papier|ausweis/.test(n)) return 'Dokumente';
+  if (/kleid|wäsche|schuh/.test(n)) return 'Kleidung';
+  if (/hyg|pflege|kosmet|bad/.test(n)) return 'Hygiene';
+  if (/gesund|medi|apothek|erste/.test(n)) return 'Gesundheit';
+  if (/elektr|technik|gerät/.test(n)) return 'Elektronik';
+  return 'Sonstiges';
+}
+function packPrompt(t) {
+  const n = nights(t);
+  const plan = S.items.slice().sort(cmpItems).slice(0, 40).map((it) => `- ${TYPES[typeOf(it)].label}: ${str(it.title, 60)}${it.details ? ` (${str(it.details, 80)})` : ''}`).join('\n') || '- noch nichts geplant';
+  const have = S.packing.map((p) => str(p.text, 40)).filter(Boolean).slice(0, 150).join(', ') || 'nichts';
+  return `Erstelle eine Packliste für diese Reise.
+Reise: ${tripName(t)}
+Ziel: ${str(t.destination, 80) || 'unbekannt'}
+Zeitraum: ${t.start || '?'} bis ${t.end || '?'}${n != null ? ` (${n} Nächte)` : ''}${t.start ? `, Monat: ${MONTH.format(utcDate(t.start))}` : ''}
+Reisende: ${travelers(t).length || 1}
+Geplant:
+${plan}
+Notizen: ${str(t.notes, 400) || '–'}
+Steht schon auf der Liste (nicht wiederholen): ${have}
+
+Antworte NUR mit JSON: {"categories":[{"name":"Dokumente","items":["Reisepass"]}]}
+Regeln: 20 bis 40 konkrete Dinge, jeweils höchstens 4 Wörter, passend zu Ziel, Jahreszeit, Dauer und Aktivitäten. Kategorien nur aus: Dokumente, Kleidung, Hygiene, Gesundheit, Elektronik, Sonstiges. Denk an Dinge, die man oft vergisst (Adapter, Ladekabel, Medikamente, Kopien wichtiger Dokumente).`;
+}
+async function addPackItems(t, list, by) {
+  const have = new Set(S.packing.map((p) => str(p.text).toLowerCase()));
+  let i = 0; const base = Date.now();
+  for (const p of list) {
+    const text = str(p.text, 60); if (!text || have.has(text.toLowerCase())) continue;
+    have.add(text.toLowerCase());
+    await dbWrite('set', `trips/${t.id}/packing/${newId()}`, { text, category: PACK_CATS.includes(p.category) ? p.category : 'Sonstiges', done: false, order: base + i, ...(by ? { by } : {}) });
+    i++;
+    if (i >= 60) break;
+  }
+  return i;
+}
+function setPackBusy(on) {
+  for (const b of $$('[data-act="pack-ai"]')) { b.disabled = on; if (on) b.dataset.label = b.innerHTML; b.innerHTML = on ? '<span class="spinner"></span>Claude packt …' : b.dataset.label || b.innerHTML; }
+}
+async function packAI() {
+  const t = curTrip(); if (!t || !S.sampleOk || PACKCTL || !guardWrite()) return;
+  PACKCTL = new AbortController(); setPackBusy(true);
+  let res;
+  try { res = await S.sample.json(packPrompt(t), { modelTier: 'quick', signal: PACKCTL.signal }); }
+  catch (e) {
+    PACKCTL = null; setPackBusy(false);
+    if (e?.code === 'cancelled') return;
+    if (SAMPLE_GONE.has(e?.code)) { S.sampleOk = false; renderAll(); }
+    toast(sampleErrText(e), 'bad'); return;
+  }
+  const list = [];
+  for (const c of Array.isArray(res?.categories) ? res.categories : []) {
+    const cat = normCat(c?.name);
+    for (const x of (Array.isArray(c?.items) ? c.items : []).slice(0, 30)) list.push({ text: x, category: cat });
+  }
+  try {
+    const n = await addPackItems(t, list, 'claude');
+    toast(n ? `${plural(n, 'Ding', 'Dinge')} auf die Packliste gesetzt` : 'Claude hat nichts Neues gefunden – deine Liste ist schon gut gefüllt.');
+  } catch (e) { writeFailed(e); }
+  finally { PACKCTL = null; setPackBusy(false); }
+}
+async function packBase() {
+  const t = curTrip(); if (!t || !guardWrite()) return;
+  const list = Object.entries(BASE_PACK).flatMap(([category, xs]) => xs.map((text) => ({ text, category })));
+  try { const n = await addPackItems(t, list); toast(n ? `${plural(n, 'Ding', 'Dinge')} eingefügt` : 'Die Grundliste steht schon drin.'); } catch (e) { writeFailed(e); }
+}
+async function packToggle(id, done) {
+  const t = curTrip(); if (!t) return;
+  if (!guardWrite()) { renderTrip(); return; }
+  try { await dbWrite('update', `trips/${t.id}/packing/${id}`, { done }); } catch (e) { writeFailed(e); renderTrip(); }
+}
+async function packDel(id) {
+  const t = curTrip(); if (!t || !guardWrite()) return;
+  try { await dbWrite('delete', `trips/${t.id}/packing/${id}`); } catch (e) { writeFailed(e); }
+}
+async function packReset() {
+  const t = curTrip(); if (!t || !guardWrite()) return;
+  const done = S.packing.filter((p) => p.done);
+  if (!done.length) { toast('Es ist noch nichts abgehakt.'); return; }
+  try { for (const p of done) await dbWrite('update', `trips/${t.id}/packing/${p.id}`, { done: false }); toast('Alle Haken entfernt – bereit für die nächste Reise'); } catch (e) { writeFailed(e); }
+}
+async function addPackFromForm() {
+  const t = curTrip(); if (!t || !guardWrite()) return;
+  const inp = $('#packText'), text = str(inp.value, 60);
+  if (!text) return;
+  inp.value = '';
+  try { await dbWrite('set', `trips/${t.id}/packing/${newId()}`, { text, category: $('#packCat').value, done: false, order: Date.now() }); }
+  catch (e) { inp.value = text; writeFailed(e); }
+}
+
+/* ---------- Import: Buchung → Einträge (Claude) ---------- */
+const GM_BASE = '{category:reservations subject:(Buchungsbestätigung OR Buchung OR Reservierung OR Reservierungsbestätigung OR Booking OR Reservation OR Confirmation OR Flug OR Flight OR Hotel OR Ticket OR Fahrkarte OR Itinerary OR Reiseplan OR Mietwagen)} newer_than:1y';
+function openImport(mode) {
+  if (!S.sampleOk) { toast('Claude ist in dieser Ansicht nicht verfügbar. Trag Einträge von Hand ein.', 'bad'); return; }
+  if (mode === 'add' && !curTrip()) return;
+  if (IMP?.ctl) { try { IMP.ctl.abort(); } catch {} }
+  CALRUN = null;
+  IMP = { mode, src: S.mcp ? 'gmail' : 'text', threads: [], picked: new Set(), files: [], take: new Set(), ctl: null, result: null, step: 'pick', searched: false };
+  const imgs = !!S.imgLimits;
+  openSheet({
+    title: mode === 'new' ? 'Reise aus Buchung erstellen' : 'Buchung importieren',
+    body: `<div id="impPick" class="imp-pane">
+        <div class="seg" role="tablist" aria-label="Quelle">
+          <button type="button" role="tab" data-src="gmail"${S.mcp ? '' : ' hidden'}>${icon('mail')}Gmail</button>
+          <button type="button" role="tab" data-src="text">${icon('text')}Text</button>
+          <button type="button" role="tab" data-src="image"${imgs ? '' : ' hidden'}>${icon('image')}Bild</button>
+        </div>
+        <div class="imp-pane" data-pane="gmail" hidden>
+          <form id="gmForm" class="row" role="search"><input id="gmQuery" type="search" maxlength="120" placeholder="Ort, Airline oder Hotel" aria-label="In Gmail suchen"><button class="btn" type="submit">Suchen</button></form>
+          <p class="hint">Ohne Suchbegriff zeigt die Liste Buchungen und Reservierungen der letzten 12 Monate. Wähle eine oder mehrere Mails aus.</p>
+          <div id="gmResults"></div>
+        </div>
+        <div class="imp-pane" data-pane="text" hidden>
+          <textarea id="impText" rows="9" maxlength="30000" placeholder="Bestätigungsmail oder Buchungsdetails hier einfügen …" aria-label="Buchungstext"></textarea>
+        </div>
+        <div class="imp-pane" data-pane="image" hidden>
+          <label class="drop">${icon('image')}<span><b>Screenshot oder Foto wählen</b><br>z. B. Bordkarte, Bahnticket oder Buchung aus einer App</span><input id="impFiles" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple></label>
+          <div id="impThumbs" class="thumbs"></div>
+        </div>
+      </div>
+      <div id="impStatus" aria-live="polite"></div>
+      <div id="impPreview" hidden></div>
+      <p class="hint">Claude liest nur, was du auswählst. PINs, Passwörter und Zahlungsdaten werden nicht übernommen.</p>`,
+    foot: `<button class="btn" type="button" id="impBack" hidden>Zurück</button><button class="btn" type="button" id="impStop" hidden>Stopp</button><button class="btn primary" type="button" id="impGo"></button>`,
+    onMount: (sh) => {
+      $$('[data-src]', sh).forEach((b) => { b.onclick = () => setSrc(b.dataset.src); });
+      $('#gmForm', sh).onsubmit = (e) => { e.preventDefault(); gmSearch(); };
+      $('#impText', sh).oninput = updateGo;
+      $('#impFiles', sh).onchange = onFiles;
+      $('#impGo', sh).onclick = () => (IMP?.step === 'review' ? commitImport() : runParse());
+      $('#impStop', sh).onclick = () => IMP?.ctl?.abort();
+      $('#impBack', sh).onclick = () => { $('#impStatus').innerHTML = ''; setStep('pick'); };
+      setSrc(IMP.src); setStep('pick');
+    },
+    keep: true,
+  });
+}
+function setSrc(src) {
+  if (!IMP) return;
+  IMP.src = src;
+  $$('[data-src]').forEach((b) => b.setAttribute('aria-selected', b.dataset.src === src ? 'true' : 'false'));
+  $$('[data-pane]').forEach((p) => { p.hidden = p.dataset.pane !== src; });
+  $('#impStatus').innerHTML = '';
+  if (src === 'gmail' && S.mcp && !IMP.searched) { IMP.searched = true; gmSearch(); }
+  updateGo();
+}
+function setStep(step) {
+  if (!IMP) return;
+  IMP.step = step;
+  $('#impPick').hidden = step === 'review';
+  $('#impPreview').hidden = step !== 'review';
+  $('#impBack').hidden = step !== 'review';
+  $('#impStop').hidden = step !== 'busy';
+  $('#impGo').hidden = step === 'busy';
+  $$('#impPick input, #impPick textarea, #impPick button').forEach((x) => { x.disabled = step === 'busy'; });
+  updateGo();
+}
+function updateGo() {
+  const b = $('#impGo'); if (!b || !IMP) return;
+  if (IMP.step === 'review') { const n = IMP.take.size; b.disabled = !n; b.innerHTML = `${icon('check')}${n ? (IMP.mode === 'new' ? `Reise anlegen (${n})` : `${plural(n, 'Eintrag', 'Einträge')} übernehmen`) : 'Nichts ausgewählt'}`; return; }
+  const n = IMP.src === 'gmail' ? IMP.picked.size : IMP.src === 'text' ? ($('#impText').value.trim().length >= 20 ? 1 : 0) : IMP.files.length;
+  b.disabled = !n;
+  b.innerHTML = `${icon('spark')}${IMP.src === 'gmail' && n > 1 ? `${n} Mails auslesen` : 'Mit Claude auslesen'}`;
+}
+async function gmSearch() {
+  const imp = IMP; if (!imp || !S.mcp) return;
+  const q = $('#gmQuery').value.trim(), out = $('#gmResults');
+  out.innerHTML = '<div class="busy"><span class="spinner"></span><span>Suche in Gmail …</span></div>';
+  try {
+    const res = await S.mcp.callTool('Gmail', 'search_threads', { query: q ? `${q} newer_than:2y` : GM_BASE, pageSize: 20, view: 'THREAD_VIEW_MINIMAL' });
+    if (IMP !== imp) return;
+    const p = res?.payload && typeof res.payload === 'object' ? res.payload : {};
+    imp.threads = (Array.isArray(p.threads) ? p.threads : []).map((t) => {
+      const m = (Array.isArray(t?.messages) ? t.messages : [])[0] || {};
+      const dt = new Date(str(m.date, 40));
+      return { id: str(t?.id || m.threadId, 80), subject: str(m.subject, 160) || '(ohne Betreff)', sender: str(m.sender, 120), date: Number.isNaN(dt.getTime()) ? '' : `${pad(dt.getDate())}.${pad(dt.getMonth() + 1)}.${dt.getFullYear()}` };
+    }).filter((t) => t.id);
+    imp.picked.clear();
+    out.innerHTML = imp.threads.length
+      ? `<ul class="gm-list">${imp.threads.map((t) => `<li><label class="gm-row"><input type="checkbox" data-gm="${esc(t.id)}"><span class="gm-text"><b>${esc(t.subject)}</b><small>${esc([t.sender.replace(/^.*<|>.*$/g, ''), t.date].filter(Boolean).join(' · '))}</small></span></label></li>`).join('')}</ul>`
+      : `<p class="muted">${q ? `Keine Mails zu „${esc(q)}“ gefunden.` : 'Keine Buchungsmails gefunden.'} Versuch es mit dem Zielort, der Airline oder dem Hotelnamen.</p>`;
+    $$('[data-gm]', out).forEach((cb) => { cb.onchange = () => { if (cb.checked) imp.picked.add(cb.dataset.gm); else imp.picked.delete(cb.dataset.gm); updateGo(); }; });
+  } catch (e) {
+    if (IMP !== imp) return;
+    out.innerHTML = `<p class="err">${esc(mcpErrText(e, 'Gmail', false))}${permBtn(e)}</p>`;
+  }
+  updateGo();
+}
+async function gmTexts(ids) {
+  const texts = [];
+  for (const id of ids.slice(0, 6)) {
+    const res = await S.mcp.callTool('Gmail', 'get_thread', { threadId: id, messageFormat: 'PLAIN_TEXT' });
+    const p = res?.payload && typeof res.payload === 'object' ? res.payload : {};
+    const msgs = Array.isArray(p.messages) ? p.messages : [];
+    texts.push(msgs.map((m) => `Betreff: ${str(m.subject, 200)}\nVon: ${str(m.sender, 120)}\nDatum: ${str(m.date, 40)}\n\n${strML(m.plaintextBody || m.plaintext_body || m.snippet, 16000)}`).join('\n\n---\n\n').slice(0, 16000));
+  }
+  return texts;
+}
+function onFiles(e) {
+  if (!IMP) return;
+  const lim = S.imgLimits || {}, max = lim.maxCount || 4, types = lim.mediaTypes || ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  const all = [...(e.target.files || [])], files = all.filter((f) => types.includes(f.type) && (!lim.maxInputBytes || f.size <= lim.maxInputBytes)).slice(0, max);
+  IMP.files = files;
+  const th = $('#impThumbs'); th.innerHTML = '';
+  for (const f of files) { const img = document.createElement('img'); img.alt = f.name; img.src = URL.createObjectURL(f); th.append(img); }
+  $('#impStatus').innerHTML = all.length > files.length ? `<p class="hint">Es gehen höchstens ${max} Bilder als JPG, PNG, WebP oder GIF.</p>` : '';
+  updateGo();
+}
+function parsePrompt(texts, hasImages, trip) {
+  const ctx = trip ? ` Die Einträge gehören zur Reise „${tripName(trip)}“ (${str(trip.destination, 60) || 'Ziel offen'}, ${trip.start || '?'} bis ${trip.end || '?'}).` : '';
+  return [
+    `Du liest Reisebuchungen für einen Reiseplaner aus. Heute ist der ${todayISO()}.${ctx}`,
+    hasImages ? 'Lies die Buchung(en) aus den angehängten Bildern (Screenshots oder Fotos von Tickets und Bestätigungen).' : '',
+    texts.map((t, i) => `<<<BUCHUNG ${i + 1}\n${t}\n>>>`).join('\n\n'),
+    `Antworte NUR mit JSON in genau diesem Format:
+{"trip":{"title":"kurzer Reisename, z. B. Lissabon im Mai","destination":"Zielort","code":"3-Buchstaben-Kürzel des Ziels (IATA-Flughafen- oder Stadtcode) oder leer","start":"YYYY-MM-DD","end":"YYYY-MM-DD"},
+"items":[{"type":"flight|train|bus|car|ferry|stay|activity|food|note","title":"z. B. Flug LH 1172 oder Hotel Lumen","start":"YYYY-MM-DDTHH:MM oder YYYY-MM-DD","end":"YYYY-MM-DDTHH:MM, YYYY-MM-DD oder leer","tz":"IANA-Zeitzone des Startorts, z. B. Europe/Berlin, oder leer","endTz":"IANA-Zeitzone des Zielorts oder leer","from":"Abfahrt/Abflug mit Code, z. B. Frankfurt (FRA)","to":"Ankunft mit Code","location":"Adresse oder Ort","provider":"Airline, Bahn, Hotel, Vermieter, Veranstalter","code":"Buchungs- oder Bestätigungsnummer","details":"kurz: Sitzplatz, Gepäck, Zimmer, Check-in-Zeiten, wichtige Hinweise","cost":123.45,"currency":"EUR"}]}
+Regeln:
+- Alle Zeiten als Ortszeit des jeweiligen Orts, so wie in der Buchung angegeben.
+- Hin- und Rückflug, Umstiege und einzelne Zugfahrten sind getrennte Einträge.
+- Unterkunft: start = Anreisedatum (mit frühester Check-in-Uhrzeit, falls genannt), end = Abreisedatum (mit spätester Check-out-Uhrzeit, falls genannt).
+- Mietwagen: start = Abholung, end = Rückgabe, location = Abholort.
+- Übernimm nur, was in der Buchung steht. Nichts erfinden; unbekannte Felder leer lassen, cost dann null.
+- Niemals PINs, Passwörter, Kartennummern oder Zahlungsdaten übernehmen.
+- cost ist der Gesamtpreis dieser Buchung als Zahl mit Punkt als Dezimaltrenner.
+- Ist keine Reisebuchung erkennbar: {"trip":null,"items":[]}`,
+  ].filter(Boolean).join('\n\n');
+}
+function normalizeParse(res) {
+  const out = { trip: null, items: [] };
+  if (!res || typeof res !== 'object') return out;
+  const tr = res.trip && typeof res.trip === 'object' ? res.trip : null;
+  if (tr) out.trip = { title: str(tr.title, 80), destination: str(tr.destination, 80), code: str(tr.code, 3).toUpperCase().replace(/[^A-Z0-9]/g, ''), start: isoDate(tr.start), end: isoDate(tr.end) };
+  for (const r of (Array.isArray(res.items) ? res.items : []).slice(0, 40)) if (r && typeof r === 'object') out.items.push(cleanItem(r));
+  return out;
+}
+const sameItem = (a, b) => typeOf(a) === typeOf(b) && datePart(a.start) === datePart(b.start)
+  && ((a.code && b.code && str(a.code).toLowerCase() === str(b.code).toLowerCase()) || str(a.title).toLowerCase() === str(b.title).toLowerCase());
+async function runParse() {
+  const imp = IMP; if (!imp) return;
+  const status = $('#impStatus');
+  setStep('busy');
+  status.innerHTML = `<div class="busy"><span class="spinner"></span><span id="impBusy">${imp.src === 'gmail' ? 'Hole die Mails aus Gmail …' : 'Claude liest die Buchung …'}</span></div>`;
+  let texts = [], images = null;
+  try {
+    if (imp.src === 'gmail') texts = await gmTexts([...imp.picked]);
+    else if (imp.src === 'text') texts = [$('#impText').value.trim().slice(0, 30000)];
+    else images = imp.files.slice();
+  } catch (e) {
+    if (IMP !== imp) return;
+    setStep('pick'); status.innerHTML = `<p class="err">${esc(mcpErrText(e, 'Gmail', false))}${permBtn(e)}</p>`; return;
+  }
+  if (IMP !== imp) return;
+  const busy = $('#impBusy'); if (busy) busy.textContent = imp.src === 'gmail' && texts.length > 1 ? `Claude liest ${texts.length} Buchungen …` : 'Claude liest die Buchung …';
+  imp.ctl = new AbortController();
+  try {
+    const res = await S.sample.json(parsePrompt(texts, !!images, imp.mode === 'add' ? curTrip() : null), {
+      signal: imp.ctl.signal, ...(images ? { images } : {}),
+      onText: () => { const el = $('#impBusy'); if (el && IMP === imp) el.textContent = 'Claude schreibt die Einträge …'; },
+    });
+    if (IMP !== imp) return;
+    imp.result = normalizeParse(res);
+    status.innerHTML = '';
+    renderPreview(); setStep('review');
+  } catch (e) {
+    if (IMP !== imp) return;
+    setStep('pick');
+    if (e?.code === 'cancelled') { status.innerHTML = ''; return; }
+    status.innerHTML = `<p class="err">${esc(sampleErrText(e))}${e?.code === 'not_granted' ? permBtn(e) : ''}</p>`;
+    if (SAMPLE_GONE.has(e?.code)) { S.sampleOk = false; renderAll(); }
+  } finally { if (IMP === imp) imp.ctl = null; }
+}
+function renderPreview() {
+  const imp = IMP, r = imp.result, box = $('#impPreview');
+  const existing = imp.mode === 'add' ? S.items : [];
+  imp.take = new Set();
+  const rows = r.items.map((it, i) => { const dup = existing.some((e) => sameItem(e, it)); if (!dup) imp.take.add(i); return { it, i, dup }; });
+  if (!rows.length) {
+    box.innerHTML = '<div class="empty-card"><h3>Keine Buchung gefunden</h3><p>Claude hat darin keine Reisebuchung erkannt. Geh zurück und wähle eine andere Mail oder füg mehr Text ein.</p></div>';
+    updateGo(); return;
+  }
+  const tr = r.trip || {}, dates = r.items.flatMap((it) => [datePart(it.start), datePart(it.end)]).filter(Boolean).sort();
+  const tripFields = imp.mode === 'new' ? `<div class="imp-trip"><h3 class="sec-h">Neue Reise</h3>
+      <label class="fld"><span>Name der Reise</span><input id="impTitle" maxlength="80" value="${esc(tr.title || tr.destination || '')}"></label>
+      <div class="fld-row dest"><label class="fld"><span>Ziel</span><input id="impDest" maxlength="80" value="${esc(tr.destination || '')}"></label><label class="fld code"><span>Kürzel</span><input id="impCode" maxlength="3" value="${esc(tr.code || '')}"></label></div>
+      <div class="fld-row"><label class="fld"><span>Hinreise</span><input id="impStart" type="date" value="${esc(tr.start || dates[0] || '')}"></label><label class="fld"><span>Rückreise</span><input id="impEnd" type="date" value="${esc(tr.end || dates[dates.length - 1] || '')}"></label></div>
+    </div>` : '';
+  box.innerHTML = `${tripFields}<h3 class="sec-h">${plural(rows.length, 'Eintrag', 'Einträge')} erkannt</h3>
+    <ul class="pv-list">${rows.map(({ it, i, dup }) => { const ty = TYPES[it.type];
+      const meta = [fmtShort(it.start), [it.from, it.to].filter(Boolean).join(' → ') || it.location, it.code].filter(Boolean).join(' · ');
+      return `<li><label class="pv-row${dup ? ' is-dup' : ''}"><input type="checkbox" data-pv="${i}"${dup ? '' : ' checked'}><span class="tag g-${ty.g}">${esc(ty.tag)}</span><span class="pv-main"><b>${esc(it.title)}</b><small>${esc(meta)}${dup ? ' · steht schon im Ablauf' : ''}</small></span></label></li>`; }).join('')}</ul>
+    <p class="hint">Prüf die Angaben kurz – du kannst jeden Eintrag danach noch bearbeiten.</p>`;
+  $$('[data-pv]', box).forEach((cb) => { cb.onchange = () => { const i = +cb.dataset.pv; if (cb.checked) imp.take.add(i); else imp.take.delete(i); updateGo(); }; });
+  updateGo();
+}
+async function commitImport() {
+  const imp = IMP; if (!imp || !guardWrite()) return;
+  const chosen = imp.result.items.filter((_, i) => imp.take.has(i));
+  if (!chosen.length) return;
+  const btn = $('#impGo'); btn.disabled = true;
+  try {
+    let tripId = S.sel;
+    if (imp.mode === 'new') {
+      const dates = chosen.flatMap((it) => [datePart(it.start), datePart(it.end)]).filter(Boolean).sort();
+      const start = isoDate($('#impStart').value) || dates[0] || '', endIn = isoDate($('#impEnd').value) || dates[dates.length - 1] || start;
+      const dest = str($('#impDest').value, 80);
+      tripId = newId();
+      await dbWrite('set', `trips/${tripId}`, { title: str($('#impTitle').value, 80) || dest || 'Neue Reise', destination: dest, code: str($('#impCode').value, 3).toUpperCase().replace(/[^A-ZÄÖÜ0-9]/g, ''), start, end: endIn < start ? start : endIn, travelers: [], currency: chosen.find((c) => c.currency)?.currency || 'EUR', notes: '', createdAt: Date.now(), updatedAt: Date.now() });
+    }
+    let n = 0;
+    for (const it of chosen) { await dbWrite('set', `trips/${tripId}/items/${newId()}`, { ...it, source: 'import', createdAt: Date.now() + n }); n++; }
+    const t = S.trips.find((x) => x.id === tripId);
+    if (imp.mode === 'add' && t && !t.start) {
+      const dates = chosen.flatMap((it) => [datePart(it.start), datePart(it.end)]).filter(Boolean).sort();
+      if (dates.length) await dbWrite('update', `trips/${tripId}`, { start: dates[0], end: dates[dates.length - 1], updatedAt: Date.now() });
+    }
+    closeSheet(true); S.lastFocus = null;
+    if (imp.mode === 'new') { S.tab = 'plan'; selectTrip(tripId); toast(`Reise angelegt · ${plural(n, 'Eintrag', 'Einträge')}`); }
+    else toast(`${plural(n, 'Eintrag', 'Einträge')} übernommen`);
+  } catch (e) { btn.disabled = false; writeFailed(e); }
+}
+
+/* ---------- Navigation & Abos ---------- */
+function selectTrip(id, fromHash) {
+  if (S.sel !== id) {
+    flushNotes();
+    S.subs.forEach((u) => { try { u(); } catch {} });
+    S.subs = []; S.sel = id; S.items = []; S.packing = []; S.expenses = [];
+    S.loaded = { items: false, packing: false, expenses: false };
+    if (id && S.db) {
+      const base = S.db.doc(`trips/${id}`);
+      for (const key of ['items', 'packing', 'expenses']) {
+        S.subs.push(base.collection(key).onSnapshot((snap) => {
+          if (S.sel !== id) return;
+          S[key] = snap.docs.map((d) => ({ ...d.data(), id: d.id }));
+          S.loaded[key] = true;
+          renderAll();
+        }, () => { if (S.sel !== id) return; S.loaded[key] = true; renderAll(); }));
+      }
+    }
+    if (!fromHash) {
+      const h = id ? `reise-${id}` : 'reisen';
+      if (location.hash.slice(1) !== h) { S.ignoreHash = h; location.hash = h; }
+    }
+    if (!isDesktop()) window.scrollTo(0, 0);
+  }
+  renderAll();
+}
+function routeFromHash() {
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (S.ignoreHash !== null && S.ignoreHash === h) { S.ignoreHash = null; return; }
+  S.ignoreHash = null;
+  const m = /^reise-([A-Za-z0-9-]+)$/.exec(h);
+  if (m || h === 'reisen' || !h) selectTrip(m ? m[1] : null, true);
+}
+function setTab(tab) {
+  if (!['plan', 'pack', 'cost', 'info'].includes(tab)) return;
+  if (S.tab !== tab) flushNotes();
+  S.tab = tab; renderTrip();
+  const top = $('#tripHead');
+  if (!isDesktop()) window.scrollTo(0, 0); else if (top && top.getBoundingClientRect().top < 0) top.scrollIntoView({ block: 'start' });
+}
+function subscribeTrips() {
+  const timer = setTimeout(() => { if (!S.tripsLoaded) { S.tripsStale = true; renderAll(); } }, 10000);
+  S.db.collection('trips').onSnapshot((snap) => {
+    S.trips = snap.docs.map((d) => ({ ...d.data(), id: d.id }));
+    S.tripsSeen = true;
+    if (!snap.metadata.fromCache) { S.tripsLoaded = true; S.tripsStale = false; clearTimeout(timer); }
+    if (S.sel && S.tripsLoaded && !S.trips.some((t) => t.id === S.sel)) { selectTrip(null); toast('Diese Reise wurde gelöscht.'); return; }
+    if (!S.sel && !S.autoPicked && S.tripsLoaded && isDesktop() && !location.hash.slice(1)) {
+      S.autoPicked = true; const t = nextTrip() || sortedTrips().slice(-1)[0];
+      if (t) { selectTrip(t.id); return; }
+    }
+    renderAll();
+  }, (e) => { clearTimeout(timer); S.tripsError = e?.code || 'unavailable'; renderAll(); });
+}
+
+/* ---------- Notizen ---------- */
+let notesTimer = null, notesPending = null;
+function onNotesInput() {
+  if (!S.canWrite) return;
+  const el = $('#notes'); S.notesDirty = true; $('#notesState').textContent = 'Wird gespeichert …';
+  notesPending = { id: el.dataset.trip, val: el.value };
+  clearTimeout(notesTimer); notesTimer = setTimeout(flushNotes, 900);
+}
+async function flushNotes() {
+  clearTimeout(notesTimer); notesTimer = null;
+  const p = notesPending; notesPending = null;
+  if (!p || !p.id) return;
+  try {
+    await dbWrite('update', `trips/${p.id}`, { notes: p.val.slice(0, 20000), updatedAt: Date.now() });
+    if ($('#notes').dataset.trip === p.id && !notesPending) { S.notesDirty = false; $('#notesState').textContent = 'Gespeichert'; }
+  } catch (e) { if ($('#notes').dataset.trip === p.id) $('#notesState').textContent = 'Nicht gespeichert – versuch es gleich noch mal.'; writeFailed(e); }
+}
+
+/* ---------- Ereignisse ---------- */
+document.addEventListener('click', (ev) => {
+  const el = ev.target.closest('[data-act]'); if (!el || el.disabled) return;
+  const id = el.dataset.id;
+  switch (el.dataset.act) {
+    case 'open-trip': selectTrip(id); break;
+    case 'back': selectTrip(null); break;
+    case 'tab': setTab(el.dataset.tab); break;
+    case 'new-trip': if (guardWrite()) openTripForm(null); break;
+    case 'edit-trip': if (guardWrite() && curTrip()) openTripForm(curTrip()); break;
+    case 'import-new': if (guardWrite()) openImport('new'); break;
+    case 'import-add': if (guardWrite()) openImport('add'); break;
+    case 'add-item': if (guardWrite()) openItemForm(null, el.dataset.day); break;
+    case 'item': openItem(id); break;
+    case 'cal': openCalendar(); break;
+    case 'copy': copyText(el.dataset.text || '', 'Buchungsnummer kopiert'); break;
+    case 'copy-plan': { const t = curTrip(); if (t) copyText(planText(t), 'Ablauf kopiert'); break; }
+    case 'pack-ai': packAI(); break;
+    case 'pack-base': packBase(); break;
+    case 'pack-del': packDel(id); break;
+    case 'pack-reset': packReset(); break;
+    case 'add-expense': if (guardWrite()) openExpenseForm(null); break;
+    case 'expense': { const e = S.expenses.find((x) => x.id === id); if (e) openExpenseForm(e); break; }
+    case 'delete-trip': confirmDeleteTrip(); break;
+    case 'close-sheet': closeSheet(); break;
+    case 'perm': openPermissions(); break;
+    default: break;
+  }
+});
+document.addEventListener('change', (ev) => {
+  const el = ev.target;
+  if (el.matches('[data-act="pack-toggle"]')) packToggle(el.dataset.id, el.checked);
+  else if (el.id === 'packOpen') { S.packOpen = el.checked; renderTrip(); }
+});
+document.addEventListener('keydown', (ev) => {
+  if (ev.key === 'Escape' && sheetOpen()) { ev.preventDefault(); closeSheet(); }
+});
+$('#packForm').addEventListener('submit', (ev) => { ev.preventDefault(); addPackFromForm(); });
+$('#packCat').innerHTML = PACK_CATS.map((c) => `<option>${c}</option>`).join('');
+$('#notes').addEventListener('input', onNotesInput);
+$('#notes').addEventListener('blur', () => { if (notesPending) flushNotes(); });
+window.addEventListener('hashchange', routeFromHash);
+window.addEventListener('pagehide', () => { if (notesPending) flushNotes(); });
+matchMedia('(min-width: 960px)').addEventListener?.('change', () => renderAll());
+let lastDay = todayISO();
+setInterval(() => {
+  const c = $('#boardClock'); if (c) c.textContent = hhmm();
+  if (todayISO() !== lastDay) { lastDay = todayISO(); renderAll(); }
+}, 15000);
+
+/* ---------- Start ---------- */
+async function boot() {
+  renderAll();
+  const C = window.claude;
+  const use = (n) => (C && typeof C.use === 'function' ? Promise.resolve(C.use(n)).catch(() => null) : Promise.resolve(null));
+  const [db, user, sample, mcp, perms] = await Promise.all([use('db'), use('user'), use('sample'), use('mcp'), use('permissions')]);
+  Object.assign(S, { db, user, sample, mcp, perms, sampleOk: !!sample });
+  if (sample) { try { const lim = await sample.limits(); S.imgLimits = lim?.images || null; } catch { S.imgLimits = null; } }
+  if (user) {
+    try { const w = await user.can('data.write'); if (w === false) S.canWrite = false; else if (w === null) S.writeUnknown = true; } catch { S.writeUnknown = true; }
+    try { S.myId = await user.id(); } catch { S.myId = null; }
+  } else S.writeUnknown = true;
+  S.ready = true;
+  if (!db) { S.noDb = true; S.canWrite = false; renderAll(); return; }
+  subscribeTrips();
+  routeFromHash();
+  renderAll();
+}
+boot();
+})();
+</script>
