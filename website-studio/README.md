@@ -8,13 +8,14 @@ Mit diesem Paket entwirft und entwickelt Claude vollständige Kunden-Websites in
 |---|---|
 | `MASTER-PROMPT.md` | Der Haupt-Prompt: Rolle, Workflow, Strategie, Texte, Design, Sektionen, Technik, Performance, SEO, Barrierefreiheit, Recht, Funktionen, Bilder, Anpassungs-Befehle, Qualitätssicherung, Übergabe und eine Bibliothek mit 26 Branchenprofilen |
 | `BRIEFING-VORLAGE.md` | Kunden-Briefing zum Ausfüllen: Schnellstart, vollständige Fassung und ein Beispiel |
-| `generator.html` | Briefing-Generator im Browser: Formular ausfüllen, Branche wählen, fertigen Prompt kopieren |
-| `tools/` | Quelle und Build-Skript des Generators |
+| `generator.html` | Briefing-Generator im Browser: Branche eintragen, automatische Vorschläge prüfen, fertigen Prompt kopieren |
+| `tools/branchen-vorschlaege.json` | Vorlagen für die automatischen Vorschläge: 26 Branchen mit über 100 Fachrichtungen |
+| `tools/` | Außerdem Vorlage und Build-Skript des Generators |
 
 ## Schnellstart in drei Schritten
 
 1. **Master-Prompt hinterlegen**, siehe Varianten A–C unten.
-2. **Briefing senden:** Vorlage ausfüllen oder den Generator nutzen. Minimum: Branche, Firmenname, Ort, Leistungen.
+2. **Briefing senden:** Im Generator Branche und Ort eintragen; Leistungen, Keywords, Zielgruppen und mehr werden automatisch vorgeschlagen. Oder die Vorlage von Hand ausfüllen.
 3. **Anpassen:** frei formulieren oder Befehle nutzen, z. B. `STIL: edler`, `SEKTION NEU: FAQ auf Startseite`, `PRÜFEN`.
 
 ## Variante A · Claude Code (empfohlen für echte Kundenprojekte)
@@ -57,6 +58,14 @@ Im Chat arbeitet Claude im **Vorschaumodus**: Er liefert eine vollständige Star
 
 Im Generator „Komplett“ wählen und den kopierten Prompt als erste Nachricht senden. Er enthält Master-Prompt, Branchenprofil und Briefing.
 
+## Automatische Vorschläge im Generator
+
+- **Sofort:** Sobald du ein Branchenprofil wählst oder die Branche genau einträgst („Zahnarztpraxis mit Schwerpunkt Kinder“), füllt der Generator Leistungen, Keywords mit Ort, Zielgruppen, typische Kundenfragen, Haupt- und Nebenziele, Stil, Funktionen und Tools aus. Steht das Profil auf „Automatisch“, wird es aus der Branche erkannt. Ein genannter Schwerpunkt rückt in der Leistungsliste nach vorn, die Orte kommen aus „Ort / Einzugsgebiet“ und der Adresse.
+- **Mit Claude verfeinern:** In der veröffentlichten Generator-Seite auf claude.ai erstellt ein Klick passgenaue Vorschläge für genau diese Branche und diesen Ort, auch für Branchen ohne Vorlage. Das nutzt dein Claude-Kontingent und fragt beim ersten Mal um Zustimmung. In der lokalen `generator.html` gibt es nur die eingebauten Vorschläge.
+- **Deine Angaben haben Vorrang:** Was du selbst eingetragen oder bearbeitet hast, wird nie überschrieben. Vorschläge sind farbig markiert; „Alle übernehmen“ bestätigt sie, „Vorschläge entfernen“ leert sie.
+- **Im Prompt gekennzeichnet:** Unbestätigte Vorschläge stehen im Briefing als `[Vorschlag]`. Der Master-Prompt behandelt sie als Orientierung, nicht als Fakten des Kunden, und setzt sie für die Produktion auf die TODO-Liste.
+- **Vorlagen erweitern:** In `tools/branchen-vorschlaege.json` hat jedes Branchenprofil Standardwerte und „varianten“ für Fachrichtungen. Eine Variante wird über ihre „erkennen“-Wörter gefunden (Wortteile, Groß- und Kleinschreibung und Umlaute egal). Felder, die eine Variante nicht nennt, übernimmt sie vom Profil. `{branche}` in Keywords wird durch die eingegebene Branche ersetzt, `"lokal": false` lässt die Orte weg. Danach den Generator neu bauen (siehe unten); das Skript meldet Tippfehler bei Stilen, Zielen und Funktionen.
+
 ## Anpassen per Prompt
 
 Freie Formulierungen funktionieren immer. Für schnelle, eindeutige Änderungen gibt es Befehle:
@@ -83,8 +92,8 @@ Die vollständige Liste mit Wirkung steht im Master-Prompt im Abschnitt `<anpass
 ## Branche festlegen oder spezialisieren
 
 - Die Branchen-Bibliothek enthält 26 Profile, von Handwerk über Praxen und Kanzleien bis Gastronomie. Für andere Branchen leitet Claude selbst ein Profil nach demselben Schema ab.
-- **Wenn du dich auf eine Branche spezialisierst**, lohnt es sich, ihr Profil im Master-Prompt mit deinem Wissen auszubauen: typische Kundenfragen, bewährte Seitenstrukturen, Tools der Branche, Formulierungen, die funktionieren. Die anderen Profile kannst du löschen.
-- Nach Änderungen am Master-Prompt den Generator neu bauen:
+- **Wenn du dich auf eine Branche spezialisierst**, lohnt es sich, ihr Profil im Master-Prompt mit deinem Wissen auszubauen: typische Kundenfragen, bewährte Seitenstrukturen, Tools der Branche, Formulierungen, die funktionieren. Die anderen Profile kannst du löschen. Ergänze passend dazu die Vorlage in `tools/branchen-vorschlaege.json` um deine Fachrichtungen.
+- Nach Änderungen am Master-Prompt oder an den Vorlagen den Generator neu bauen:
 
 ```bash
 python3 tools/build-generator.py

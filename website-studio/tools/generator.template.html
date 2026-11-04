@@ -136,7 +136,14 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
 .btn--ghost { background: transparent; color: var(--ink); border-color: var(--ink-soft); }
 .btn--ghost:hover { border-color: var(--ink); background: var(--field); }
 .btn--sm { min-height: 32px; padding: 5px 11px; font-size: 0.8125rem; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.chip {
+  display: inline-flex; align-items: center; margin-left: 8px; padding: 1px 7px; border-radius: 999px;
+  font-size: 0.6875rem; font-weight: 650; font-stretch: 92%; letter-spacing: 0.02em; line-height: 1.5;
+  background: var(--accent-wash); color: var(--accent); vertical-align: 1px; white-space: nowrap;
+}
 
 /* Generator */
 .gen { display: grid; gap: 24px; padding-block: 24px 48px; }
@@ -145,9 +152,9 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
 .ticket__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
 .note { font-size: 0.875rem; font-weight: 600; border-radius: 4px; padding: 8px 12px; }
 .note--demo { background: var(--demo-wash); color: var(--demo); }
-.hint { font-size: 0.875rem; color: var(--ink-soft); }
 
 .sheet { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--radius); }
+.sheet--lead { border: 1.5px solid var(--accent); box-shadow: var(--shadow); }
 .sheet > summary {
   list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px;
   padding: 14px 18px; min-height: 52px;
@@ -155,16 +162,19 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
 .sheet > summary::-webkit-details-marker { display: none; }
 .sheet > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: var(--radius); }
 .sheet__title { font-family: var(--font-display); font-weight: 750; font-stretch: 110%; font-size: 1.0625rem; }
-.sheet__meta { display: flex; align-items: center; gap: 14px; }
+.sheet__meta { display: flex; align-items: center; gap: 10px; }
+.sheet__meta .chip { margin-left: 0; }
 .count { font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .count.is-filled { color: var(--accent); }
-.chev { width: 9px; height: 9px; border-right: 2px solid var(--ink-soft); border-bottom: 2px solid var(--ink-soft); transform: translateY(-2px) rotate(45deg); transition: transform 0.2s ease; }
+.chev { width: 9px; height: 9px; margin-left: 4px; border-right: 2px solid var(--ink-soft); border-bottom: 2px solid var(--ink-soft); transform: translateY(-2px) rotate(45deg); transition: transform 0.2s ease; }
 .sheet[open] > summary .chev { transform: translateY(2px) rotate(-135deg); }
+.sheet__intro { padding: 0 18px 4px; font-size: 0.875rem; color: var(--ink-soft); max-width: 72ch; }
 
 .fields {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px 16px;
   padding: 16px 18px 20px; border-top: 1px dashed var(--line);
 }
+.sheet__intro + .fields { margin-top: 12px; }
 .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .field--wide { grid-column: 1 / -1; }
 .field label, .checks legend { font-size: 0.8125rem; font-weight: 650; font-stretch: 94%; color: var(--ink); }
@@ -174,14 +184,27 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
   background: var(--field); border: 0; border-bottom: 1.5px solid var(--ink-soft); border-radius: 4px 4px 0 0;
   padding: 10px 12px;
 }
-.field textarea { min-height: 76px; resize: vertical; line-height: 1.45; }
+.field textarea { min-height: 76px; max-height: 16rem; resize: vertical; line-height: 1.45; field-sizing: content; }
 .field input::placeholder, .field textarea::placeholder { color: var(--ink-soft); opacity: 0.8; }
 .field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-bottom-color: var(--accent); }
+.field .is-auto { background: var(--accent-wash); border-bottom-color: var(--accent); border-bottom-style: dashed; }
 
 .checks { border: 0; margin: 0; padding: 0; min-width: 0; }
 .checks__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 196px), 1fr)); gap: 2px 16px; margin-top: 8px; }
 .check { display: flex; align-items: center; gap: 9px; min-height: 34px; font-size: 0.9rem; cursor: pointer; }
 .check input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); flex: none; }
+
+.sug {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
+  padding: 12px 14px; border-radius: 4px; background: var(--accent-wash);
+}
+.sug__text { flex: 1 1 280px; min-width: 0; font-size: 0.875rem; }
+.sug__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.sug.is-busy .sug__text::before {
+  content: ""; display: inline-block; width: 11px; height: 11px; margin-right: 8px; vertical-align: -1px;
+  border-radius: 50%; border: 2px solid var(--accent); border-right-color: transparent; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* Druckfahne */
 .galley {
@@ -291,7 +314,7 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
 @media (min-width: 1100px) { .toast { bottom: calc(24px + env(safe-area-inset-bottom, 0px)); } }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition: none !important; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
 }
 </style>
 <!--BODY-->
@@ -305,7 +328,7 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
           <h1>Website-Studio</h1>
         </div>
       </div>
-      <p class="lede">Briefing ausfüllen, Branche wählen, Prompt kopieren und in Claude einfügen. Der Master-Prompt regelt Design, Texte, Technik, SEO, Barrierefreiheit und Datenschutz.</p>
+      <p class="lede">Branche eintragen, Vorschläge prüfen, Prompt kopieren und in Claude einfügen. Der Master-Prompt regelt Design, Texte, Technik, SEO, Barrierefreiheit und Datenschutz.</p>
     </div>
     <nav class="tabs" aria-label="Bereiche">
       <a href="#generator" data-view="generator">Generator</a>
@@ -327,7 +350,6 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
             <button type="button" class="btn btn--ghost btn--sm" id="btn-clear">Formular leeren</button>
           </div>
         </div>
-        <p class="hint">Minimum: Branche, Firmenname, Ort und Leistungen. Leere Felder entscheidet Claude nach Best Practice und dokumentiert seine Annahmen.</p>
         <div id="sections" class="ticket"></div>
       </form>
 
@@ -429,15 +451,25 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
         <p class="guide__result">Ergebnis wie im Projekt, nur ohne gespeicherte Anweisungen.</p>
       </article>
       <article class="guide__card guide__card--wide">
+        <p class="guide__tag">Automatische Vorschläge</p>
+        <h3>Wie die Vorschläge funktionieren</h3>
+        <ul>
+          <li><strong>Sofort:</strong> Sobald du Branchenprofil oder Branche einträgst, füllt der Generator Leistungen, Keywords mit Ort, Zielgruppen, Kundenfragen, Ziele, Stil, Funktionen und Tools aus einer Vorlage mit 26 Branchen und über 100 Fachrichtungen. Das Profil wird aus deiner Eingabe erkannt.</li>
+          <li><strong>Mit Claude verfeinern:</strong> Ein Klick erstellt passgenaue Vorschläge für genau deine Branche und deinen Ort, auch für Branchen ohne Vorlage. Das nutzt dein Claude-Kontingent und fragt beim ersten Mal nach deiner Zustimmung.</li>
+          <li><strong>Deine Angaben bleiben:</strong> Felder, die du selbst ausgefüllt oder bearbeitet hast, werden nie überschrieben.</li>
+          <li><strong>Markiert:</strong> Vorschläge sind hervorgehoben und stehen im Prompt als <code>[Vorschlag]</code>, damit Claude sie nicht als bestätigte Fakten des Kunden behandelt. Bearbeite sie oder klicke „Alle übernehmen“, wenn sie stimmen.</li>
+        </ul>
+      </article>
+      <article class="guide__card guide__card--wide">
         <p class="guide__tag">Damit es richtig gut wird</p>
         <h3>Was den größten Unterschied macht</h3>
         <ul>
           <li><strong>Echtes Material:</strong> Fotos, Belege (Zahlen, Zertifikate), Kundenstimmen und die Adresse der alten Website.</li>
           <li><strong>Vorbilder und No-Gos</strong> nennen, mit einem Satz, was gefällt oder stört.</li>
-          <li><strong>Erst Pitch-Demo, dann Produktion:</strong> Für die Akquise reicht das Schnellstart-Minimum, für den Livegang braucht es echte Daten.</li>
+          <li><strong>Erst Pitch-Demo, dann Produktion:</strong> Für die Akquise reicht der Schnellstart, für den Livegang braucht es echte Daten.</li>
           <li><strong>Vor der Übergabe</strong> <code>PRÜFEN</code> senden und die <code>TODO-LIVEGANG.md</code> abarbeiten.</li>
           <li><strong>Rechtstexte</strong> (Impressum, Datenschutz, AGB) immer über einen Generator oder anwaltlich prüfen lassen. Claude liefert strukturierte Entwürfe.</li>
-          <li><strong>Spezialisierung:</strong> Arbeitest du vor allem für eine Branche, baue ihr Profil im Master-Prompt mit deinem Wissen aus.</li>
+          <li><strong>Spezialisierung:</strong> Arbeitest du vor allem für eine Branche, baue ihr Profil im Master-Prompt und ihre Vorlage in <code>tools/branchen-vorschlaege.json</code> mit deinem Wissen aus.</li>
         </ul>
       </article>
     </div>
@@ -459,11 +491,13 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
 (() => {
   'use strict';
   const D = __DATA__;
+  const P = D.presets || {};
   document.documentElement.lang = 'de';
 
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
-  const STORE = 'website-studio-generator-v1';
+  const byId = id => document.getElementById(id);
+  const STORE = 'website-studio-generator-v2';
   const fmt = n => n.toLocaleString('de-DE');
   const approxTokens = chars => Math.max(100, Math.round(chars / 3.4 / 100) * 100);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -475,9 +509,19 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
     'Karte (Zwei-Klick)', 'Bewertungen', 'Galerie', 'Vorher-Nachher-Regler', 'Preisliste', 'Speisekarte', 'Kursplan',
     'Karriere/Jobs', 'Blog/Ratgeber', 'Newsletter', 'Mehrsprachigkeit', 'Suche', 'Shop-Anbindung', 'WhatsApp-Kontakt',
     'Mobile Aktionsleiste', 'Hinweisleiste'];
+  const GOALS = ['anfragen', 'anrufe', 'terminbuchungen', 'reservierungen', 'bewerbungen', 'verkäufe', 'information'];
   const opts = (first, list) => [['', first], ...list.map(v => [v, v])];
+  const OUT_ORDER = ['Projekt', 'Unternehmen', 'Angebot & Positionierung', 'Ziele', 'Marke & Design', 'Umfang & Funktionen', 'Sonstiges'];
 
   const SECTIONS = [
+    { title: 'Schnellstart', open: true, lead: true, out: 'Unternehmen',
+      intro: 'Branche und Ort genügen: Leistungen, Keywords, Zielgruppen, Kundenfragen, Ziele, Stil, Funktionen und Tools werden passend vorgeschlagen. Deine eigenen Angaben überschreibt der Generator nie.',
+      fields: [
+        { id: 'f-profil', special: 'profile', label: 'Branchenprofil', type: 'select', wide: true, chip: 'erkannt', hint: '„Automatisch“ erkennt das Profil aus der Branche.' },
+        { id: 'f-branche', key: 'BRANCHE', special: 'branche', label: 'Branche (genau)', wide: true, placeholder: 'z. B. Zahnarztpraxis mit Schwerpunkt Kinder' },
+        { id: 'f-firma', key: 'FIRMENNAME', label: 'Firmenname' },
+        { id: 'f-gebiet', key: 'EINZUGSGEBIET', label: 'Ort / Einzugsgebiet', placeholder: 'z. B. Bielefeld und Umkreis' }
+      ], suggest: true },
     { title: 'Projekt', open: true, fields: [
       { id: 'f-zweck', key: 'PROJEKTZWECK', label: 'Projektzweck', type: 'select', options: [['', 'Standard: Produktion'],
         ['produktion', 'Produktion (Livegang)'], ['pitch-demo', 'Pitch-Demo (Akquise)'],
@@ -495,17 +539,13 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
       { id: 'f-sprachen', key: 'SPRACHEN', label: 'Sprachen', placeholder: 'de' },
       { id: 'f-zeitrahmen', key: 'ZEITRAHMEN', label: 'Zeitrahmen', placeholder: 'z. B. Livegang Ende Januar' }
     ] },
-    { title: 'Unternehmen', open: true, fields: [
-      { id: 'f-profil', special: 'profile', label: 'Branchenprofil', type: 'select', hint: 'Bestimmt, welches Profil aus der Branchen-Bibliothek in den Prompt kommt.' },
-      { id: 'f-branche', key: 'BRANCHE', special: 'branche', label: 'Branche (genau)', placeholder: 'z. B. Zahnarztpraxis mit Schwerpunkt Kinder' },
-      { id: 'f-firma', key: 'FIRMENNAME', label: 'Firmenname' },
+    { title: 'Kontakt & Unternehmen', out: 'Unternehmen', fields: [
       { id: 'f-rechtsform', key: 'RECHTSFORM', label: 'Rechtsform', placeholder: 'z. B. GmbH, e. K., GbR' },
       { id: 'f-inhaber', key: 'INHABER / GESCHÄFTSFÜHRUNG', label: 'Inhaber / Geschäftsführung' },
       { id: 'f-adresse', key: 'ADRESSE', label: 'Adresse' },
       { id: 'f-telefon', key: 'TELEFON', label: 'Telefon', mode: 'tel' },
       { id: 'f-email', key: 'E-MAIL', label: 'E-Mail', mode: 'email' },
       { id: 'f-whatsapp', key: 'WHATSAPP', label: 'WhatsApp', mode: 'tel' },
-      { id: 'f-gebiet', key: 'EINZUGSGEBIET', label: 'Ort / Einzugsgebiet' },
       { id: 'f-gegruendet', key: 'GEGRÜNDET', label: 'Gegründet' },
       { id: 'f-team', key: 'TEAMGRÖSSE', label: 'Teamgröße' },
       { id: 'f-oeffnung', key: 'ÖFFNUNGSZEITEN', label: 'Öffnungszeiten', type: 'textarea' },
@@ -516,25 +556,24 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
       { id: 'f-recht', key: 'RECHTSANGABEN', label: 'Rechtsangaben', type: 'textarea', placeholder: 'Register, USt-IdNr., Kammer, Aufsichtsbehörde, Berufshaftpflicht …' }
     ] },
     { title: 'Angebot & Positionierung', fields: [
-      { id: 'f-leistungen', key: 'LEISTUNGEN', label: 'Leistungen', type: 'textarea', placeholder: 'Hauptleistung zuerst, gern mit kurzer Beschreibung' },
+      { id: 'f-leistungen', key: 'LEISTUNGEN', label: 'Leistungen', type: 'textarea', chip: 'Vorschlag', placeholder: 'Hauptleistung zuerst' },
       { id: 'f-preise', key: 'PREISE', label: 'Preise', type: 'textarea', placeholder: 'Preise, Preisrahmen oder „keine Preise nennen“' },
-      { id: 'f-zielgruppen', key: 'ZIELGRUPPEN', label: 'Zielgruppen', type: 'textarea' },
+      { id: 'f-zielgruppen', key: 'ZIELGRUPPEN', label: 'Zielgruppen', type: 'textarea', chip: 'Vorschlag' },
       { id: 'f-usp', key: 'USP / UNTERSCHIED', label: 'Was macht den Betrieb besonders?', type: 'textarea' },
       { id: 'f-wettbewerber', key: 'WETTBEWERBER', label: 'Wettbewerber', type: 'textarea', placeholder: 'Namen oder URLs' },
-      { id: 'f-fragen', key: 'HÄUFIGE FRAGEN / EINWÄNDE', label: 'Häufige Fragen / Einwände', type: 'textarea' },
+      { id: 'f-fragen', key: 'HÄUFIGE FRAGEN / EINWÄNDE', label: 'Häufige Fragen / Einwände', type: 'textarea', chip: 'Vorschlag', rows: 4 },
       { id: 'f-belege', key: 'BELEGE', label: 'Belege', type: 'textarea', placeholder: 'Zahlen, Zertifikate, Auszeichnungen, Garantien, Referenzen – nur echte' },
       { id: 'f-stimmen', key: 'KUNDENSTIMMEN', label: 'Kundenstimmen', type: 'textarea', placeholder: 'Echte Zitate mit Freigabe, Name bzw. Initiale, Quelle' },
       { id: 'f-geschichte', key: 'GESCHICHTE / PERSÖNLICHES', label: 'Geschichte / Persönliches', type: 'textarea' }
     ] },
     { title: 'Ziele', fields: [
-      { id: 'f-hauptziel', key: 'HAUPTZIEL', label: 'Hauptziel', type: 'select', options: opts('Claude entscheidet',
-        ['anfragen', 'anrufe', 'terminbuchungen', 'reservierungen', 'bewerbungen', 'verkäufe', 'information']) },
-      { id: 'f-nebenziele', key: 'NEBENZIELE', label: 'Nebenziele' },
-      { id: 'f-keywords', key: 'KEYWORDS / ORTE', label: 'Keywords / Orte', wide: true },
+      { id: 'f-hauptziel', key: 'HAUPTZIEL', label: 'Hauptziel', type: 'select', chip: 'Vorschlag', options: opts('Claude entscheidet', GOALS) },
+      { id: 'f-nebenziele', key: 'NEBENZIELE', label: 'Nebenziele', chip: 'Vorschlag' },
+      { id: 'f-keywords', key: 'KEYWORDS / ORTE', label: 'Keywords / Orte', type: 'textarea', chip: 'Vorschlag' },
       { id: 'f-reaktion', key: 'REAKTIONSZEIT', label: 'Reaktionszeit', placeholder: 'nur wenn verbindlich, z. B. „Antwort in 24 h“', wide: true }
     ] },
     { title: 'Marke & Design', fields: [
-      { id: 'f-stil', key: 'STIL', special: 'stil', label: 'Stil (Archetyp)', type: 'select', options: opts('Claude entscheidet', STYLES) },
+      { id: 'f-stil', key: 'STIL', special: 'stil', label: 'Stil (Archetyp)', type: 'select', chip: 'Vorschlag', options: opts('Claude entscheidet', STYLES) },
       { id: 'f-stil-details', special: 'stil-details', label: 'Stil im Detail', placeholder: 'z. B. hochwertig, nicht rustikal' },
       { id: 'f-persoenlichkeit', key: 'MARKENPERSÖNLICHKEIT', label: 'Markenpersönlichkeit', placeholder: 'drei Adjektive' },
       { id: 'f-farben', key: 'FARBEN', label: 'Farben', placeholder: 'Hex-Werte, „aus dem Logo“ oder Beschreibung' },
@@ -552,8 +591,8 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
     ] },
     { title: 'Umfang & Funktionen', fields: [
       { id: 'f-seiten', key: 'SEITEN', label: 'Seiten', type: 'textarea', placeholder: 'leer lassen = Claude schlägt die Sitemap vor' },
-      { id: 'f-funktionen', key: 'FUNKTIONEN', label: 'Funktionen', type: 'checks' },
-      { id: 'f-tools', key: 'TOOLS / INTEGRATIONEN', label: 'Tools / Integrationen', placeholder: 'z. B. Doctolib, Treatwell, Calendly, Buchungssystem', wide: true },
+      { id: 'f-funktionen', key: 'FUNKTIONEN', label: 'Funktionen', type: 'checks', chip: 'Vorschlag' },
+      { id: 'f-tools', key: 'TOOLS / INTEGRATIONEN', label: 'Tools / Integrationen', chip: 'Vorschlag', placeholder: 'z. B. Doctolib, Treatwell, Calendly, Buchungssystem', wide: true },
       { id: 'f-analytics', key: 'ANALYTICS', label: 'Analytics', type: 'select', options: opts('Standard: keine',
         ['keine', 'plausible', 'matomo (cookielos)', 'ga4 (benötigt Consent-Banner)']) },
       { id: 'f-cms', key: 'SELBSTPFLEGE / CMS', label: 'Selbstpflege durch den Kunden', type: 'select', options: opts('Standard: nein', ['nein', 'ja']) }
@@ -570,34 +609,29 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
       'f-profil': 'Handwerk, Bau & Sanierung',
       'f-branche': 'Sanitär, Heizung, Klima – Schwerpunkt Badsanierung',
       'f-firma': 'Haustechnik Morgenroth GmbH (fiktives Beispiel)',
+      'f-gebiet': 'Bielefeld und 25 km Umkreis (Gütersloh, Herford, Bad Salzuflen)',
       'f-adresse': 'Beispielweg 12, 33602 Bielefeld',
       'f-telefon': '0521 123 45 67',
       'f-email': 'info@morgenroth-beispiel.de',
-      'f-gebiet': 'Bielefeld und 25 km Umkreis (Gütersloh, Herford, Bad Salzuflen)',
       'f-gegruendet': '1996',
       'f-team': '14 Mitarbeitende, davon 3 Meister',
       'f-oeffnung': 'Mo–Do 7:30–16:30 Uhr, Fr 7:30–13:00 Uhr',
-      'f-leistungen': 'Badsanierung (Hauptleistung), Heizungsmodernisierung inkl. Wärmepumpe, Wartung, Notdienst für Bestandskunden',
-      'f-zielgruppen': 'Eigenheimbesitzer zwischen 45 und 70, oft mit dem Wunsch nach einem barrierearmen Bad',
       'f-usp': 'Komplettbad aus einer Hand mit festem Ansprechpartner, 3D-Badplanung vorab, verbindlicher Zeitplan',
       'f-belege': 'Meisterbetrieb, Innungsmitglied, 4,8 Sterne bei 112 Google-Bewertungen',
-      'f-hauptziel': 'anfragen',
-      'f-nebenziele': 'Bewerbungen von Azubis und Gesellen',
-      'f-keywords': 'Badsanierung Bielefeld, barrierefreies Bad Bielefeld, Wärmepumpe Bielefeld',
-      'f-stil': 'Kraftvoll & Bodenständig',
       'f-stil-details': 'hochwertig, nicht rustikal',
       'f-farben': 'Logo-Blau #1B3A5C, gern mit einem warmen Akzent',
       'f-logo': 'vorhanden (wird mitgeschickt)',
       'f-anrede': 'Sie',
       'f-besonderes': 'Sucht dringend Azubis und Gesellen – die Karriere-Seite soll stark sein.'
     },
-    checks: ['Kontaktformular', 'Vorher-Nachher-Regler', 'Bewertungen', 'Karriere/Jobs', 'WhatsApp-Kontakt', 'Mobile Aktionsleiste']
+    checks: []
   };
 
   /* ---------- Formular aufbauen ---------- */
-  const host = $('#sections');
-  const profileOptions = [['', 'Automatisch – alle Profile einfügen'], ...D.entries.map(e => [e.title, e.title]),
-    ['__andere', 'Andere Branche – Claude leitet ein Profil ab']];
+  const host = byId('sections');
+  const profileOptions = [['', 'Automatisch aus der Branche erkennen'], ...D.entries.map(e => [e.title, e.title]),
+    ['__andere', 'Andere Branche (ohne Vorlage)']];
+  const chipHtml = f => (f.chip ? ` <span class="chip" hidden>${esc(f.chip)}</span>` : '');
 
   function control(f) {
     if (f.type === 'select') {
@@ -605,76 +639,425 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
       return `<select id="${f.id}">${list.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join('')}</select>`;
     }
     const ph = f.placeholder ? ` placeholder="${esc(f.placeholder)}"` : '';
-    if (f.type === 'textarea') return `<textarea id="${f.id}" rows="2"${ph}></textarea>`;
+    if (f.type === 'textarea') return `<textarea id="${f.id}" rows="${f.rows || 2}"${ph}></textarea>`;
     const im = f.mode ? ` inputmode="${f.mode}"` : '';
     return `<input type="text" id="${f.id}"${ph}${im}>`;
   }
 
   for (const sec of SECTIONS) {
     const det = document.createElement('details');
-    det.className = 'sheet';
+    det.className = 'sheet' + (sec.lead ? ' sheet--lead' : '');
     det.open = !!sec.open;
     const fields = sec.fields.map(f => {
       if (f.type === 'checks') {
-        return `<fieldset class="field field--wide checks"><legend>${esc(f.label)}</legend><div class="checks__grid">${
+        return `<fieldset class="field field--wide checks" id="${f.id}"><legend>${esc(f.label)}${chipHtml(f)}</legend><div class="checks__grid">${
           FUNCS.map((name, i) => `<label class="check"><input type="checkbox" id="fn-${i}" value="${esc(name)}"><span>${esc(name)}</span></label>`).join('')
         }</div></fieldset>`;
       }
-      const wide = f.wide || f.type === 'textarea' || f.special === 'profile';
+      const wide = f.wide || f.type === 'textarea';
       const hint = f.hint ? `<small>${esc(f.hint)}</small>` : '';
-      return `<div class="field${wide ? ' field--wide' : ''}"><label for="${f.id}">${esc(f.label)}</label>${control(f)}${hint}</div>`;
+      return `<div class="field${wide ? ' field--wide' : ''}"><label for="${f.id}">${esc(f.label)}${chipHtml(f)}</label>${control(f)}${hint}</div>`;
     }).join('');
-    det.innerHTML = `<summary><span class="sheet__title">${esc(sec.title)}</span><span class="sheet__meta"><span class="count"></span><span class="chev" aria-hidden="true"></span></span></summary><div class="fields">${fields}</div>`;
+    const sug = sec.suggest ? `<div class="sug" id="sug"><p class="sug__text" id="sug-text" aria-live="polite"></p><div class="sug__actions">
+        <button type="button" class="btn btn--primary btn--sm" id="btn-claude" hidden>Mit Claude verfeinern</button>
+        <button type="button" class="btn btn--ghost btn--sm" id="btn-sug-accept" hidden>Alle übernehmen</button>
+        <button type="button" class="btn btn--ghost btn--sm" id="btn-sug-clear" hidden>Vorschläge entfernen</button>
+      </div></div>` : '';
+    const intro = sec.intro ? `<p class="sheet__intro">${esc(sec.intro)}</p>` : '';
+    det.innerHTML = `<summary><span class="sheet__title">${esc(sec.title)}</span><span class="sheet__meta"><span class="chip sum-chip" hidden></span><span class="count"></span><span class="chev" aria-hidden="true"></span></span></summary>${intro}<div class="fields">${fields}${sug}</div>`;
     sec.el = det;
     host.appendChild(det);
   }
 
-  /* ---------- Prompt zusammensetzen ---------- */
-  const val = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  const val = id => { const el = byId(id); return el ? el.value.trim() : ''; };
 
+  /* ---------- Vorschläge ---------- */
+  const SUG_MAP = { leistungen: 'f-leistungen', keywords: 'f-keywords', zielgruppen: 'f-zielgruppen', fragen: 'f-fragen',
+    hauptziel: 'f-hauptziel', nebenziele: 'f-nebenziele', stil: 'f-stil', tools: 'f-tools' };
+  const SUG_IDS = Object.values(SUG_MAP);
+  const TRIGGERS = ['f-profil', 'f-branche', 'f-gebiet', 'f-adresse'];
+  const autoSet = new Set();
+  let funcAuto = false, profileAuto = false;
+  let sugLabel = '', sugSource = '', lastSig = '', claudeSig = '';
+  let sampleFn = null, sampleCtl = null;
+
+  const fold = s => String(s || '').toLowerCase()
+    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+    .normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const norm = s => ' ' + fold(s).replace(/[^a-z0-9&+\-]+/g, ' ').replace(/\s+/g, ' ').trim() + ' ';
+  const normTerm = t => fold(t).replace(/[^a-z0-9&+\- ]+/g, ' ').replace(/ {2,}/g, ' ');
+
+  function termScore(text, terms) {
+    let s = 0;
+    for (const t of terms || []) { const n = normTerm(t); if (n.trim() && text.includes(n)) s += n.trim().length; }
+    return s;
+  }
+  function bestVariant(profile, text) {
+    let variant = null, score = 0;
+    for (const v of profile.varianten || []) {
+      if (v.muss && !v.muss.every(t => text.includes(normTerm(t)))) continue;
+      const s = termScore(text, v.erkennen) + (v.muss ? termScore(text, v.muss) : 0);
+      if (s > score) { variant = v; score = s; }
+    }
+    return { variant, score };
+  }
+  function detectProfile(text) {
+    let best = '', bestScore = 0;
+    for (const [title, p] of Object.entries(P)) {
+      const s = termScore(text, p.erkennen) + bestVariant(p, text).score;
+      if (s > bestScore) { best = title; bestScore = s; }
+    }
+    return best;
+  }
+
+  function places() {
+    const out = [];
+    const push = p => { if (p && !out.some(x => x.toLowerCase() === p.toLowerCase())) out.push(p); };
+    const m = val('f-adresse').match(/\b\d{5}\s+([A-Za-zÄÖÜäöüß][A-Za-zÄÖÜäöüß.\- ]{1,40})/);
+    if (m) push(m[1].trim());
+    for (const part of val('f-gebiet').split(/[,;()\/]|\s+und\s+|\s+sowie\s+|\s+\+\s+|\s+–\s+/)) {
+      const p = part.replace(/^\s*(?:in|im|rund um|raum|region|großraum|landkreis|kreis)\s+/i, '').trim();
+      if (!p || /\d|km\b|umkreis|umgebung|umland|bundesweit|deutschland|online|europaweit|weltweit/i.test(p)) continue;
+      if (/^[A-ZÄÖÜ]/.test(p)) push(p);
+    }
+    return out.slice(0, 4);
+  }
+  const cleanBranche = s => s.replace(/\(.*?\)/g, '').replace(/\s+[–-]\s+.*$/, '').replace(/\s{2,}/g, ' ').trim();
+
+  function buildKeywords(stems, local) {
+    const pl = local ? places() : [];
+    if (!pl.length) return stems.slice(0, 7);
+    const [main, ...more] = pl;
+    const list = stems.slice(0, 6).map(s => `${s} ${main}`);
+    more.slice(0, 2).forEach(t => list.push(`${stems[0]} ${t}`));
+    return list;
+  }
+
+  function focusSort(list, raw) {
+    const words = norm(raw).trim().split(' ').filter(w => w.length >= 5);
+    const m = raw.match(/(?:schwerpunkte?|spezialisiert auf|spezialisierung auf|fokus auf)[:\s]+([^,;.()]+)/i);
+    const focus = m ? m[1].replace(/\s+[–-]\s+.*$/, '').trim() : '';
+    const fWords = norm(focus).trim().split(' ').filter(w => w.length >= 5);
+    const hits = (item, ws) => {
+      const n = norm(item);
+      const iw = n.trim().split(' ').filter(w => w.length >= 5);
+      return ws.some(w => n.includes(w) || iw.some(x => w.includes(x)));
+    };
+    const scored = list.map((x, i) => ({ x, i, s: (fWords.length && hits(x, fWords) ? 2 : 0) + (hits(x, words) ? 1 : 0) }));
+    scored.sort((a, b) => b.s - a.s || a.i - b.i);
+    const out = scored.map(o => o.x);
+    if (focus && fWords.length && !out.some(x => hits(x, fWords))) out.unshift(focus.charAt(0).toUpperCase() + focus.slice(1));
+    return out.slice(0, 8);
+  }
+
+  function autoDetectProfile() {
+    const sel = byId('f-profil');
+    if (sel.value && !profileAuto) return;
+    const bg = val('f-branche');
+    const det = bg ? detectProfile(norm(bg)) : '';
+    if (det) { sel.value = det; profileAuto = true; }
+    else if (profileAuto) { sel.value = ''; profileAuto = false; }
+  }
+
+  function computePreset() {
+    const profile = val('f-profil');
+    const p = P[profile];
+    if (!p) return null;
+    const bg = val('f-branche');
+    const variant = bg ? bestVariant(p, norm(bg)).variant : null;
+    const pick = k => (variant && variant[k] !== undefined ? variant[k] : p[k]);
+    const stems = (pick('keywords') || [])
+      .map(s => (s.includes('{branche}') ? (bg ? s.split('{branche}').join(cleanBranche(bg)) : '') : s))
+      .filter(Boolean);
+    return {
+      sig: `${profile}|${variant ? variant.name : ''}`,
+      values: {
+        leistungen: focusSort(pick('leistungen') || [], bg).join(', '),
+        keywords: buildKeywords(stems, pick('lokal') !== false).join(', '),
+        zielgruppen: pick('zielgruppen') || '',
+        fragen: (pick('fragen') || []).join('\n'),
+        hauptziel: pick('hauptziel') || '',
+        nebenziele: pick('nebenziele') || '',
+        stil: pick('stil') || '',
+        tools: pick('tools') || ''
+      },
+      funktionen: pick('funktionen') || []
+    };
+  }
+
+  function applyValues(values, funktionen) {
+    const changed = [];
+    for (const [k, id] of Object.entries(SUG_MAP)) {
+      const el = byId(id);
+      if (!el) continue;
+      const isAuto = autoSet.has(id);
+      if (el.value.trim() && !isAuto) continue;
+      let v = values[k] || '';
+      if (v && el.tagName === 'SELECT' && !Array.from(el.options).some(o => o.value === v)) v = '';
+      if (!v) { if (isAuto) { el.value = ''; autoSet.delete(id); } continue; }
+      if (el.value !== v) changed.push(id);
+      el.value = v;
+      autoSet.add(id);
+    }
+    const boxes = $$('#f-funktionen input[type="checkbox"]');
+    const userPicked = !funcAuto && boxes.some(b => b.checked);
+    if (!userPicked && Array.isArray(funktionen)) {
+      const want = new Set(funktionen.filter(f => FUNCS.includes(f)));
+      let diff = false;
+      boxes.forEach(b => { const on = want.has(b.value); if (b.checked !== on) diff = true; b.checked = on; });
+      funcAuto = want.size > 0;
+      if (diff && funcAuto) changed.push('f-funktionen');
+    }
+    return changed;
+  }
+
+  function clearAuto() {
+    autoSet.forEach(id => { const el = byId(id); if (el) el.value = ''; });
+    autoSet.clear();
+    if (funcAuto) $$('#f-funktionen input[type="checkbox"]').forEach(b => { b.checked = false; });
+    funcAuto = false;
+  }
+
+  function openSectionsFor(ids) {
+    ids.forEach(id => { const el = byId(id); const d = el && el.closest('details'); if (d) d.open = true; });
+  }
+
+  function applySuggestions(opt = {}) {
+    autoDetectProfile();
+    const sig = `${val('f-profil')}|${norm(val('f-branche'))}`;
+    if (sugSource === 'claude' && sig === claudeSig) { refreshAutoUI(); updateSugBar(); return; }
+    const pr = computePreset();
+    if (!pr) {
+      if (sugSource) clearAuto();
+      sugSource = ''; lastSig = ''; claudeSig = '';
+      refreshAutoUI(); updateSugBar();
+      return;
+    }
+    const changed = applyValues(pr.values, pr.funktionen);
+    sugLabel = val('f-branche') || val('f-profil');
+    sugSource = 'vorlage';
+    claudeSig = '';
+    if (opt.open && pr.sig !== lastSig) openSectionsFor(changed);
+    lastSig = pr.sig;
+    refreshAutoUI(); updateSugBar();
+  }
+
+  function refreshAutoUI() {
+    for (const id of SUG_IDS) {
+      const el = byId(id);
+      if (!el) continue;
+      const on = autoSet.has(id);
+      el.classList.toggle('is-auto', on);
+      const chip = $(`label[for="${id}"] .chip`);
+      if (chip) chip.hidden = !on;
+    }
+    const fs = byId('f-funktionen');
+    if (fs) { const c = $('legend .chip', fs); if (c) c.hidden = !funcAuto; }
+    const sel = byId('f-profil');
+    sel.classList.toggle('is-auto', profileAuto);
+    const pc = $('label[for="f-profil"] .chip');
+    if (pc) pc.hidden = !profileAuto;
+  }
+
+  let busy = false;
+  function updateSugBar() {
+    const btnC = byId('btn-claude');
+    btnC.hidden = !sampleFn;
+    if (busy) return;
+    const n = autoSet.size + (funcAuto ? 1 : 0);
+    const profile = val('f-profil'), bg = val('f-branche');
+    let msg;
+    if (n) {
+      msg = `${n} ${n === 1 ? 'Feld' : 'Felder'} mit Vorschlägen ${sugSource === 'claude' ? 'von Claude ' : ''}für „${sugLabel || bg || profile}“ ausgefüllt. Prüfe sie: Bis du sie bearbeitest oder übernimmst, stehen sie im Prompt als [Vorschlag].`;
+    } else if ((bg || profile) && !P[profile]) {
+      msg = 'Für diese Branche gibt es keine eingebaute Vorlage.' + (sampleFn ? ' Claude kann passende Vorschläge erstellen.' : ' Wähle ein ähnliches Branchenprofil oder fülle die Felder selbst aus.');
+    } else if (bg || profile) {
+      msg = 'Keine offenen Vorschläge: Alle Felder sind übernommen oder mit deinen Angaben gefüllt.';
+    } else {
+      msg = 'Trag die Branche ein – passende Vorschläge erscheinen automatisch.';
+    }
+    byId('sug-text').textContent = msg;
+    byId('btn-sug-accept').hidden = !n;
+    byId('btn-sug-clear').hidden = !n;
+    btnC.disabled = !(bg || (profile && profile !== '__andere'));
+  }
+
+  let sugTimer;
+  function scheduleSuggest() {
+    clearTimeout(sugTimer);
+    sugTimer = setTimeout(() => { applySuggestions({ open: true }); render(); save(); }, 400);
+  }
+
+  /* ---------- Mit Claude verfeinern ---------- */
+  function claudePrompt() {
+    const profile = val('f-profil');
+    const pl = places();
+    const known = [];
+    const add = (label, id) => { const v = val(id); if (v && !autoSet.has(id)) known.push(`- ${label}: ${v.replace(/\s*\n\s*/g, '; ')}`); };
+    add('Firmenname', 'f-firma');
+    add('Leistungen (vom Nutzer bestätigt)', 'f-leistungen');
+    add('Zielgruppen (vom Nutzer bestätigt)', 'f-zielgruppen');
+    add('Besonderheit', 'f-usp');
+    add('Wünsche', 'f-besonderes');
+    return [
+      'Du hilfst einer Webdesign-Agentur, das Briefing für die Website eines Unternehmens in Deutschland auszufüllen.',
+      '',
+      `Branche: ${val('f-branche') || '–'}`,
+      `Branchenprofil: ${profile && profile !== '__andere' ? profile : 'keines passend'}`,
+      `Ort / Einzugsgebiet: ${val('f-gebiet') || pl[0] || 'unbekannt'}`,
+      ...(known.length ? ['Bereits bekannt:', ...known] : []),
+      '',
+      'Schlage realistische, branchentypische Angaben vor, konkret für genau diese Branche und nicht allgemein. Erfinde nichts über das Unternehmen selbst: keine Zahlen, Preise, Jahreszahlen, Auszeichnungen, Zertifikate oder Bewertungen. Leistungen, die nicht jeder Betrieb dieser Branche anbietet, kennzeichnest du mit „(falls angeboten)“.',
+      '',
+      'Antworte nur mit einem JSON-Objekt in genau diesem Format:',
+      '{"leistungen": ["…"], "keywords": ["…"], "zielgruppen": "…", "fragen": ["…"], "hauptziel": "…", "nebenziele": "…", "stil": "…", "funktionen": ["…"], "tools": "…"}',
+      '',
+      'Regeln:',
+      '- leistungen: 5 bis 8 Leistungen, die wichtigste zuerst, je 1 bis 6 Wörter.',
+      `- keywords: 6 bis 8 Suchbegriffe, wie Kunden sie bei Google eingeben${pl.length ? `, mit Ortsnamen (${pl.slice(0, 3).join(', ')})` : ''}.`,
+      '- zielgruppen: ein bis zwei Sätze.',
+      '- fragen: 5 bis 6 typische Fragen oder Einwände von Kunden, als Fragen formuliert.',
+      `- hauptziel: genau einer dieser Werte: ${GOALS.join(', ')}.`,
+      '- nebenziele: kurz, durch Kommas getrennt.',
+      `- stil: genau einer dieser Werte: ${STYLES.join(' | ')}.`,
+      `- funktionen: 4 bis 7 Werte, nur aus dieser Liste: ${FUNCS.join(' | ')}.`,
+      '- tools: in der Branche übliche Software oder Buchungstools mit „z. B.“, sonst ein leerer String.'
+    ].join('\n');
+  }
+
+  function fromClaude(r) {
+    if (!r || typeof r !== 'object' || Array.isArray(r)) return null;
+    const arr = x => (Array.isArray(x) ? x.map(v => String(v).trim()).filter(Boolean) : []);
+    const str = x => (typeof x === 'string' ? x.trim() : '');
+    const goal = str(r.hauptziel).toLowerCase();
+    const values = {
+      leistungen: arr(r.leistungen).slice(0, 8).join(', '),
+      keywords: arr(r.keywords).slice(0, 10).join(', '),
+      zielgruppen: str(r.zielgruppen),
+      fragen: arr(r.fragen).slice(0, 8).join('\n'),
+      hauptziel: GOALS.includes(goal) ? goal : '',
+      nebenziele: str(r.nebenziele),
+      stil: STYLES.includes(str(r.stil)) ? str(r.stil) : '',
+      tools: str(r.tools)
+    };
+    if (!values.leistungen && !values.keywords) return null;
+    return { values, funktionen: arr(r.funktionen).filter(f => FUNCS.includes(f)) };
+  }
+
+  const HIDE_CODES = ['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'];
+  async function refineWithClaude() {
+    if (!sampleFn) return;
+    if (sampleCtl) { sampleCtl.abort(); return; }
+    const btn = byId('btn-claude');
+    const bar = byId('sug');
+    const ctl = new AbortController();
+    sampleCtl = ctl;
+    busy = true;
+    bar.classList.add('is-busy');
+    btn.textContent = 'Abbrechen';
+    byId('sug-text').textContent = 'Claude erstellt Vorschläge …';
+    const sigAtStart = `${val('f-profil')}|${norm(val('f-branche'))}`;
+    try {
+      const result = fromClaude(await sampleFn.json(claudePrompt(), { modelTier: 'quick', signal: ctl.signal }));
+      if (!result) throw { code: 'invalid_json' };
+      busy = false;
+      const changed = applyValues(result.values, result.funktionen);
+      sugSource = 'claude';
+      claudeSig = sigAtStart;
+      sugLabel = val('f-branche') || val('f-profil');
+      openSectionsFor(changed);
+      refreshAutoUI(); render(); save(); updateSugBar();
+      toast(changed.length ? 'Vorschläge von Claude eingefügt.' : 'Claude hat keine neuen Vorschläge für die offenen Felder.');
+    } catch (e) {
+      busy = false;
+      const code = e && e.code;
+      updateSugBar();
+      const t = byId('sug-text');
+      if (code === 'cancelled') { /* abgebrochen */ }
+      else if (HIDE_CODES.includes(code)) { sampleFn = null; updateSugBar(); t.textContent = 'Claude-Vorschläge sind hier nicht freigegeben. Die eingebauten Vorschläge funktionieren weiter.'; }
+      else if (code === 'rate_limited') t.textContent = 'Gerade zu viele Anfragen an Claude. Versuch es bitte etwas später noch einmal.';
+      else if (code === 'session_expired') t.textContent = 'Bitte melde dich bei Claude neu an und versuch es dann noch einmal.';
+      else t.textContent = 'Das hat nicht geklappt. Versuch es bitte noch einmal.';
+    } finally {
+      sampleCtl = null;
+      bar.classList.remove('is-busy');
+      btn.textContent = 'Mit Claude verfeinern';
+    }
+  }
+  byId('btn-claude').addEventListener('click', refineWithClaude);
+
+  if (window.claude && typeof window.claude.use === 'function') {
+    Promise.resolve(window.claude.use('sample')).then(s => { if (s) { sampleFn = s; updateSugBar(); } }).catch(() => {});
+  }
+
+  byId('btn-sug-accept').addEventListener('click', () => {
+    autoSet.clear(); funcAuto = false;
+    refreshAutoUI(); render(); save(); updateSugBar();
+    toast('Vorschläge übernommen.');
+  });
+  byId('btn-sug-clear').addEventListener('click', () => {
+    const before = snapshot();
+    clearAuto(); sugSource = ''; lastSig = ''; claudeSig = '';
+    refreshAutoUI(); render(); save(); updateSugBar();
+    toast('Vorschläge entfernt.', { label: 'Rückgängig', run: () => { apply(before); render(); save(); } });
+  });
+
+  /* ---------- Prompt zusammensetzen ---------- */
   function collect() {
-    return SECTIONS.map(sec => {
-      const lines = [];
-      let filled = 0;
+    const groups = OUT_ORDER.map(title => ({ title, lines: [] }));
+    const byTitle = Object.fromEntries(groups.map(g => [g.title, g]));
+    const counts = new Map();
+    let anyAuto = false;
+    for (const sec of SECTIONS) {
+      const out = byTitle[sec.out || sec.title];
+      let filled = 0, autoN = 0;
       for (const f of sec.fields) {
         if (f.type === 'checks') {
-          const picked = $$('.checks input:checked', sec.el).map(i => i.value);
-          if (picked.length) { filled++; lines.push([f.key, picked.join(', ')]); }
+          const picked = $$('#f-funktionen input:checked').map(i => i.value);
+          if (picked.length) {
+            filled++;
+            if (funcAuto) { autoN++; anyAuto = true; }
+            out.lines.push([funcAuto ? `${f.key} [Vorschlag]` : f.key, picked.join(', ')]);
+          }
           continue;
         }
         const v = val(f.id);
         if (v) filled++;
+        const isAuto = !!v && autoSet.has(f.id);
+        if (isAuto) autoN++;
         if (f.special === 'profile' || f.special === 'stil-details') continue;
+        let line = '';
         if (f.special === 'branche') {
           const p = val('f-profil');
           const profile = p && p !== '__andere' ? p : '';
-          if (v) lines.push([f.key, profile ? `${v} (Branchenprofil: ${profile})` : v]);
-          else if (profile) lines.push([f.key, profile]);
-          continue;
+          line = v ? (profile ? `${v} (Branchenprofil: ${profile})` : v) : profile;
+        } else if (f.special === 'stil') {
+          line = [v, val('f-stil-details')].filter(Boolean).join(' – ');
+        } else {
+          line = v;
         }
-        if (f.special === 'stil') {
-          const d = val('f-stil-details');
-          const s = [v, d].filter(Boolean).join(' – ');
-          if (s) lines.push([f.key, s]);
-          continue;
-        }
-        if (v) lines.push([f.key, v]);
+        if (!line) continue;
+        if (isAuto) anyAuto = true;
+        out.lines.push([isAuto ? `${f.key} [Vorschlag]` : f.key, line]);
       }
-      return { sec, lines, filled, total: sec.fields.length };
-    });
+      counts.set(sec, { filled, total: sec.fields.length, autoN });
+    }
+    return { groups, counts, anyAuto };
   }
 
-  function briefingText(groups) {
+  function briefingText(groups, anyAuto) {
     let out = '=== KUNDEN-BRIEFING ===\n';
     for (const g of groups) {
       if (!g.lines.length) continue;
-      out += `\n## ${g.sec.title}\n`;
+      out += `\n## ${g.title}\n`;
       for (const [k, v] of g.lines) {
         const rows = v.split('\n').map(l => l.trim()).filter(Boolean);
         out += rows.length > 1 ? `${k}:\n${rows.map(r => '  ' + r).join('\n')}\n` : `${k}: ${rows[0]}\n`;
       }
     }
-    return out + '\nNicht genannte Punkte entscheidest du nach den Standardwerten und Best Practices des Master-Prompts und dokumentierst deine Annahmen.\nStarte jetzt mit Phase 0.';
+    out += '\n';
+    if (anyAuto) out += 'Mit [Vorschlag] markierte Angaben sind branchenübliche Vorschläge aus dem Briefing-Generator, die der Kunde noch nicht bestätigt hat.\n';
+    return out + 'Nicht genannte Punkte entscheidest du nach den Standardwerten und Best Practices des Master-Prompts und dokumentierst deine Annahmen.\nStarte jetzt mit Phase 0.';
   }
 
   function libraryFor(mode) {
@@ -686,35 +1069,38 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
     return e ? { text: e.body, label: `Profil „${e.title}“` } : { text: all(), label: `alle ${D.entries.length} Branchenprofile` };
   }
 
-  const out = $('#out');
+  const out = byId('out');
   let current = '';
 
   function render() {
-    const groups = collect();
+    const { groups, counts, anyAuto } = collect();
     const mode = $('input[name="ausgabe"]:checked').value;
     const libMode = $('input[name="profile"]:checked').value;
-    const briefing = briefingText(groups);
+    const briefing = briefingText(groups, anyAuto);
     let hint;
     if (mode === 'briefing') {
       current = `Neues Kundenprojekt. Arbeite nach dem Website-Studio-Master-Prompt (Projektanweisungen bzw. CLAUDE.md).\n\n${briefing}`;
       hint = 'Enthält nur das Briefing. Der Master-Prompt muss in den Projektanweisungen bzw. in CLAUDE.md liegen.';
-      $('#gen-where').textContent = 'Einfügen: in einen neuen Chat im Claude-Projekt oder als BRIEFING.md in den Kundenordner.';
+      byId('gen-where').textContent = 'Einfügen: in einen neuen Chat im Claude-Projekt oder als BRIEFING.md in den Kundenordner.';
     } else {
       const lib = libraryFor(libMode);
       current = `${D.before}\n\n${D.intro}\n\n${lib.text}\n\n${D.after}\n\n---\n\n${briefing}`;
       hint = `Enthält Master-Prompt, ${lib.label} und Briefing.`;
-      $('#gen-where').textContent = 'Einfügen: als erste Nachricht in einen neuen Chat oder als CLAUDE.md in Claude Code.';
+      byId('gen-where').textContent = 'Einfügen: als erste Nachricht in einen neuen Chat oder als CLAUDE.md in Claude Code.';
     }
     out.value = current;
-    $('#gen-hint').textContent = hint;
-    const stats = `${fmt(current.length)} Zeichen · ≈ ${fmt(approxTokens(current.length))} Tokens`;
-    $('#gen-stats').textContent = stats;
-    $('#dock-stats').textContent = `≈ ${fmt(approxTokens(current.length))} Tokens`;
+    byId('gen-hint').textContent = hint;
+    byId('gen-stats').textContent = `${fmt(current.length)} Zeichen · ≈ ${fmt(approxTokens(current.length))} Tokens`;
+    byId('dock-stats').textContent = `≈ ${fmt(approxTokens(current.length))} Tokens`;
     $$('input[name="profile"]').forEach(r => { r.disabled = mode === 'briefing'; });
-    for (const g of groups) {
-      const c = g.sec.el.querySelector('.count');
-      c.textContent = `${g.filled} von ${g.total}`;
-      c.classList.toggle('is-filled', g.filled > 0);
+    for (const sec of SECTIONS) {
+      const c = counts.get(sec);
+      const count = $('.count', sec.el);
+      count.textContent = `${c.filled} von ${c.total}`;
+      count.classList.toggle('is-filled', c.filled > 0);
+      const chip = $('.sum-chip', sec.el);
+      chip.hidden = !c.autoN;
+      chip.textContent = `${c.autoN} ${c.autoN === 1 ? 'Vorschlag' : 'Vorschläge'}`;
     }
   }
 
@@ -726,20 +1112,31 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
     const fields = {};
     formControls().forEach(el => { fields[el.id] = el.value; });
     return {
-      v: 1, fields,
-      checks: $$('#sections input[type="checkbox"]:checked').map(el => el.value),
+      v: 2, fields,
+      checks: $$('#f-funktionen input:checked').map(el => el.value),
       ausgabe: $('input[name="ausgabe"]:checked').value,
       profile: $('input[name="profile"]:checked').value,
-      example: exampleActive
+      example: exampleActive,
+      auto: Array.from(autoSet), funcAuto, profileAuto, sugLabel, sugSource, lastSig, claudeSig
     };
   }
   function apply(state) {
     formControls().forEach(el => { el.value = (state.fields && state.fields[el.id]) || ''; });
-    $$('#sections input[type="checkbox"]').forEach(el => { el.checked = !!(state.checks && state.checks.includes(el.value)); });
+    $$('#f-funktionen input[type="checkbox"]').forEach(el => { el.checked = !!(state.checks && state.checks.includes(el.value)); });
     if (state.ausgabe) { const r = $(`input[name="ausgabe"][value="${state.ausgabe}"]`); if (r) r.checked = true; }
     if (state.profile) { const r = $(`input[name="profile"][value="${state.profile}"]`); if (r) r.checked = true; }
     exampleActive = !!state.example;
-    $('#example-note').hidden = !exampleActive;
+    byId('example-note').hidden = !exampleActive;
+    autoSet.clear();
+    (state.auto || []).forEach(id => { if (SUG_IDS.includes(id)) autoSet.add(id); });
+    funcAuto = !!state.funcAuto;
+    profileAuto = !!state.profileAuto;
+    sugLabel = state.sugLabel || '';
+    sugSource = state.sugSource || '';
+    lastSig = state.lastSig || '';
+    claudeSig = state.claudeSig || '';
+    refreshAutoUI();
+    updateSugBar();
   }
   let saveTimer;
   function save() {
@@ -752,22 +1149,33 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
     try { const raw = localStorage.getItem(STORE); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
   }
 
-  function loadExample() {
+  function loadExample(open) {
     apply({ fields: EXAMPLE.fields, checks: EXAMPLE.checks, example: true,
       ausgabe: $('input[name="ausgabe"]:checked').value, profile: $('input[name="profile"]:checked').value });
+    applySuggestions({ open });
   }
 
-  const onEdit = () => {
-    if (exampleActive) { exampleActive = false; $('#example-note').hidden = true; }
-    render(); save();
+  const onEdit = e => {
+    const el = e.target;
+    if (el && el.id) {
+      if (el.type === 'checkbox') funcAuto = false;
+      else autoSet.delete(el.id);
+      if (el.id === 'f-profil') profileAuto = false;
+      if (el.id === 'f-stil-details') autoSet.delete('f-stil');
+      refreshAutoUI();
+      if (TRIGGERS.includes(el.id)) scheduleSuggest();
+    }
+    if (exampleActive) { exampleActive = false; byId('example-note').hidden = true; }
+    render(); save(); updateSugBar();
   };
-  $('#briefing-form').addEventListener('input', onEdit);
-  $('#briefing-form').addEventListener('change', onEdit);
-  $('#briefing-form').addEventListener('submit', e => e.preventDefault());
+  const form = byId('briefing-form');
+  form.addEventListener('input', onEdit);
+  form.addEventListener('change', onEdit);
+  form.addEventListener('submit', e => e.preventDefault());
   $$('input[name="ausgabe"], input[name="profile"]').forEach(r => r.addEventListener('change', () => { render(); save(); }));
 
-  $('#btn-example').addEventListener('click', () => { loadExample(); render(); save(); toast('Beispiel geladen.'); });
-  $('#btn-clear').addEventListener('click', () => {
+  byId('btn-example').addEventListener('click', () => { loadExample(true); render(); save(); toast('Beispiel geladen.'); });
+  byId('btn-clear').addEventListener('click', () => {
     const before = snapshot();
     apply({ fields: {}, checks: [], example: false, ausgabe: before.ausgabe, profile: before.profile });
     render(); save();
@@ -777,7 +1185,7 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
   /* ---------- Kopieren ---------- */
   function selectIn(el) {
     if (!el) return;
-    if ('select' in el && typeof el.select === 'function') {
+    if (typeof el.select === 'function') {
       el.focus(); el.select();
       try { el.setSelectionRange(0, el.value.length); } catch (e) { /* ignorieren */ }
     } else {
@@ -807,18 +1215,18 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
       } else { fail(); }
     } catch (e) { fail(); }
   }
-  $('#btn-copy').addEventListener('click', () => copy(current, out));
-  $('#btn-copy-dock').addEventListener('click', () => copy(current, out));
-  $('#btn-jump').addEventListener('click', () => { out.scrollIntoView({ block: 'start' }); out.focus({ preventScroll: true }); });
+  byId('btn-copy').addEventListener('click', () => copy(current, out));
+  byId('btn-copy-dock').addEventListener('click', () => copy(current, out));
+  byId('btn-jump').addEventListener('click', () => { out.scrollIntoView({ block: 'start' }); out.focus({ preventScroll: true }); });
 
   /* ---------- Master-Prompt und Befehle ---------- */
-  const masterOut = $('#master-out');
+  const masterOut = byId('master-out');
   masterOut.value = D.full;
-  $('#master-stats').textContent = `${fmt(D.full.length)} Zeichen · ≈ ${fmt(approxTokens(D.full.length))} Tokens`;
-  $('#master-note').textContent = `Vollständige Fassung mit allen ${D.entries.length} Branchenprofilen. Für Claude Code als CLAUDE.md, für Claude-Projekte als Projektanweisung. Eine kürzere Fassung mit nur einer Branche erzeugst du im Generator.`;
-  $('#btn-copy-master').addEventListener('click', () => copy(D.full, masterOut, 'Master-Prompt kopiert.'));
+  byId('master-stats').textContent = `${fmt(D.full.length)} Zeichen · ≈ ${fmt(approxTokens(D.full.length))} Tokens`;
+  byId('master-note').textContent = `Vollständige Fassung mit allen ${D.entries.length} Branchenprofilen. Für Claude Code als CLAUDE.md, für Claude-Projekte als Projektanweisung. Eine kürzere Fassung mit nur einer Branche erzeugst du im Generator.`;
+  byId('btn-copy-master').addEventListener('click', () => copy(D.full, masterOut, 'Master-Prompt kopiert.'));
 
-  $('#cmds').innerHTML = D.commands.map((c, i) => `
+  byId('cmds').innerHTML = D.commands.map((c, i) => `
     <article class="cmd">
       <p class="cmd__name">${esc(c.cmd)}</p>
       <p class="cmd__effect">${inlineCode(c.effect)}</p>
@@ -827,15 +1235,15 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-copy], [data-copy-ref]');
     if (!b) return;
-    const ref = b.dataset.copyRef ? document.getElementById(b.dataset.copyRef) : b.previousElementSibling;
+    const ref = b.dataset.copyRef ? byId(b.dataset.copyRef) : b.previousElementSibling;
     const text = b.dataset.copy || (ref ? ref.textContent : '');
     copy(text, ref, 'Kopiert.');
   });
 
-  $('#colophon').textContent = `Website-Studio ${D.version} · Rechtliche Hinweise im Prompt mit Stand ${D.stand}. Rechtstexte immer über einen Generator oder anwaltlich prüfen lassen. Deine Eingaben bleiben nur in diesem Browser gespeichert.`;
+  byId('colophon').textContent = `Website-Studio ${D.version} · Rechtliche Hinweise im Prompt mit Stand ${D.stand}. Rechtstexte immer über einen Generator oder anwaltlich prüfen lassen. Deine Eingaben bleiben nur in diesem Browser gespeichert.`;
 
   /* ---------- Rückmeldung ---------- */
-  const toastEl = $('#toast');
+  const toastEl = byId('toast');
   let toastTimer;
   function toast(msg, action) {
     toastEl.textContent = '';
@@ -862,13 +1270,13 @@ h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-s
     $$('.tabs a').forEach(a => {
       if (a.dataset.view === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
-    $('#dock').hidden = v !== 'generator';
+    byId('dock').hidden = v !== 'generator';
   }
   window.addEventListener('hashchange', showView);
 
   /* ---------- Start ---------- */
   const saved = loadSaved();
-  if (saved && saved.v === 1) apply(saved); else loadExample();
+  if (saved && saved.v === 2) apply(saved); else loadExample(false);
   render();
   showView();
 })();

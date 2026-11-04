@@ -1,0 +1,1118 @@
+{
+  "Handwerk, Bau & Sanierung": {
+    "erkennen": ["handwerk", "meisterbetrieb", "gewerk"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Anrufe, Bewerbungen von Fachkräften und Azubis",
+    "stil": "Kraftvoll & Bodenständig",
+    "funktionen": ["Kontaktformular", "Galerie", "Vorher-Nachher-Regler", "Bewertungen", "Karriere/Jobs", "WhatsApp-Kontakt", "Mobile Aktionsleiste"],
+    "tools": "",
+    "zielgruppen": "Haus- und Wohnungseigentümer im Einzugsgebiet, Vermieter und Hausverwaltungen, Gewerbekunden",
+    "fragen": ["Was kostet das ungefähr?", "Wie schnell bekomme ich einen Termin?", "Wie lange dauern die Arbeiten?", "Gibt es dafür eine Förderung?", "Wie viel Schmutz und Lärm entsteht?", "Welche Gewährleistung bekomme ich?"],
+    "leistungen": ["Beratung vor Ort", "Planung und Angebot", "Ausführung aus einer Hand", "Reparatur und Wartung", "Sanierung und Modernisierung"],
+    "keywords": ["Handwerker", "Handwerksbetrieb", "Sanierung", "Renovierung"],
+    "varianten": [
+      {
+        "name": "Elektrotechnik",
+        "erkennen": ["elektr", "e-check", "smart home", "smarthome", "gebäudetechnik"],
+        "leistungen": ["Elektroinstallation in Neu- und Altbau", "E-Check und Prüfung nach DGUV Vorschrift 3", "Smart Home und Gebäudetechnik", "Photovoltaik und Batteriespeicher", "Wallbox und Ladeinfrastruktur", "Beleuchtung und Netzwerktechnik", "Störungsdienst (falls angeboten)"],
+        "keywords": ["Elektriker", "Elektroinstallation", "E-Check", "Wallbox Installation", "Smart Home Installation", "Elektrofirma"],
+        "fragen": ["Was kostet eine neue Elektroinstallation?", "Muss meine alte Elektrik erneuert werden?", "Wer meldet die Wallbox beim Netzbetreiber an?", "Wie schnell sind Sie bei einer Störung da?", "Arbeiten Sie auch für Gewerbekunden?"]
+      },
+      {
+        "name": "Sanitär, Heizung, Klima",
+        "erkennen": ["sanitär", "shk", "heizung", "bad", "badsanierung", "installateur", "klempner", "wärmepumpe", "klima", "gas- und wasser", "rohrbruch"],
+        "leistungen": ["Badsanierung und Badumbau", "Barrierefreies Bad", "Heizungsmodernisierung", "Wärmepumpen", "Heizungswartung", "Sanitärinstallation", "Notdienst (falls angeboten)"],
+        "keywords": ["Badsanierung", "Bad renovieren", "Heizungsbauer", "Wärmepumpe", "Installateur", "Barrierefreies Bad"],
+        "fragen": ["Was kostet eine Badsanierung?", "Wie lange dauert der Umbau des Bades?", "Welche Heizung passt zu meinem Haus?", "Gibt es Förderung für eine Wärmepumpe?", "Können wir während der Arbeiten im Haus wohnen?", "Bieten Sie einen Notdienst an?"]
+      },
+      {
+        "name": "Maler und Lackierer",
+        "erkennen": ["maler", "lackierer", "lackierarbeit", "tapezier", "fassade", "anstrich", "raumausstatt"],
+        "leistungen": ["Innenanstrich und Tapezierarbeiten", "Fassadenanstrich und Fassadensanierung", "Wärmedämmverbundsysteme", "Lackierarbeiten", "Bodenbeläge", "Dekorative Wandgestaltung", "Schimmelsanierung"],
+        "keywords": ["Maler", "Malerbetrieb", "Fassade streichen", "Wohnung streichen lassen", "Malerarbeiten", "Tapezieren"],
+        "fragen": ["Was kostet das Streichen einer Wohnung?", "Wie lange dauern die Arbeiten?", "Muss ich die Möbel selbst ausräumen?", "Welche Farben eignen sich für Allergiker?", "Wann ist die beste Zeit für einen Fassadenanstrich?"]
+      },
+      {
+        "name": "Dach und Zimmerei",
+        "erkennen": ["dach", "dachdeck", "zimmerei", "zimmerer", "spengler"],
+        "leistungen": ["Dachsanierung und Neueindeckung", "Dachdämmung", "Flachdachabdichtung", "Dachfenster", "Dachrinnen und Klempnerarbeiten", "Reparatur nach Sturmschäden", "Montage von Photovoltaik"],
+        "keywords": ["Dachdecker", "Dachsanierung", "Dachreparatur", "Flachdach sanieren", "Dachdämmung", "Dachfenster einbauen"],
+        "fragen": ["Was kostet eine Dachsanierung?", "Wann muss ein Dach erneuert werden?", "Lohnt sich eine Dachdämmung?", "Übernimmt die Versicherung Sturmschäden?", "Kann die Photovoltaik gleich mit aufs Dach?"]
+      },
+      {
+        "name": "Tischlerei und Schreinerei",
+        "erkennen": ["tischler", "schreiner", "möbel", "küchen", "innenausbau", "treppenbau"],
+        "leistungen": ["Möbel nach Maß", "Küchen", "Innenausbau", "Einbauschränke", "Türen und Fenster", "Treppen", "Reparaturen"],
+        "keywords": ["Tischlerei", "Schreinerei", "Möbel nach Maß", "Einbauschrank nach Maß", "Küche nach Maß", "Innenausbau"],
+        "fragen": ["Was kostet ein Möbelstück nach Maß?", "Wie lange dauert die Fertigung?", "Welche Hölzer und Materialien bieten Sie an?", "Kommen Sie zum Aufmaß zu uns?", "Übernehmen Sie auch die Montage?"]
+      },
+      {
+        "name": "Fliesen und Boden",
+        "erkennen": ["fliese", "bodenleger", "parkett", "estrich", "naturstein", "bodenbel"],
+        "leistungen": ["Fliesenarbeiten in Bad und Küche", "Großformatfliesen", "Parkett und Bodenbeläge", "Naturstein", "Abdichtung", "Terrassen und Balkone", "Reparaturen"],
+        "keywords": ["Fliesenleger", "Fliesen verlegen", "Bad fliesen", "Parkett verlegen", "Bodenleger", "Terrasse fliesen"],
+        "fragen": ["Was kostet das Fliesen pro Quadratmeter?", "Kann man neue Fliesen auf alte verlegen?", "Wie lange muss der Estrich trocknen?", "Welche Fliesen eignen sich für Fußbodenheizung?", "Bringen Sie die Fliesen mit, oder kaufe ich sie selbst?"]
+      },
+      {
+        "name": "Bau und Sanierung",
+        "erkennen": ["bauunternehm", "baufirma", "rohbau", "maurer", "hochbau", "generalunternehm", "schlüsselfertig", "kernsanierung", "altbausanierung", "umbau", "anbau", "neubau", "bauträger"],
+        "leistungen": ["Neubau und Rohbau", "Umbau und Anbau", "Kernsanierung", "Altbausanierung", "Energetische Sanierung", "Maurer- und Betonarbeiten", "Schlüsselfertiges Bauen"],
+        "keywords": ["Bauunternehmen", "Hausbau", "Kernsanierung", "Altbausanierung", "Anbau", "Rohbau"],
+        "fragen": ["Was kostet eine Kernsanierung?", "Wie lange dauert ein Anbau?", "Kümmern Sie sich um die Baugenehmigung?", "Arbeiten Sie zum Festpreis?", "Wer koordiniert die anderen Gewerke?"]
+      },
+      {
+        "name": "Trockenbau",
+        "erkennen": ["trockenbau", "akustikdeck"],
+        "leistungen": ["Trockenbau und Innenausbau", "Dachgeschossausbau", "Akustikdecken", "Brandschutz im Trockenbau", "Spachtel- und Malerarbeiten", "Raumteilung und Vorwandinstallation"],
+        "keywords": ["Trockenbau", "Trockenbauer", "Dachgeschossausbau", "Akustikdecke", "Innenausbau"]
+      },
+      {
+        "name": "Metallbau",
+        "erkennen": ["metallbau", "schlosserei", "stahlbau", "geländer", "edelstahl"],
+        "leistungen": ["Geländer und Treppen", "Tore und Zäune", "Vordächer und Überdachungen", "Balkone", "Stahlkonstruktionen", "Reparatur- und Schweißarbeiten"],
+        "keywords": ["Metallbau", "Schlosserei", "Geländer nach Maß", "Tor nach Maß", "Vordach", "Stahltreppe"]
+      },
+      {
+        "name": "Fenster, Türen, Sonnenschutz",
+        "erkennen": ["fensterbau", "fenster", "haustür", "türen", "rollladen", "rolladen", "markise", "sonnenschutz", "glaserei", "glaser"],
+        "leistungen": ["Fenster", "Haustüren", "Rollläden und Raffstores", "Insektenschutz", "Markisen und Sonnenschutz", "Einbruchschutz", "Reparatur und Wartung"],
+        "keywords": ["Fenster austauschen", "Fensterbauer", "Haustür kaufen", "Rollladen Reparatur", "Markise", "Einbruchschutz Fenster"]
+      },
+      {
+        "name": "Schlüsseldienst",
+        "erkennen": ["schlüsseldienst", "aufsperr", "türöffnung"],
+        "hauptziel": "anrufe",
+        "leistungen": ["Türöffnung", "Schlosswechsel", "Einbruchschutz", "Schließanlagen", "Tresoröffnung", "Notdienst (falls angeboten)"],
+        "keywords": ["Schlüsseldienst", "Tür öffnen", "Schloss wechseln", "Einbruchschutz"],
+        "fragen": ["Was kostet eine Türöffnung?", "Wie schnell sind Sie vor Ort?", "Wird das Schloss bei der Öffnung beschädigt?", "Nennen Sie den Preis vorher verbindlich?", "Sind Sie auch nachts und am Wochenende erreichbar?"]
+      }
+    ]
+  },
+
+  "Architektur & Innenarchitektur": {
+    "erkennen": ["architekt", "planungsbüro"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Reputation, Bewerbungen",
+    "stil": "Editorial & Kreativ",
+    "funktionen": ["Kontaktformular", "Galerie", "Karriere/Jobs"],
+    "tools": "",
+    "zielgruppen": "Private Bauherren mit gehobenem Anspruch, Unternehmen und Investoren, öffentliche Auftraggeber",
+    "fragen": ["Wie läuft die Zusammenarbeit ab?", "Was kostet die Planung?", "Übernehmen Sie auch die Bauleitung?", "Wie früh sollte ich ein Büro beauftragen?", "Arbeiten Sie auch bei Umbauten und Sanierungen?"],
+    "leistungen": ["Entwurf und Planung", "Genehmigungsplanung", "Ausschreibung und Vergabe", "Bauleitung", "Umbau und Sanierung", "Innenarchitektur"],
+    "keywords": ["Architekt", "Architekturbüro", "Architekt Einfamilienhaus", "Architekt Umbau", "Innenarchitekt"],
+    "varianten": [
+      {
+        "name": "Innenarchitektur",
+        "erkennen": ["innenarchitekt", "interior", "raumgestalt", "einrichtungsplan"],
+        "leistungen": ["Raumkonzepte", "Möbel- und Lichtplanung", "Material- und Farbkonzepte", "Praxis- und Büroplanung", "Gastronomie- und Ladenbau", "Projektsteuerung"],
+        "keywords": ["Innenarchitekt", "Interior Design", "Praxisplanung", "Büroplanung", "Lichtplanung"]
+      }
+    ]
+  },
+
+  "Garten- & Landschaftsbau": {
+    "erkennen": ["garten", "landschaftsbau", "galabau", "pflasterbau"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Pflegeverträge, Bewerbungen",
+    "stil": "Natürlich & Nachhaltig",
+    "funktionen": ["Kontaktformular", "Galerie", "Vorher-Nachher-Regler", "Karriere/Jobs", "WhatsApp-Kontakt"],
+    "tools": "",
+    "zielgruppen": "Eigenheimbesitzer, Wohnungseigentümergemeinschaften und Hausverwaltungen, Gewerbekunden",
+    "fragen": ["Was kostet eine Gartenneuanlage?", "Wann ist die beste Zeit für die Umgestaltung?", "Übernehmen Sie auch die regelmäßige Pflege?", "Planen Sie den Garten gemeinsam mit uns?", "Wie lange dauern die Arbeiten?"],
+    "leistungen": ["Gartenplanung", "Gartenneuanlage und Umgestaltung", "Pflasterarbeiten und Terrassen", "Zäune und Sichtschutz", "Bepflanzung und Rollrasen", "Teiche und Wasseranlagen", "Gartenpflege und Gehölzschnitt"],
+    "keywords": ["Garten- und Landschaftsbau", "Gartengestaltung", "Gartenpflege", "Pflasterarbeiten", "Terrasse anlegen", "Rollrasen verlegen"],
+    "varianten": [
+      {
+        "name": "Baumpflege",
+        "erkennen": ["baumpflege", "baumfäll", "baumdienst", "seilklettert"],
+        "leistungen": ["Baumpflege und Kronenschnitt", "Baumfällung", "Seilklettertechnik", "Wurzelstockfräsen", "Baumkontrolle", "Sturmschadenbeseitigung"],
+        "keywords": ["Baumfällung", "Baumpflege", "Baum fällen lassen", "Baumschnitt", "Baumdienst"]
+      }
+    ]
+  },
+
+  "Energie & Haustechnik (Photovoltaik, Speicher, Wärmepumpe, Wallbox)": {
+    "erkennen": ["solar", "photovolt", "pv-", " pv ", "energie", "energieberat", "wallbox", "batteriespeicher"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Bewerbungen von Monteuren und Elektrikern",
+    "stil": "Klar & Modern",
+    "funktionen": ["Kontaktformular", "Bewertungen", "Galerie", "Karriere/Jobs", "Mobile Aktionsleiste"],
+    "tools": "",
+    "zielgruppen": "Eigenheimbesitzer mit Interesse an Energieunabhängigkeit, Landwirte und Gewerbebetriebe mit großen Dachflächen",
+    "fragen": ["Lohnt sich eine Photovoltaikanlage für mein Haus?", "Was kostet eine PV-Anlage mit Speicher?", "Wie lange dauert es bis zur Inbetriebnahme?", "Funktioniert eine Wärmepumpe auch im Altbau?", "Welche Förderung gibt es aktuell?", "Wer übernimmt die Anmeldung beim Netzbetreiber?"],
+    "leistungen": ["Photovoltaikanlagen", "Batteriespeicher", "Wärmepumpen", "Wallboxen", "Energieberatung", "Wartung und Service"],
+    "keywords": ["Photovoltaik", "Solaranlage", "PV-Anlage mit Speicher", "Wärmepumpe", "Wallbox", "Solarteur"],
+    "varianten": [
+      {
+        "name": "Photovoltaik",
+        "erkennen": ["photovolt", "solar", "pv-", " pv "],
+        "leistungen": ["Photovoltaikanlagen", "Batteriespeicher", "Wallboxen", "Notstrom- und Ersatzstromlösungen", "Wartung und Reinigung", "Anlagenüberwachung"]
+      },
+      {
+        "name": "Wärmepumpe",
+        "erkennen": ["wärmepumpe", "heiztechnik"],
+        "leistungen": ["Wärmepumpen", "Heizungsmodernisierung", "Hydraulischer Abgleich", "Photovoltaik für den Eigenverbrauch", "Wartung und Service", "Beratung zur Förderung"],
+        "keywords": ["Wärmepumpe", "Wärmepumpe Altbau", "Heizung tauschen", "Wärmepumpe Installateur", "Luft-Wasser-Wärmepumpe"]
+      },
+      {
+        "name": "Energieberatung",
+        "erkennen": ["energieberat", "energieausweis", "sanierungsfahrplan"],
+        "leistungen": ["Energieberatung für Wohngebäude", "Individueller Sanierungsfahrplan (iSFP)", "Energieausweis", "Fördermittelberatung", "Baubegleitung", "Blower-Door-Test"],
+        "keywords": ["Energieberater", "Energieausweis", "Sanierungsfahrplan", "Energieberatung Förderung"]
+      }
+    ]
+  },
+
+  "Reinigung, Gebäudeservice & Hausmeisterdienst": {
+    "erkennen": ["reinigung", "gebäudeservice", "gebäudereinig", "putz", "facility"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Bewerbungen",
+    "stil": "Klar & Modern",
+    "funktionen": ["Kontaktformular", "Rückruf-Formular", "Bewertungen", "Karriere/Jobs", "WhatsApp-Kontakt"],
+    "tools": "",
+    "zielgruppen": "Unternehmen und Büros, Arztpraxen, Hausverwaltungen und Eigentümergemeinschaften, Privathaushalte",
+    "fragen": ["Was kostet die Reinigung pro Monat?", "Wie oft sollte gereinigt werden?", "Haben wir feste Ansprechpartner und feste Teams?", "Sind Sie versichert?", "Können wir mit einem Probetermin starten?"],
+    "leistungen": ["Unterhaltsreinigung", "Büroreinigung", "Praxisreinigung", "Treppenhausreinigung", "Glas- und Fensterreinigung", "Grundreinigung", "Bauendreinigung"],
+    "keywords": ["Gebäudereinigung", "Reinigungsfirma", "Büroreinigung", "Treppenhausreinigung", "Fensterreinigung", "Unterhaltsreinigung"],
+    "varianten": [
+      {
+        "name": "Hausmeisterdienst",
+        "erkennen": ["hausmeister", "objektbetreuung", "winterdienst", "grünpflege"],
+        "leistungen": ["Hausmeisterservice", "Objektbetreuung", "Winterdienst", "Grünflächenpflege", "Kleinreparaturen", "Treppenhausreinigung", "Mülltonnenservice"],
+        "keywords": ["Hausmeisterservice", "Hausmeisterdienst", "Winterdienst", "Objektbetreuung", "Grünpflege"]
+      },
+      {
+        "name": "Haushaltsreinigung",
+        "erkennen": ["haushaltshilfe", "haushalt", "putzhilfe", "privathaushalt"],
+        "leistungen": ["Haushaltsreinigung", "Wohnungsreinigung", "Fensterputzen", "Bügelservice", "Endreinigung bei Umzug"],
+        "keywords": ["Haushaltshilfe", "Putzhilfe", "Reinigungskraft privat", "Wohnungsreinigung", "Endreinigung Umzug"],
+        "zielgruppen": "Berufstätige, Familien, Seniorinnen und Senioren, Vermieter von Ferienwohnungen"
+      },
+      {
+        "name": "Umzug und Entrümpelung",
+        "erkennen": ["umzug", "entrümpel", "haushaltsauflös", "möbeltransport"],
+        "leistungen": ["Privatumzüge", "Firmenumzüge", "Entrümpelung", "Haushaltsauflösung", "Möbelmontage", "Halteverbotszone einrichten"],
+        "keywords": ["Umzugsunternehmen", "Umzugsfirma", "Entrümpelung", "Haushaltsauflösung", "Umzug Kosten"],
+        "zielgruppen": "Privatpersonen und Familien mit Umzugsplänen, Unternehmen, Erben und Angehörige bei Haushaltsauflösungen",
+        "fragen": ["Was kostet ein Umzug?", "Wie früh sollte ich buchen?", "Bauen Sie auch Möbel ab und auf?", "Sind meine Sachen versichert?", "Kümmern Sie sich um die Halteverbotszone?"]
+      }
+    ]
+  },
+
+  "Kfz-Werkstatt & Autohaus": {
+    "erkennen": ["kfz", "auto", "werkstatt", "fahrzeug"],
+    "hauptziel": "terminbuchungen",
+    "nebenziele": "Anrufe, Bewerbungen von Mechatronikern und Azubis",
+    "stil": "Kraftvoll & Bodenständig",
+    "funktionen": ["Online-Terminbuchung", "Kontaktformular", "Öffnungszeiten mit Live-Status", "Bewertungen", "Karte (Zwei-Klick)", "WhatsApp-Kontakt", "Mobile Aktionsleiste"],
+    "tools": "",
+    "zielgruppen": "Privatkunden aus der Umgebung, Pendler, Gewerbekunden mit Firmenfahrzeugen",
+    "fragen": ["Was kostet eine Inspektion?", "Bleibt die Herstellergarantie erhalten, wenn ich nicht in die Vertragswerkstatt gehe?", "Bekomme ich einen Ersatzwagen?", "Kann ich das Auto morgens bringen und abends abholen?", "Machen Sie die Hauptuntersuchung im Haus?", "Wie lange dauert ein Reifenwechsel?"],
+    "leistungen": ["Inspektion und Wartung", "Reparaturen aller Marken", "Vorbereitung und Abnahme der HU/AU", "Reifenservice und Einlagerung", "Klimaservice", "Unfallinstandsetzung", "Fehlerdiagnose"],
+    "keywords": ["Autowerkstatt", "Kfz Werkstatt", "Inspektion", "Reifenwechsel", "HU AU", "Autoreparatur"],
+    "varianten": [
+      {
+        "name": "Autohaus",
+        "erkennen": ["autohaus", "gebrauchtwagen", "neuwagen", "autohandel", "fahrzeughandel", "autohändler"],
+        "hauptziel": "anfragen",
+        "leistungen": ["Neuwagen", "Gebrauchtwagen", "Finanzierung und Leasing", "Inzahlungnahme", "Werkstatt und Service", "Zubehör"],
+        "keywords": ["Autohaus", "Gebrauchtwagen", "Gebrauchtwagen kaufen", "Auto Leasing", "Auto verkaufen", "Neuwagen"],
+        "tools": "Fahrzeugbörse (z. B. mobile.de, AutoScout24)",
+        "fragen": ["Kann ich das Fahrzeug Probe fahren?", "Nehmen Sie mein altes Auto in Zahlung?", "Welche Finanzierungs- und Leasingangebote gibt es?", "Gibt es eine Garantie auf Gebrauchtwagen?", "Liefern Sie das Fahrzeug auch aus?"]
+      },
+      {
+        "name": "Karosserie und Lack",
+        "erkennen": ["karosserie", "autolack", "fahrzeuglack", "unfallinstand", "smart repair", "dellen"],
+        "hauptziel": "anfragen",
+        "leistungen": ["Unfallinstandsetzung", "Karosseriearbeiten", "Autolackierung", "Smart Repair", "Dellenentfernung", "Abwicklung mit der Versicherung", "Glasreparatur"],
+        "keywords": ["Karosseriewerkstatt", "Autolackierer", "Unfallreparatur", "Smart Repair", "Delle entfernen"]
+      },
+      {
+        "name": "Reifenservice",
+        "erkennen": ["reifen"],
+        "leistungen": ["Reifenwechsel", "Reifeneinlagerung", "Reifenverkauf", "Achsvermessung", "Felgenreparatur", "Service für Reifendruckkontrollsysteme"],
+        "keywords": ["Reifenwechsel", "Reifenservice", "Reifen kaufen", "Reifeneinlagerung", "Achsvermessung"]
+      },
+      {
+        "name": "Motorrad",
+        "erkennen": ["motorrad", "zweirad", "motorroller"],
+        "leistungen": ["Inspektion und Wartung", "Reparaturen", "Reifenservice", "Vorbereitung der Hauptuntersuchung", "Umbauten und Zubehör", "Gebrauchte Motorräder"],
+        "keywords": ["Motorradwerkstatt", "Motorrad Inspektion", "Motorradhändler", "Motorradreifen"]
+      }
+    ]
+  },
+
+  "Gastronomie (Restaurant, Café, Bar)": {
+    "erkennen": ["restaurant", "gastronomie", "gaststätte", "bistro", "lokal", "küche"],
+    "hauptziel": "reservierungen",
+    "nebenziele": "Feiern und Events, Gutscheine, Bewerbungen",
+    "stil": "Warm & Nahbar",
+    "funktionen": ["Reservierung", "Speisekarte", "Öffnungszeiten mit Live-Status", "Galerie", "Bewertungen", "Karte (Zwei-Klick)", "Hinweisleiste", "Mobile Aktionsleiste"],
+    "tools": "Reservierungstool (z. B. OpenTable, Quandoo, resmio)",
+    "zielgruppen": "Gäste aus der Nachbarschaft, Berufstätige zur Mittagszeit, Paare und Familien am Wochenende, Gruppen für Feiern",
+    "fragen": ["Muss ich reservieren?", "Gibt es vegetarische und vegane Gerichte?", "Kann ich hier eine Feier ausrichten?", "Ist das Restaurant barrierefrei?", "Gibt es Parkplätze in der Nähe?", "Bieten Sie Gutscheine an?"],
+    "leistungen": ["Mittagstisch", "Abendkarte", "Saisonale Gerichte", "Feiern und Gesellschaften", "Catering", "Gutscheine"],
+    "keywords": ["Restaurant", "Essen gehen", "Mittagstisch", "Restaurant mit Terrasse", "Restaurant für Feiern"],
+    "varianten": [
+      {
+        "name": "Café",
+        "erkennen": ["café", "kaffee", "frühstück", "brunch", "eiscafé", "rösterei"],
+        "hauptziel": "information",
+        "nebenziele": "Tischreservierungen für Frühstück und Brunch, Tortenbestellungen",
+        "leistungen": ["Frühstück und Brunch", "Kaffeespezialitäten", "Hausgemachte Kuchen und Torten", "Kleine Mittagskarte", "Torten auf Bestellung", "Kaffee zum Mitnehmen"],
+        "keywords": ["Café", "Frühstück", "Brunch", "Kaffee und Kuchen", "Café mit Terrasse"]
+      },
+      {
+        "name": "Bar",
+        "erkennen": ["bar ", "cocktail", "kneipe", " pub", "weinbar", "lounge"],
+        "stil": "Dunkel & Atmosphärisch",
+        "leistungen": ["Cocktails", "Weine und Spirituosen", "Barfood", "Events und Live-Musik", "Private Feiern", "Tischreservierung"],
+        "keywords": ["Bar", "Cocktailbar", "Weinbar", "Bar für Feiern", "Kneipe"]
+      },
+      {
+        "name": "Pizzeria und Italienisch",
+        "erkennen": ["pizz", "italien", "trattoria", "osteria"],
+        "leistungen": ["Pizza aus dem Steinofen", "Pasta", "Antipasti", "Mittagstisch", "Abholung und Lieferung", "Feiern"],
+        "keywords": ["Pizzeria", "Italienisches Restaurant", "Pizza bestellen", "Pizza Lieferservice"],
+        "tools": "Bestellsystem bzw. Lieferplattform"
+      },
+      {
+        "name": "Imbiss und Streetfood",
+        "erkennen": ["imbiss", "burger", "döner", "streetfood", "street food", "foodtruck", "food truck"],
+        "hauptziel": "information",
+        "leistungen": ["Burger", "Pommes und Beilagen", "Vegetarische und vegane Varianten", "Abholung", "Lieferung", "Catering"],
+        "keywords": ["Burger", "Imbiss", "Essen bestellen", "Lieferservice"],
+        "tools": "Bestellsystem bzw. Lieferplattform"
+      },
+      {
+        "name": "Gasthof und Biergarten",
+        "erkennen": ["gasthof", "gasthaus", "wirtshaus", "biergarten", "landgasthof", "brauhaus"],
+        "leistungen": ["Regionale Küche", "Biergarten", "Saal für Feiern", "Mittagstisch", "Saisonale Spezialitäten", "Gästezimmer (falls vorhanden)"],
+        "keywords": ["Gasthof", "Biergarten", "Saal für Feier", "Regionale Küche", "Landgasthof"]
+      }
+    ]
+  },
+
+  "Bäckerei, Konditorei & Lebensmittelhandwerk": {
+    "erkennen": ["bäcker", "backstube", "brot", "konditor", "metzger", "fleischer"],
+    "hauptziel": "information",
+    "nebenziele": "Vorbestellungen, Catering, Bewerbungen und Ausbildung",
+    "stil": "Warm & Nahbar",
+    "funktionen": ["Öffnungszeiten mit Live-Status", "Kontaktformular", "Galerie", "Karriere/Jobs", "Hinweisleiste", "Karte (Zwei-Klick)"],
+    "tools": "",
+    "zielgruppen": "Stammkunden aus dem Viertel, Familien, Berufstätige am Morgen, Firmen für Frühstücks- und Catering-Bestellungen",
+    "fragen": ["Kann ich Torten und Platten vorbestellen?", "Gibt es glutenfreie oder vegane Produkte?", "Welche Filiale hat sonntags geöffnet?", "Woher kommen Ihre Zutaten?", "Bilden Sie aus?"],
+    "leistungen": ["Brot und Brötchen", "Kuchen und Torten", "Feingebäck", "Snacks und Frühstück", "Torten auf Bestellung", "Catering und Frühstücksservice"],
+    "keywords": ["Bäckerei", "Brötchen", "Torte bestellen", "Bäckerei mit Café", "Frühstück"],
+    "varianten": [
+      {
+        "name": "Konditorei",
+        "erkennen": ["konditor", "patisserie", "pâtisserie", "tortenatelier", "chocolatier"],
+        "leistungen": ["Torten auf Bestellung", "Hochzeitstorten", "Motivtorten", "Pralinen", "Feingebäck", "Café"],
+        "keywords": ["Konditorei", "Hochzeitstorte", "Torte bestellen", "Motivtorte", "Pralinen"]
+      },
+      {
+        "name": "Metzgerei",
+        "erkennen": ["metzger", "fleischer", "schlachter", "wurst"],
+        "leistungen": ["Frischfleisch aus der Region", "Wurstspezialitäten aus eigener Herstellung", "Mittagstisch", "Partyservice und Catering", "Grillspezialitäten", "Feinkost"],
+        "keywords": ["Metzgerei", "Fleischerei", "Partyservice", "Mittagstisch", "Grillfleisch bestellen"],
+        "fragen": ["Woher stammt Ihr Fleisch?", "Kann ich Fleisch für eine Feier vorbestellen?", "Bieten Sie Partyservice an?", "Gibt es einen Mittagstisch?", "Stellen Sie Wurst und Schinken selbst her?"]
+      }
+    ]
+  },
+
+  "Hotel, Pension & Ferienwohnung": {
+    "erkennen": ["hotel", "unterkunft", "übernachtung", "beherbergung"],
+    "hauptziel": "reservierungen",
+    "nebenziele": "Anfragen für Gruppen und Feiern, Gutscheine",
+    "stil": "Warm & Nahbar",
+    "funktionen": ["Reservierung", "Galerie", "Bewertungen", "Mehrsprachigkeit", "Karte (Zwei-Klick)", "Kontaktformular"],
+    "tools": "Buchungsmaschine bzw. Channel-Manager (z. B. Smoobu, Lodgify, Beds24)",
+    "zielgruppen": "Urlauber, Geschäftsreisende, Wanderer und Radfahrer, Familien, Gäste von Veranstaltungen in der Region",
+    "fragen": ["Ab wann kann ich einchecken?", "Sind Haustiere erlaubt?", "Gibt es Parkplätze?", "Wie sind die Stornobedingungen?", "Ist das Frühstück inklusive?", "Warum lohnt sich die Direktbuchung?"],
+    "leistungen": ["Einzel- und Doppelzimmer", "Frühstück", "Direktbuchung", "Arrangements und Pauschalen", "Tagungs- und Gruppenangebote", "Fahrradverleih (falls vorhanden)"],
+    "keywords": ["Hotel", "Übernachtung", "Hotel mit Frühstück", "Unterkunft", "Zimmer"],
+    "varianten": [
+      {
+        "name": "Ferienwohnung",
+        "erkennen": ["ferienwohnung", "ferienhaus", "fewo", "apartment", "appartement", "ferienapartment"],
+        "leistungen": ["Ferienwohnungen", "Ferienhaus", "Ausstattung mit Küche, WLAN und Terrasse", "Haustierfreundliche Unterkunft (falls zutreffend)", "Bettwäsche und Endreinigung", "Direktbuchung"],
+        "keywords": ["Ferienwohnung", "Ferienhaus", "Ferienwohnung mit Hund", "Unterkunft", "Urlaub"],
+        "tools": "Buchungssystem bzw. Channel-Manager (z. B. Smoobu, Lodgify)"
+      },
+      {
+        "name": "Pension und Gästehaus",
+        "erkennen": ["pension", "gästehaus", "bed and breakfast", "b&b", "monteurzimmer"],
+        "leistungen": ["Einzel- und Doppelzimmer", "Frühstück", "Familienzimmer", "Fahrradgarage", "Zimmer für Monteure und Langzeitgäste"],
+        "keywords": ["Pension", "Gästehaus", "Zimmer mit Frühstück", "Übernachtung", "Monteurzimmer"]
+      },
+      {
+        "name": "Wellnesshotel",
+        "erkennen": ["wellness", "spa", "resort", "kurhotel"],
+        "stil": "Premium & Edel",
+        "leistungen": ["Zimmer und Suiten", "Spa- und Wellnessbereich", "Massagen und Anwendungen", "Restaurant", "Wellness-Arrangements", "Angebote für Tagesgäste"],
+        "keywords": ["Wellnesshotel", "Wellnesswochenende", "Spa-Hotel", "Kurzurlaub", "Day Spa"]
+      },
+      {
+        "name": "Camping",
+        "erkennen": ["camping", "wohnmobil", "stellplatz", "glamping", "zeltplatz"],
+        "leistungen": ["Stellplätze für Zelte und Wohnwagen", "Wohnmobilstellplätze", "Mietunterkünfte und Glamping", "Sanitäranlagen", "Kiosk und Brötchenservice", "Freizeitangebote"],
+        "keywords": ["Campingplatz", "Wohnmobilstellplatz", "Glamping", "Zeltplatz"]
+      }
+    ]
+  },
+
+  "Event- & Hochzeitslocation, Catering": {
+    "erkennen": ["eventlocation", "location", "hochzeitslocation", "festsaal", "veranstaltungs", "tagungsraum"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Besichtigungstermine",
+    "stil": "Premium & Edel",
+    "funktionen": ["Kontaktformular", "Galerie", "Bewertungen", "Karte (Zwei-Klick)"],
+    "tools": "",
+    "zielgruppen": "Brautpaare, Unternehmen für Firmenfeiern und Tagungen, Familien für Geburtstage und Jubiläen",
+    "fragen": ["Ist unser Wunschtermin noch frei?", "Wie viele Gäste passen in die Räume?", "Was kostet die Miete inklusive Catering?", "Dürfen wir eigene Dienstleister mitbringen?", "Bis wann darf gefeiert werden?", "Gibt es Übernachtungsmöglichkeiten?"],
+    "leistungen": ["Hochzeiten", "Firmenfeiern und Weihnachtsfeiern", "Tagungen und Seminare", "Geburtstage und Jubiläen", "Catering und Getränke", "Dekoration und Technik"],
+    "keywords": ["Eventlocation", "Hochzeitslocation", "Location für Feier", "Tagungsraum", "Saal mieten"],
+    "varianten": [
+      {
+        "name": "Catering",
+        "erkennen": ["catering", "partyservice", "buffet"],
+        "leistungen": ["Catering für Firmenevents", "Hochzeitscatering", "Fingerfood und Buffets", "Business-Lunch", "Grill-Catering", "Personal und Equipment"],
+        "keywords": ["Catering", "Partyservice", "Fingerfood Catering", "Hochzeitscatering", "Firmencatering"]
+      },
+      {
+        "name": "Hochzeits- und Eventplanung",
+        "erkennen": ["hochzeitsplan", "weddingplan", "wedding plan", "eventplan", "eventagentur", "freie trau"],
+        "leistungen": ["Komplettplanung", "Teilplanung", "Koordination am Hochzeitstag", "Suche nach Location und Dienstleistern", "Freie Trauungen", "Firmenevents"],
+        "keywords": ["Hochzeitsplaner", "Weddingplaner", "Eventagentur", "Freie Trauung", "Hochzeitsplanung"]
+      }
+    ]
+  },
+
+  "Einzelhandel, Boutique & Hofladen": {
+    "erkennen": ["einzelhandel", "laden", "geschäft", "fachgeschäft", "shop", "store"],
+    "hauptziel": "information",
+    "nebenziele": "Online-Shop, Gutscheine, Newsletter-Anmeldungen",
+    "stil": "Editorial & Kreativ",
+    "funktionen": ["Öffnungszeiten mit Live-Status", "Galerie", "Karte (Zwei-Klick)", "Newsletter", "Hinweisleiste", "Shop-Anbindung"],
+    "tools": "",
+    "zielgruppen": "Stammkundschaft aus der Region, Laufkundschaft, Geschenkesuchende",
+    "fragen": ["Haben Sie das vorrätig?", "Kann ich telefonisch reservieren?", "Gibt es Gutscheine?", "Kann ich online bestellen und im Laden abholen?", "Wo kann ich parken?"],
+    "leistungen": ["Persönliche Beratung", "Ausgewähltes Sortiment", "Gutscheine", "Click & Collect", "Geschenkverpackung", "Events und Workshops"],
+    "keywords": ["Geschäft", "Laden", "Geschenke", "Einkaufen"],
+    "varianten": [
+      {
+        "name": "Mode und Boutique",
+        "erkennen": ["mode", "boutique", "fashion", "bekleidung", "concept store"],
+        "leistungen": ["Damenmode", "Herrenmode", "Accessoires", "Persönliche Stilberatung", "Änderungsservice", "Gutscheine"],
+        "keywords": ["Boutique", "Damenmode", "Modegeschäft", "Concept Store", "Mode kaufen"]
+      },
+      {
+        "name": "Hofladen",
+        "erkennen": ["hofladen", "bauernhof", "direktvermarkt", "obsthof", "bioladen", "bio-laden", "unverpackt"],
+        "stil": "Natürlich & Nachhaltig",
+        "leistungen": ["Obst und Gemüse der Saison", "Eier und Milchprodukte", "Fleisch und Wurst vom Hof", "Regionale Spezialitäten", "Geschenkkörbe", "Selbstbedienung"],
+        "keywords": ["Hofladen", "Regionale Produkte", "Bauernladen", "Eier vom Hof", "Obst und Gemüse regional"]
+      },
+      {
+        "name": "Blumen",
+        "erkennen": ["blumen", "florist", "floristik", "gärtnerei"],
+        "leistungen": ["Sträuße und Gestecke", "Hochzeitsfloristik", "Trauerfloristik", "Pflanzen", "Blumenlieferung", "Dekoration für Events"],
+        "keywords": ["Blumenladen", "Florist", "Blumen bestellen", "Hochzeitsfloristik", "Trauerfloristik"]
+      },
+      {
+        "name": "Optik",
+        "erkennen": ["optiker", "optik", "brillen", "kontaktlinsen"],
+        "hauptziel": "terminbuchungen",
+        "funktionen": ["Online-Terminbuchung", "Öffnungszeiten mit Live-Status", "Galerie", "Karte (Zwei-Klick)", "Bewertungen"],
+        "leistungen": ["Sehtest", "Brillen", "Kontaktlinsen", "Sonnenbrillen mit Sehstärke", "Sportbrillen", "Reparaturservice"],
+        "keywords": ["Optiker", "Sehtest", "Brille kaufen", "Kontaktlinsen", "Gleitsichtbrille"]
+      },
+      {
+        "name": "Buchhandlung",
+        "erkennen": ["buchhandlung", "buchladen", "antiquariat"],
+        "leistungen": ["Bücher aller Genres", "Bestellservice", "Lesungen", "Geschenkgutscheine", "Kinder- und Jugendbücher", "Beratung"],
+        "keywords": ["Buchhandlung", "Bücher kaufen", "Buch bestellen", "Lesung"]
+      },
+      {
+        "name": "Fahrrad",
+        "erkennen": ["fahrrad", "e-bike", "ebike", "radladen"],
+        "leistungen": ["Fahrräder und E-Bikes", "Werkstatt und Inspektion", "Probefahrten", "Dienstrad-Leasing", "Zubehör", "Verleih (falls angeboten)"],
+        "keywords": ["Fahrradladen", "E-Bike kaufen", "Fahrradwerkstatt", "E-Bike Leasing", "Fahrrad Reparatur"]
+      },
+      {
+        "name": "Juwelier",
+        "erkennen": ["juwelier", "schmuck", "goldschmied", "uhrmacher"],
+        "stil": "Premium & Edel",
+        "leistungen": ["Schmuck", "Trauringe und Verlobungsringe", "Uhren", "Anfertigungen aus der Goldschmiede", "Reparatur und Batteriewechsel", "Goldankauf (falls angeboten)"],
+        "keywords": ["Juwelier", "Trauringe", "Verlobungsring", "Goldschmied", "Uhrenreparatur"]
+      }
+    ]
+  },
+
+  "Friseur, Barbier, Kosmetik & Nagelstudio": {
+    "erkennen": ["friseur", "frisör", "salon", "beauty", "haarstudio"],
+    "hauptziel": "terminbuchungen",
+    "nebenziele": "Gutscheine, Bewerbungen",
+    "stil": "Premium & Edel",
+    "funktionen": ["Online-Terminbuchung", "Preisliste", "Galerie", "Bewertungen", "Öffnungszeiten mit Live-Status", "Karriere/Jobs", "Mobile Aktionsleiste"],
+    "tools": "Online-Buchungstool (z. B. Treatwell, Shore, Salonized, Planity)",
+    "zielgruppen": "Frauen und Männer aus der Umgebung, Brautpaare, Berufstätige mit wenig Zeit",
+    "fragen": ["Kann ich online einen Termin buchen?", "Was kostet ein Haarschnitt?", "Wie lange dauert eine Farbbehandlung?", "Welche Produkte verwenden Sie?", "Gibt es Gutscheine?"],
+    "leistungen": ["Damenhaarschnitt", "Herrenhaarschnitt", "Coloration und Strähnen", "Balayage", "Hochsteck- und Brautfrisuren", "Pflegebehandlungen"],
+    "keywords": ["Friseur", "Friseur Termin", "Balayage", "Haare färben", "Brautfrisur", "Herrenfriseur"],
+    "varianten": [
+      {
+        "name": "Barbier",
+        "erkennen": ["barber", "barbier", "herrenfriseur", "bartpflege"],
+        "stil": "Dunkel & Atmosphärisch",
+        "zielgruppen": "Männer jeden Alters aus der Umgebung, Berufstätige, Bräutigame",
+        "leistungen": ["Herrenhaarschnitt", "Fade Cut", "Bartpflege und Bartrasur", "Nassrasur mit heißem Tuch", "Haar- und Bart-Pakete", "Pflegeprodukte für Männer"],
+        "keywords": ["Barbershop", "Barber", "Bart trimmen", "Herrenfriseur", "Fade Haarschnitt"]
+      },
+      {
+        "name": "Kosmetik",
+        "erkennen": ["kosmetik", "gesichtsbehandlung", "wimpern", "augenbrauen", "haarentfernung", "waxing", "microneedling", "hydrafacial"],
+        "zielgruppen": "Frauen und Männer, die Wert auf gepflegte Haut legen; Kundinnen vor besonderen Anlässen",
+        "leistungen": ["Gesichtsbehandlungen", "Microneedling", "Wimpern- und Augenbrauenstyling", "Haarentfernung", "Make-up", "Hautanalyse und Beratung"],
+        "keywords": ["Kosmetikstudio", "Gesichtsbehandlung", "Wimpernlifting", "Microneedling", "Augenbrauen", "Kosmetikerin"]
+      },
+      {
+        "name": "Nagelstudio",
+        "erkennen": ["nagel", "nägel", "maniküre", "pediküre", "nail"],
+        "leistungen": ["Maniküre", "Pediküre", "Gel- und Acrylnägel", "Nageldesign", "Shellac", "Auffüllen"],
+        "keywords": ["Nagelstudio", "Gelnägel", "Maniküre", "Pediküre", "Nageldesign"]
+      },
+      {
+        "name": "Massage und Day Spa",
+        "erkennen": ["massage", "day spa", "dayspa", "thai-massage"],
+        "leistungen": ["Klassische Massage", "Hot-Stone-Massage", "Aromaölmassage", "Paarmassage", "Wellness-Pakete", "Gutscheine"],
+        "keywords": ["Massage", "Wellnessmassage", "Massage Gutschein", "Day Spa", "Paarmassage"]
+      },
+      {
+        "name": "Tattoo und Piercing",
+        "erkennen": ["tattoo", "tätowier", "piercing"],
+        "hauptziel": "anfragen",
+        "stil": "Dunkel & Atmosphärisch",
+        "leistungen": ["Individuelle Tattoos nach Entwurf", "Cover-ups", "Fine-Line-Tattoos", "Piercings", "Beratung und Entwurf", "Nachsorge"],
+        "keywords": ["Tattoo Studio", "Tätowierer", "Fine Line Tattoo", "Cover-up Tattoo", "Piercing"]
+      }
+    ]
+  },
+
+  "Fitness, Yoga & Personal Training": {
+    "erkennen": ["fitness", "gym", "crossfit", "sportstudio", "trainingszentrum"],
+    "hauptziel": "terminbuchungen",
+    "nebenziele": "Mitgliedschaften, Firmenfitness, Bewerbungen",
+    "stil": "Kraftvoll & Bodenständig",
+    "funktionen": ["Online-Terminbuchung", "Kursplan", "Preisliste", "Galerie", "Bewertungen", "Karriere/Jobs", "Mobile Aktionsleiste"],
+    "tools": "Mitglieder- und Buchungssoftware (z. B. Magicline, Eversports)",
+    "zielgruppen": "Einsteiger, Berufstätige, Wiedereinsteiger nach einer Pause, Firmen für Firmenfitness",
+    "fragen": ["Kann ich ein kostenloses Probetraining machen?", "Wie lange ist die Vertragslaufzeit?", "Kann ich die Mitgliedschaft pausieren?", "Gibt es eine Einweisung und Betreuung beim Training?", "Welche Kurse sind inklusive?", "Gibt es Kooperationen für Firmenfitness?"],
+    "leistungen": ["Gerätetraining", "Kurse", "Personal Training", "Trainingsplanung und Betreuung", "Functional Training", "Firmenfitness"],
+    "keywords": ["Fitnessstudio", "Probetraining", "Gym", "Fitnesskurse", "Personal Trainer"],
+    "varianten": [
+      {
+        "name": "Yoga und Pilates",
+        "erkennen": ["yoga", "pilates", "meditation", "achtsamkeit"],
+        "stil": "Warm & Nahbar",
+        "tools": "Buchungssoftware (z. B. Eversports, bsport)",
+        "leistungen": ["Yogakurse für Einsteiger und Fortgeschrittene", "Hatha- und Vinyasa-Yoga", "Pilates", "Präventionskurse", "Workshops und Retreats", "Online-Kurse"],
+        "keywords": ["Yoga", "Yogastudio", "Yoga für Anfänger", "Pilates", "Yogakurs"]
+      },
+      {
+        "name": "Personal Training",
+        "erkennen": ["personal train", "personaltrain", "personal coach", "ernährungsberat"],
+        "hauptziel": "anfragen",
+        "leistungen": ["Personal Training", "Ernährungsberatung", "Individuelle Trainingspläne", "Small-Group-Training", "Online-Coaching", "Outdoor-Training"],
+        "keywords": ["Personal Trainer", "Personal Training", "Ernährungsberatung", "Fitness Coach"]
+      },
+      {
+        "name": "Kampfsport",
+        "erkennen": ["kampfsport", "kickbox", "boxen", "boxing", "karate", "judo", "taekwondo", "mma", "selbstverteidigung", "krav maga"],
+        "leistungen": ["Kickboxen", "Boxen", "Selbstverteidigung", "Kinder- und Jugendtraining", "Fitnessboxen", "Probetraining"],
+        "keywords": ["Kampfsportschule", "Kickboxen", "Boxen", "Selbstverteidigung", "Kampfsport für Kinder"]
+      },
+      {
+        "name": "Reha- und Gesundheitssport",
+        "erkennen": ["rehasport", "reha-sport", "gesundheitssport", "ems-training"],
+        "leistungen": ["Rehasport", "Gesundheitskurse", "Rückentraining", "Gerätegestütztes Training", "Präventionskurse"],
+        "keywords": ["Rehasport", "Rückentraining", "Gesundheitssport", "Präventionskurs"]
+      }
+    ]
+  },
+
+  "Arzt- & Zahnarztpraxis": {
+    "erkennen": ["arzt", "ärzt", "medizin", "mvz", "zahn"],
+    "hauptziel": "terminbuchungen",
+    "nebenziele": "Bewerbungen (MFA), Entlastung des Telefons",
+    "stil": "Klar & Modern",
+    "funktionen": ["Online-Terminbuchung", "Öffnungszeiten mit Live-Status", "Karte (Zwei-Klick)", "Karriere/Jobs", "Hinweisleiste", "Mobile Aktionsleiste"],
+    "tools": "Online-Terminbuchung (z. B. Doctolib, Dr. Flex)",
+    "zielgruppen": "Patientinnen und Patienten aus dem Einzugsgebiet, Familien, Berufstätige mit wenig Zeit",
+    "fragen": ["Nehmen Sie neue Patienten auf?", "Kann ich online einen Termin buchen?", "Was muss ich zum ersten Termin mitbringen?", "Welche Leistungen übernimmt die Krankenkasse?", "Ist die Praxis barrierefrei?", "Was mache ich außerhalb der Sprechzeiten?"],
+    "leistungen": ["Vorsorge und Check-up", "Diagnostik", "Behandlung akuter und chronischer Erkrankungen", "Impfungen", "Hausbesuche (falls angeboten)", "Individuelle Gesundheitsleistungen (IGeL)"],
+    "keywords": ["Arzt", "Arztpraxis", "Arzttermin", "Praxis"],
+    "varianten": [
+      {
+        "name": "Zahnarzt",
+        "erkennen": ["zahnarzt", "zahnmedizin", "zahnheilkunde", "dental", "implantolog", "oralchirurg"],
+        "nebenziele": "Bewerbungen (ZFA), Patienten für Prophylaxe und Implantologie",
+        "leistungen": ["Prophylaxe und professionelle Zahnreinigung", "Füllungen und Zahnerhaltung", "Zahnersatz (Kronen, Brücken, Prothesen)", "Implantologie", "Ästhetische Zahnheilkunde", "Behandlung von Angstpatienten", "Kinderzahnheilkunde"],
+        "keywords": ["Zahnarzt", "Zahnarztpraxis", "Professionelle Zahnreinigung", "Implantate", "Zahnarzt für Angstpatienten", "Zahnarzt neue Patienten"],
+        "fragen": ["Nehmen Sie neue Patienten auf?", "Was kostet eine professionelle Zahnreinigung?", "Ich habe Angst vor dem Zahnarzt – wie gehen Sie damit um?", "Was zahlt die Krankenkasse beim Zahnersatz?", "Wie lange halten Implantate?", "Was mache ich bei Zahnschmerzen am Wochenende?"]
+      },
+      {
+        "name": "Kinderzahnarzt",
+        "muss": ["zahn"],
+        "erkennen": ["kinder", "jugend"],
+        "stil": "Frisch & Freundlich",
+        "zielgruppen": "Eltern mit Kindern vom ersten Zahn bis ins Jugendalter, ängstliche Kinder, Familien aus dem Einzugsgebiet",
+        "leistungen": ["Prophylaxe für Kinder und Fissurenversiegelung", "Behandlung von Milchzähnen", "Kindgerechte Behandlung bei Angst", "Beratung zur kieferorthopädischen Frühbehandlung", "Versorgung nach Zahnunfällen", "Zahnpflege-Beratung für Eltern"],
+        "keywords": ["Kinderzahnarzt", "Zahnarzt für Kinder", "Kinderzahnarzt Angst", "Fissurenversiegelung"],
+        "fragen": ["Ab wann sollte mein Kind zum Zahnarzt?", "Wie nehmen Sie Kindern die Angst?", "Darf ich bei der Behandlung dabei sein?", "Was ist eine Fissurenversiegelung?", "Was tun nach einem Zahnunfall?"]
+      },
+      {
+        "name": "Kieferorthopädie",
+        "erkennen": ["kieferorthop", "zahnspange", "aligner"],
+        "leistungen": ["Feste Zahnspangen", "Herausnehmbare Zahnspangen", "Aligner-Therapie", "Kieferorthopädie für Erwachsene", "Frühbehandlung", "Retention"],
+        "keywords": ["Kieferorthopäde", "Zahnspange", "Aligner", "Unsichtbare Zahnspange", "Zahnspange für Erwachsene"]
+      },
+      {
+        "name": "Hausarzt",
+        "erkennen": ["hausarzt", "hausärzt", "allgemeinmedizin", "innere medizin", "internist"],
+        "leistungen": ["Hausärztliche Versorgung", "Check-up und Vorsorgeuntersuchungen", "Impfungen", "Labordiagnostik", "EKG und Langzeit-Blutdruckmessung", "Hausbesuche (falls angeboten)", "Betreuung chronisch Kranker (DMP)"],
+        "keywords": ["Hausarzt", "Allgemeinmedizin", "Hausarzt neue Patienten", "Internist", "Impfung"]
+      },
+      {
+        "name": "Kinderarzt",
+        "erkennen": ["kinderarzt", "kinderärzt", "kinderheilkunde", "pädiatr", "kinder- und jugendarzt"],
+        "stil": "Frisch & Freundlich",
+        "leistungen": ["Vorsorgeuntersuchungen (U1 bis J2)", "Impfungen", "Akutsprechstunde", "Entwicklungsdiagnostik", "Allergiediagnostik", "Jugendmedizin"],
+        "keywords": ["Kinderarzt", "Kinderarzt neue Patienten", "U-Untersuchung", "Kinderarztpraxis"]
+      },
+      {
+        "name": "Dermatologie",
+        "erkennen": ["hautarzt", "dermatolog"],
+        "leistungen": ["Hautkrebsvorsorge", "Allergologie", "Behandlung von Akne und Rosazea", "Ästhetische Dermatologie", "Operative Dermatologie", "Lasertherapie"],
+        "keywords": ["Hautarzt", "Dermatologe", "Hautkrebsscreening", "Hautarzt Termin"]
+      },
+      {
+        "name": "Orthopädie",
+        "erkennen": ["orthopäd", "unfallchirurg", "sportmedizin"],
+        "leistungen": ["Diagnostik des Bewegungsapparats", "Behandlung von Rücken- und Gelenkschmerzen", "Sportmedizin", "Stoßwellentherapie", "Injektionstherapie", "Osteoporose-Diagnostik"],
+        "keywords": ["Orthopäde", "Orthopädie", "Rückenschmerzen Arzt", "Sportmediziner"]
+      },
+      {
+        "name": "Gynäkologie",
+        "erkennen": ["frauenarzt", "frauenärzt", "gynäkolog"],
+        "leistungen": ["Vorsorgeuntersuchungen", "Schwangerschaftsbetreuung", "Verhütungsberatung", "Beratung bei Kinderwunsch", "Begleitung in den Wechseljahren", "Ultraschalldiagnostik"],
+        "keywords": ["Frauenarzt", "Gynäkologe", "Frauenarzt neue Patientinnen", "Frauenarzt Schwangerschaft"]
+      },
+      {
+        "name": "Psychotherapie",
+        "erkennen": ["psychotherap", "psychiat", "psycholog"],
+        "stil": "Warm & Nahbar",
+        "leistungen": ["Psychotherapeutische Sprechstunde", "Verhaltenstherapie", "Tiefenpsychologisch fundierte Psychotherapie", "Akutbehandlung", "Gruppentherapie", "Online-Termine (falls angeboten)"],
+        "keywords": ["Psychotherapeut", "Psychotherapie", "Therapieplatz", "Verhaltenstherapie"],
+        "fragen": ["Wie bekomme ich einen Therapieplatz?", "Übernimmt die Krankenkasse die Kosten?", "Was passiert in der ersten Sprechstunde?", "Wie lange sind die Wartezeiten?", "Bieten Sie auch Termine per Video an?"]
+      },
+      {
+        "name": "Augenheilkunde",
+        "erkennen": ["augenarzt", "augenärzt", "augenheilkunde", "ophthalmo"],
+        "leistungen": ["Augenuntersuchung und Sehtest", "Glaukom-Vorsorge", "Makula-Diagnostik", "Augenheilkunde für Kinder", "Sehtest für den Führerschein", "Beratung zu Laser und Operationen"],
+        "keywords": ["Augenarzt", "Augenarzt Termin", "Glaukomvorsorge", "Sehtest Führerschein"]
+      }
+    ]
+  },
+
+  "Physiotherapie, Ergotherapie, Osteopathie & Heilpraktik": {
+    "erkennen": ["physio", "therapiezentrum", "krankengymnast", "therapeut"],
+    "hauptziel": "terminbuchungen",
+    "nebenziele": "Bewerbungen von Therapeutinnen und Therapeuten, Kursanmeldungen",
+    "stil": "Warm & Nahbar",
+    "funktionen": ["Online-Terminbuchung", "Kursplan", "Karriere/Jobs", "Öffnungszeiten mit Live-Status", "Karte (Zwei-Klick)", "Mobile Aktionsleiste"],
+    "tools": "",
+    "zielgruppen": "Patientinnen und Patienten mit Rezept, Selbstzahler, Sportlerinnen und Sportler, ältere Menschen",
+    "fragen": ["Brauche ich ein Rezept?", "Wie schnell bekomme ich einen Termin?", "Was muss ich zur ersten Behandlung mitbringen?", "Machen Sie auch Hausbesuche?", "Was kostet eine Behandlung als Selbstzahler?"],
+    "leistungen": ["Krankengymnastik", "Manuelle Therapie", "Manuelle Lymphdrainage", "Krankengymnastik am Gerät (KGG)", "Massage", "Hausbesuche (falls angeboten)"],
+    "keywords": ["Physiotherapie", "Krankengymnastik", "Manuelle Therapie", "Physiotherapie Termin", "Lymphdrainage"],
+    "varianten": [
+      {
+        "name": "Ergotherapie",
+        "erkennen": ["ergotherap"],
+        "leistungen": ["Ergotherapie für Kinder", "Neurologische Behandlung", "Handtherapie", "Hirnleistungstraining", "Psychisch-funktionelle Behandlung", "Hausbesuche (falls angeboten)"],
+        "keywords": ["Ergotherapie", "Ergotherapie Kinder", "Handtherapie", "Ergotherapeut"]
+      },
+      {
+        "name": "Logopädie",
+        "erkennen": ["logopäd", "sprachtherap", "stimmtherap"],
+        "leistungen": ["Sprachtherapie für Kinder", "Stimmtherapie", "Schlucktherapie", "Stottertherapie", "Therapie nach Schlaganfall", "Hausbesuche (falls angeboten)"],
+        "keywords": ["Logopädie", "Logopäde", "Sprachtherapie Kinder", "Stimmtherapie"]
+      },
+      {
+        "name": "Osteopathie",
+        "erkennen": ["osteopath"],
+        "leistungen": ["Osteopathische Behandlung", "Osteopathie für Säuglinge und Kinder", "Behandlung bei Kiefergelenksbeschwerden (CMD)", "Behandlung bei Rückenbeschwerden", "Begleitung in der Schwangerschaft", "Beratung zur Kostenerstattung"],
+        "keywords": ["Osteopathie", "Osteopath", "Osteopathie Baby", "Osteopathie Kosten"]
+      },
+      {
+        "name": "Heilpraktik",
+        "erkennen": ["heilprakti", "naturheil", "akupunktur", "homöopath"],
+        "leistungen": ["Naturheilkundliche Beratung", "Akupunktur", "Schröpfen", "Ernährungsberatung", "Entspannungsverfahren", "Ausführliches Erstgespräch"],
+        "keywords": ["Heilpraktiker", "Naturheilpraxis", "Akupunktur", "Heilpraktikerin"],
+        "fragen": ["Was passiert im Erstgespräch?", "Übernimmt meine Versicherung die Kosten?", "Wie viele Termine sind sinnvoll?", "Arbeiten Sie mit meiner Ärztin oder meinem Arzt zusammen?"]
+      },
+      {
+        "name": "Podologie",
+        "erkennen": ["podolog", "fußpflege", "medizinische fuß"],
+        "leistungen": ["Podologische Komplexbehandlung", "Behandlung beim diabetischen Fuß", "Nagelkorrekturspangen", "Behandlung von Hühneraugen und Hornhaut", "Medizinische Fußpflege", "Hausbesuche (falls angeboten)"],
+        "keywords": ["Podologie", "Medizinische Fußpflege", "Podologe", "Fußpflege"]
+      }
+    ]
+  },
+
+  "Pflegedienst, Tagespflege & Seniorenangebote": {
+    "erkennen": ["pflegedienst", "ambulante pflege", "altenpflege", "krankenpflege", "intensivpflege", "senioren", "pflege"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Bewerbungen von Pflegefach- und Pflegehilfskräften",
+    "stil": "Warm & Nahbar",
+    "funktionen": ["Rückruf-Formular", "Kontaktformular", "Karriere/Jobs", "Mobile Aktionsleiste", "WhatsApp-Kontakt"],
+    "tools": "",
+    "zielgruppen": "Angehörige, die Unterstützung für Eltern oder Partner suchen; pflegebedürftige Menschen; Pflegekräfte auf Jobsuche",
+    "fragen": ["Wie schnell kann die Pflege beginnen?", "Was zahlt die Pflegekasse?", "Wie beantrage ich einen Pflegegrad?", "Kommen immer dieselben Pflegekräfte?", "Sind Sie auch nachts und am Wochenende erreichbar?", "Welche Orte versorgen Sie?"],
+    "leistungen": ["Grundpflege", "Behandlungspflege", "Verhinderungspflege", "Hauswirtschaftliche Versorgung", "Entlastungsleistungen", "Beratungseinsätze nach § 37 Abs. 3 SGB XI"],
+    "keywords": ["Pflegedienst", "Ambulanter Pflegedienst", "Pflege zu Hause", "Verhinderungspflege", "Pflegedienst Jobs"],
+    "varianten": [
+      {
+        "name": "Tagespflege",
+        "erkennen": ["tagespflege"],
+        "leistungen": ["Tagespflege", "Fahrdienst", "Gemeinsame Mahlzeiten", "Aktivierung und Gedächtnistraining", "Ausflüge und Feste", "Schnuppertag"],
+        "keywords": ["Tagespflege", "Tagespflege Senioren", "Tagespflege Kosten"]
+      },
+      {
+        "name": "Alltagshilfe und Betreuung",
+        "erkennen": ["seniorenbetreuung", "alltagshilfe", "alltagsbegleit", "betreuungsdienst", "24-stunden", "seniorenassistenz"],
+        "leistungen": ["Alltagsbegleitung", "Haushaltshilfe", "Einkaufs- und Begleitdienste", "Betreuung bei Demenz", "Leistungen über den Entlastungsbetrag", "Verhinderungspflege"],
+        "keywords": ["Seniorenbetreuung", "Alltagshilfe", "Haushaltshilfe Senioren", "Entlastungsbetrag"]
+      },
+      {
+        "name": "Stationäre Pflege und Wohnen",
+        "erkennen": ["pflegeheim", "seniorenheim", "seniorenresidenz", "betreutes wohnen", "wohngemeinschaft", "kurzzeitpflege"],
+        "leistungen": ["Vollstationäre Pflege", "Kurzzeitpflege", "Betreutes Wohnen", "Wohngruppe für Menschen mit Demenz", "Therapie und Aktivierung", "Besichtigung"],
+        "keywords": ["Pflegeheim", "Kurzzeitpflege", "Betreutes Wohnen", "Seniorenheim"]
+      }
+    ]
+  },
+
+  "Tierarztpraxis, Hundeschule & Tierbetreuung": {
+    "erkennen": ["tierarzt", "tierärzt", "tierklinik", "tiermedizin", "hund", "katze", "tierbetreuung"],
+    "hauptziel": "terminbuchungen",
+    "nebenziele": "Anrufe, Bewerbungen (TFA)",
+    "stil": "Frisch & Freundlich",
+    "funktionen": ["Online-Terminbuchung", "Öffnungszeiten mit Live-Status", "Hinweisleiste", "Karte (Zwei-Klick)", "Mobile Aktionsleiste"],
+    "tools": "",
+    "zielgruppen": "Hunde- und Katzenhalter, Familien mit Kleintieren, je nach Praxis auch Pferdehalter",
+    "fragen": ["Was mache ich im Notfall?", "Nehmen Sie neue Patienten auf?", "Was kostet eine Impfung?", "Kann ich online einen Termin buchen?", "Machen Sie Hausbesuche?"],
+    "leistungen": ["Vorsorge und Impfungen", "Innere Medizin", "Chirurgie und Kastration", "Zahnbehandlung", "Röntgen und Ultraschall", "Labordiagnostik"],
+    "keywords": ["Tierarzt", "Tierarztpraxis", "Tierarzt Notdienst", "Tierarzt Katze", "Tierarzt Hund"],
+    "varianten": [
+      {
+        "name": "Hundeschule",
+        "erkennen": ["hundeschule", "hundetrain", "welpen", "hundeerzieh"],
+        "hauptziel": "anfragen",
+        "funktionen": ["Kontaktformular", "Kursplan", "Online-Terminbuchung", "Bewertungen", "Galerie"],
+        "tools": "",
+        "zielgruppen": "Neue Welpen- und Hundebesitzer, Halter von Hunden mit Problemverhalten, Familien",
+        "leistungen": ["Welpengruppe", "Junghundekurs", "Alltagstraining", "Einzeltraining", "Vorbereitung auf den Hundeführerschein", "Training bei Problemverhalten"],
+        "keywords": ["Hundeschule", "Welpenschule", "Hundetrainer", "Einzeltraining Hund", "Hundeführerschein"],
+        "fragen": ["Ab welchem Alter kann mein Welpe teilnehmen?", "Was kostet eine Einzelstunde?", "Wie groß sind die Gruppen?", "Helfen Sie auch bei Leinenaggression?", "Muss mein Hund geimpft sein?"]
+      },
+      {
+        "name": "Tierpension und Betreuung",
+        "erkennen": ["tierpension", "hundepension", "katzenpension", "hundetagesstätte", "hundetagesstaette", "dogsitting", "gassi"],
+        "hauptziel": "anfragen",
+        "funktionen": ["Kontaktformular", "Galerie", "Bewertungen", "WhatsApp-Kontakt"],
+        "leistungen": ["Hundepension", "Katzenbetreuung", "Hundetagesstätte", "Gassi-Service", "Urlaubsbetreuung", "Kennenlerntag"],
+        "keywords": ["Hundepension", "Hundetagesstätte", "Katzenpension", "Gassi-Service"]
+      },
+      {
+        "name": "Pferdepraxis",
+        "erkennen": ["pferd", "equin"],
+        "leistungen": ["Pferdemedizin", "Lahmheitsdiagnostik", "Zahnbehandlung beim Pferd", "Ankaufsuntersuchung", "Impfungen", "Fahrpraxis"],
+        "keywords": ["Pferdetierarzt", "Tierarzt Pferd", "Ankaufsuntersuchung Pferd"]
+      },
+      {
+        "name": "Hundefriseur",
+        "erkennen": ["hundefris", "hundesalon", "grooming"],
+        "hauptziel": "terminbuchungen",
+        "leistungen": ["Baden und Trimmen", "Scheren", "Krallenpflege", "Gewöhnung für Welpen", "Beratung zur Fellpflege"],
+        "keywords": ["Hundefriseur", "Hundesalon", "Hund trimmen"]
+      }
+    ]
+  },
+
+  "Rechtsanwalt & Kanzlei": {
+    "erkennen": ["anwalt", "anwält", "kanzlei", "rechtsberatung", "jurist"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Anrufe, Bewerbungen",
+    "stil": "Seriös & Vertrauensvoll",
+    "funktionen": ["Kontaktformular", "Rückruf-Formular", "Online-Terminbuchung", "Blog/Ratgeber"],
+    "tools": "",
+    "zielgruppen": "Privatpersonen mit einem akuten Rechtsproblem, Unternehmen und Selbstständige",
+    "fragen": ["Was kostet eine Erstberatung?", "Wie schnell bekomme ich einen Termin?", "Übernimmt meine Rechtsschutzversicherung die Kosten?", "Welche Unterlagen soll ich mitbringen?", "Ist eine Beratung auch per Video oder Telefon möglich?"],
+    "leistungen": ["Erstberatung", "Außergerichtliche Vertretung", "Vertretung vor Gericht", "Prüfung und Gestaltung von Verträgen", "Online-Beratung"],
+    "keywords": ["Rechtsanwalt", "Anwalt", "Kanzlei", "Anwalt Erstberatung", "Fachanwalt"],
+    "varianten": [
+      {
+        "name": "Familienrecht",
+        "erkennen": ["familienrecht", "scheidung", "unterhalt", "sorgerecht"],
+        "leistungen": ["Scheidung", "Unterhalt", "Sorge- und Umgangsrecht", "Zugewinnausgleich", "Eheverträge", "Mediation"],
+        "keywords": ["Scheidungsanwalt", "Anwalt Familienrecht", "Scheidung Kosten", "Unterhalt Anwalt", "Sorgerecht Anwalt"]
+      },
+      {
+        "name": "Arbeitsrecht",
+        "erkennen": ["arbeitsrecht", "kündigungsschutz", "abfindung"],
+        "leistungen": ["Kündigungsschutzklage", "Abfindung", "Aufhebungsvertrag", "Arbeitszeugnis", "Beratung für Arbeitgeber", "Beratung von Betriebsräten"],
+        "keywords": ["Anwalt Arbeitsrecht", "Kündigung Anwalt", "Abfindung", "Fachanwalt Arbeitsrecht", "Aufhebungsvertrag prüfen"]
+      },
+      {
+        "name": "Verkehrsrecht",
+        "erkennen": ["verkehrsrecht", "verkehrsunfall", "bußgeld", "fahrverbot"],
+        "leistungen": ["Unfallregulierung", "Bußgeldverfahren", "Fahrverbot und Punkte", "Verkehrsstrafrecht", "Schadensersatz und Schmerzensgeld"],
+        "keywords": ["Anwalt Verkehrsrecht", "Verkehrsunfall Anwalt", "Einspruch Bußgeldbescheid", "Fahrverbot Anwalt"]
+      },
+      {
+        "name": "Strafrecht",
+        "erkennen": ["strafrecht", "strafverteid"],
+        "leistungen": ["Strafverteidigung", "Ermittlungsverfahren", "Haftsachen", "Verkehrsstrafrecht", "Wirtschaftsstrafrecht", "Erreichbarkeit im Notfall (falls angeboten)"],
+        "keywords": ["Strafverteidiger", "Anwalt Strafrecht", "Vorladung Polizei Anwalt", "Strafanwalt"]
+      },
+      {
+        "name": "Erbrecht",
+        "erkennen": ["erbrecht", "testament", "nachlass", "erbschaft"],
+        "leistungen": ["Testamentsgestaltung", "Erbauseinandersetzung", "Pflichtteil", "Vorsorgevollmacht", "Unternehmensnachfolge", "Testamentsvollstreckung"],
+        "keywords": ["Anwalt Erbrecht", "Testament Anwalt", "Pflichtteil", "Erbstreit Anwalt"]
+      },
+      {
+        "name": "Miet- und Immobilienrecht",
+        "erkennen": ["mietrecht", "wohnungseigentumsrecht", "immobilienrecht", "baurecht"],
+        "leistungen": ["Mietrecht für Mieter und Vermieter", "Nebenkostenabrechnung", "Räumung", "Mietminderung", "Wohnungseigentumsrecht", "Immobilienkauf"],
+        "keywords": ["Anwalt Mietrecht", "Mietrecht", "Nebenkostenabrechnung prüfen", "Räumungsklage"]
+      },
+      {
+        "name": "Wirtschaftsrecht",
+        "erkennen": ["wirtschaftsrecht", "gesellschaftsrecht", "handelsrecht", "vertragsrecht", "it-recht", "markenrecht", "datenschutzrecht"],
+        "zielgruppen": "Mittelständische Unternehmen, Gründerinnen und Gründer, Geschäftsführungen",
+        "leistungen": ["Gesellschaftsrecht", "Vertragsgestaltung", "Handels- und Vertriebsrecht", "IT- und Datenschutzrecht", "Marken- und Wettbewerbsrecht", "Unternehmensnachfolge"],
+        "keywords": ["Anwalt Wirtschaftsrecht", "Anwalt für Unternehmen", "Anwalt Gesellschaftsrecht", "Anwalt Vertragsrecht"]
+      },
+      {
+        "name": "Notariat",
+        "erkennen": ["notar"],
+        "hauptziel": "terminbuchungen",
+        "leistungen": ["Immobilienkaufverträge", "Testamente und Erbverträge", "Vorsorgevollmachten", "Gesellschaftsgründungen", "Eheverträge", "Beglaubigungen"],
+        "keywords": ["Notar", "Notartermin", "Notar Hauskauf", "Beglaubigung"]
+      }
+    ]
+  },
+
+  "Steuerberatung & Wirtschaftsprüfung": {
+    "erkennen": ["steuer", "steuerberat", "steuerkanzlei", "lohnsteuer"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Bewerbungen (Steuerfachangestellte, Azubis)",
+    "stil": "Seriös & Vertrauensvoll",
+    "funktionen": ["Kontaktformular", "Online-Terminbuchung", "Karriere/Jobs", "Blog/Ratgeber"],
+    "tools": "Digitale Zusammenarbeit (z. B. DATEV Unternehmen online, Mandantenportal)",
+    "zielgruppen": "Selbstständige und Freiberufler, kleine und mittlere Unternehmen, Privatpersonen mit Immobilien oder mehreren Einkunftsarten",
+    "fragen": ["Was kostet eine Steuerberatung?", "Nehmen Sie neue Mandanten auf?", "Wie funktioniert die digitale Zusammenarbeit?", "Welche Unterlagen brauchen Sie?", "Betreuen Sie auch Gründerinnen und Gründer?"],
+    "leistungen": ["Finanzbuchhaltung", "Lohn- und Gehaltsabrechnung", "Jahresabschluss", "Steuererklärungen", "Steuerliche Beratung", "Beratung bei der Existenzgründung"],
+    "keywords": ["Steuerberater", "Steuerberatung", "Steuerkanzlei", "Steuerberater für Selbstständige", "Buchhaltung"],
+    "varianten": [
+      {
+        "name": "Wirtschaftsprüfung",
+        "erkennen": ["wirtschaftsprüf"],
+        "leistungen": ["Jahresabschlussprüfung", "Prüfungen nach Sondervorschriften", "Unternehmensbewertung", "Due Diligence", "Sanierungsberatung"],
+        "keywords": ["Wirtschaftsprüfer", "Jahresabschlussprüfung", "Unternehmensbewertung"]
+      },
+      {
+        "name": "Lohnsteuerhilfeverein",
+        "erkennen": ["lohnsteuerhilfe"],
+        "zielgruppen": "Arbeitnehmerinnen und Arbeitnehmer, Rentnerinnen und Rentner, Familien",
+        "leistungen": ["Einkommensteuererklärung für Mitglieder", "Prüfung von Steuerbescheiden", "Einspruch", "Beratung zu Werbungskosten", "Beratung zur Steuerklassenwahl"],
+        "keywords": ["Lohnsteuerhilfeverein", "Steuererklärung machen lassen", "Lohnsteuerhilfe"]
+      },
+      {
+        "name": "Buchhaltungsbüro",
+        "erkennen": ["buchhaltungsbüro", "buchhaltungsservice", "lohnbuchhaltung", "buchhalter"],
+        "leistungen": ["Laufende Buchhaltung", "Lohnabrechnung", "Belegerfassung", "Mahnwesen", "Digitale Belegverarbeitung"],
+        "keywords": ["Buchhaltungsbüro", "Buchhaltung", "Lohnabrechnung", "Buchhalter"]
+      }
+    ]
+  },
+
+  "Versicherung & Finanzberatung": {
+    "erkennen": ["versicherung", "finanzberat", "finanzplan", "vermögensberat", "finanzdienst", "vorsorge"],
+    "hauptziel": "terminbuchungen",
+    "nebenziele": "Rückrufe, Anfragen",
+    "stil": "Seriös & Vertrauensvoll",
+    "funktionen": ["Online-Terminbuchung", "Rückruf-Formular", "Kontaktformular", "Blog/Ratgeber"],
+    "tools": "Terminbuchung (z. B. Calendly)",
+    "zielgruppen": "Familien, Selbstständige und Freiberufler, Berufseinsteiger, Menschen kurz vor dem Ruhestand",
+    "fragen": ["Was kostet die Beratung?", "Sind Sie unabhängig oder an eine Gesellschaft gebunden?", "Wie läuft das Erstgespräch ab?", "Können wir uns auch online treffen?", "Wie oft sollte ich meine Verträge prüfen lassen?"],
+    "leistungen": ["Altersvorsorge", "Absicherung der Arbeitskraft", "Krankenversicherung", "Sachversicherungen", "Vermögensaufbau", "Vertragscheck"],
+    "keywords": ["Versicherungsmakler", "Finanzberater", "Beratung Altersvorsorge", "Berufsunfähigkeitsversicherung", "Versicherungsberatung"],
+    "varianten": [
+      {
+        "name": "Baufinanzierung",
+        "erkennen": ["baufinanz", "immobilienfinanz", "kreditvermitt", "darlehen"],
+        "leistungen": ["Baufinanzierung", "Anschlussfinanzierung", "Forward-Darlehen", "Beratung zu Fördermitteln", "Modernisierungskredit"],
+        "keywords": ["Baufinanzierung", "Anschlussfinanzierung", "Berater Baufinanzierung", "Hausfinanzierung"]
+      }
+    ]
+  },
+
+  "Immobilienmakler & Hausverwaltung": {
+    "erkennen": ["immobilie", "makler", "maklerbüro", "real estate"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Anfragen zur Wertermittlung, Käuferanfragen",
+    "stil": "Premium & Edel",
+    "funktionen": ["Kontaktformular", "Bewertungen", "Galerie", "Blog/Ratgeber", "WhatsApp-Kontakt"],
+    "tools": "Maklersoftware (z. B. onOffice, FLOWFACT, Propstack)",
+    "zielgruppen": "Eigentümer, die verkaufen oder vermieten möchten; Erben; Käufer und Mieter in der Region",
+    "fragen": ["Was ist meine Immobilie wert?", "Wie lange dauert ein Verkauf?", "Was kostet ein Makler?", "Welche Unterlagen brauche ich für den Verkauf?", "Brauche ich einen Energieausweis?", "Kann ich verkaufen, wenn noch ein Kredit läuft?"],
+    "leistungen": ["Immobilienbewertung", "Verkauf von Häusern und Wohnungen", "Vermietung", "Exposé und Vermarktung", "Besichtigungen und Verhandlung", "Begleitung bis zum Notartermin"],
+    "keywords": ["Immobilienmakler", "Haus verkaufen", "Immobilienbewertung", "Wohnung verkaufen", "Makler"],
+    "varianten": [
+      {
+        "name": "Hausverwaltung",
+        "erkennen": ["hausverwalt", "weg-verwalt", "mietverwalt", "immobilienverwalt", "property management"],
+        "zielgruppen": "Eigentümergemeinschaften, private Vermieter, Investoren",
+        "leistungen": ["WEG-Verwaltung", "Mietverwaltung", "Sondereigentumsverwaltung", "Nebenkostenabrechnung", "Instandhaltung und Koordination von Handwerkern", "Eigentümerversammlungen"],
+        "keywords": ["Hausverwaltung", "WEG-Verwaltung", "Mietverwaltung", "Hausverwaltung wechseln"],
+        "fragen": ["Was kostet eine Hausverwaltung?", "Wie läuft ein Verwalterwechsel ab?", "Wie erreichen wir Sie im Notfall?", "Wie oft finden Eigentümerversammlungen statt?", "Gibt es ein digitales Portal für Eigentümer?"]
+      },
+      {
+        "name": "Immobiliengutachten",
+        "erkennen": ["gutacht", "sachverständig", "wertgutacht"],
+        "leistungen": ["Verkehrswertgutachten", "Kurzgutachten", "Gutachten bei Erbschaft und Scheidung", "Bauschadensgutachten", "Begleitung beim Immobilienkauf"],
+        "keywords": ["Immobiliengutachter", "Verkehrswertgutachten", "Gutachter Haus", "Sachverständiger Immobilien"]
+      }
+    ]
+  },
+
+  "Beratung, Coaching & Agentur": {
+    "erkennen": ["beratung", "berater", "coach", "agentur", "consult"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Terminbuchungen, Newsletter-Anmeldungen",
+    "stil": "Klar & Modern",
+    "funktionen": ["Online-Terminbuchung", "Kontaktformular", "Blog/Ratgeber", "Newsletter", "Bewertungen"],
+    "tools": "Terminbuchung (z. B. Calendly oder Cal.com)",
+    "zielgruppen": "Unternehmerinnen und Unternehmer, Führungskräfte, Teams in kleinen und mittleren Unternehmen",
+    "fragen": ["Wie läuft ein Erstgespräch ab?", "Was kostet die Zusammenarbeit?", "Wie lange dauert ein typisches Projekt?", "Arbeiten Sie auch remote?", "Für wen ist Ihr Angebot nicht geeignet?"],
+    "leistungen": ["Erstgespräch", "Strategieberatung", "Workshops", "Einzelcoaching", "Begleitung in der Umsetzung"],
+    "keywords": ["Unternehmensberatung", "Coaching", "Beratung", "Workshop"],
+    "varianten": [
+      {
+        "name": "Coaching",
+        "erkennen": ["coach", "coaching", "life coach", "persönlichkeitsentwickl", "karrierecoach"],
+        "zielgruppen": "Berufstätige in Veränderungsphasen, Führungskräfte, Selbstständige",
+        "leistungen": ["Einzelcoaching", "Karrierecoaching", "Coaching für Führungskräfte", "Teamcoaching", "Online-Coaching", "Workshops"],
+        "keywords": ["Coach", "Business Coach", "Karrierecoaching", "Life Coach", "Coaching für Führungskräfte"]
+      },
+      {
+        "name": "Marketing- und Webagentur",
+        "erkennen": ["werbeagentur", "marketingagentur", "marketing", "webdesign", "webagentur", "suchmaschinen", " seo", "social media", "branding", "kommunikationsdesign"],
+        "stil": "Editorial & Kreativ",
+        "leistungen": ["Webdesign und Entwicklung", "Suchmaschinenoptimierung (SEO)", "Social-Media-Marketing", "Branding und Corporate Design", "Online-Werbung", "Content und Text"],
+        "keywords": ["Werbeagentur", "Webdesign", "Marketingagentur", "SEO-Agentur", "Social-Media-Agentur"]
+      },
+      {
+        "name": "Unternehmensberatung",
+        "erkennen": ["unternehmensberat", "consulting", "strategieberat", "managementberat", "prozessberat", "interim"],
+        "leistungen": ["Strategieberatung", "Prozessoptimierung", "Digitalisierung", "Organisationsentwicklung", "Interim-Management", "Beratung zu Fördermitteln"],
+        "keywords": ["Unternehmensberatung", "Unternehmensberater", "Prozessoptimierung", "Beratung Digitalisierung"]
+      },
+      {
+        "name": "Personalberatung",
+        "erkennen": ["personalberat", "recruit", "headhunt", "personalvermitt", "zeitarbeit", "personaldienstleist"],
+        "nebenziele": "Bewerbungen von Kandidatinnen und Kandidaten",
+        "leistungen": ["Personalvermittlung", "Executive Search", "Active Sourcing", "Arbeitnehmerüberlassung", "Employer Branding", "Bewerbermanagement"],
+        "keywords": ["Personalberatung", "Personalvermittlung", "Headhunter", "Zeitarbeit", "Recruiting-Agentur"]
+      },
+      {
+        "name": "Übersetzung",
+        "erkennen": ["übersetz", "dolmetsch", "lektorat"],
+        "leistungen": ["Fachübersetzungen", "Beglaubigte Übersetzungen", "Dolmetschen", "Lektorat", "Lokalisierung", "Express-Service (falls angeboten)"],
+        "keywords": ["Übersetzungsbüro", "Beglaubigte Übersetzung", "Dolmetscher", "Übersetzer"]
+      }
+    ]
+  },
+
+  "IT-Dienstleister, Software & SaaS": {
+    "erkennen": ["it-", " it ", "edv", "informatik", "netzwerk", "systemhaus", "software", "digitalisierung"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Demo-Termine, Bewerbungen",
+    "stil": "Klar & Modern",
+    "funktionen": ["Kontaktformular", "Online-Terminbuchung", "Blog/Ratgeber", "Karriere/Jobs", "Newsletter"],
+    "tools": "Terminbuchung für Erstgespräche (z. B. Calendly), CRM",
+    "zielgruppen": "Kleine und mittlere Unternehmen ohne eigene IT-Abteilung, Praxen und Kanzleien, Geschäftsführung und IT-Verantwortliche",
+    "fragen": ["Wie schnell reagieren Sie bei Störungen?", "Was kostet die Betreuung pro Monat?", "Arbeiten Sie auch per Fernwartung?", "Wo werden unsere Daten gespeichert?", "Wie läuft der Wechsel vom bisherigen Dienstleister?"],
+    "leistungen": ["IT-Betreuung und Support", "Netzwerk und Server", "Cloud und Microsoft 365", "IT-Sicherheit und Backup", "Hardware und Arbeitsplätze", "Telefonanlagen"],
+    "keywords": ["IT-Service", "IT-Dienstleister", "IT-Betreuung", "IT-Support", "IT-Sicherheit"],
+    "varianten": [
+      {
+        "name": "Software und SaaS",
+        "erkennen": ["saas", "software", "app-entwickl", "plattform", "cloud-lösung"],
+        "lokal": false,
+        "zielgruppen": "Unternehmen mit einem klaren Problem, das die Software löst; Entscheider und Fachanwender",
+        "leistungen": ["Produktdemo", "Kostenloser Testzugang", "Onboarding und Schulung", "Schnittstellen und Integrationen", "Support", "Individuelle Anpassungen"],
+        "keywords": ["{branche}", "{branche} kostenlos testen", "{branche} Vergleich"],
+        "fragen": ["Kann ich die Software kostenlos testen?", "Wo werden die Daten gespeichert?", "Welche Schnittstellen gibt es?", "Wie lange dauert die Einführung?", "Was kostet die Software pro Monat?"]
+      },
+      {
+        "name": "Computer- und Handyreparatur",
+        "erkennen": ["computer", "pc-", "laptop", "handy", "smartphone", "notebook"],
+        "hauptziel": "anrufe",
+        "zielgruppen": "Privatpersonen, Seniorinnen und Senioren, kleine Büros",
+        "leistungen": ["PC- und Laptop-Reparatur", "Smartphone-Reparatur", "Datenrettung", "Virenentfernung", "Einrichtung und Installation", "Vor-Ort-Service (falls angeboten)"],
+        "keywords": ["PC Reparatur", "Laptop Reparatur", "Handy Reparatur", "Datenrettung", "Computerhilfe"]
+      }
+    ]
+  },
+
+  "Fotografie, Video & Kreative": {
+    "erkennen": ["fotograf", "foto", "video", "film", "kreativ", "grafik"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Gutscheine",
+    "stil": "Editorial & Kreativ",
+    "funktionen": ["Kontaktformular", "Galerie", "Bewertungen", "Preisliste"],
+    "tools": "",
+    "zielgruppen": "Brautpaare, Familien, Unternehmen für Business- und Produktfotos",
+    "fragen": ["Ist mein Wunschtermin noch frei?", "Was kostet ein Shooting?", "Wann bekomme ich die Bilder?", "Wie viele Bilder erhalte ich?", "Fotografieren Sie auch außerhalb der Region?"],
+    "leistungen": ["Hochzeitsreportagen", "Porträt- und Familienfotografie", "Business-Porträts", "Produktfotografie", "Eventfotografie", "Bildbearbeitung"],
+    "keywords": ["Fotograf", "Fotostudio", "Hochzeitsfotograf", "Businessfotos", "Familienfotos"],
+    "varianten": [
+      {
+        "name": "Hochzeitsfotografie",
+        "erkennen": ["hochzeit", "wedding"],
+        "leistungen": ["Hochzeitsreportage", "Begleitung im Standesamt", "Paarshooting", "Verlobungsshooting", "Hochzeitsalben", "Hochzeitsvideo (falls angeboten)"],
+        "keywords": ["Hochzeitsfotograf", "Hochzeitsfotografie", "Hochzeitsvideo", "Paarshooting"]
+      },
+      {
+        "name": "Video und Film",
+        "erkennen": ["video", "film", "drohne"],
+        "leistungen": ["Imagefilme", "Videos für Social Media", "Eventvideos", "Drohnenaufnahmen", "Recruiting-Videos", "Schnitt und Postproduktion"],
+        "keywords": ["Videograf", "Imagefilm", "Videoproduktion", "Drohnenaufnahmen", "Recruiting-Video"]
+      },
+      {
+        "name": "Grafik und Illustration",
+        "erkennen": ["grafik", "illustr", "designstudio"],
+        "lokal": false,
+        "leistungen": ["Logo und Corporate Design", "Illustration", "Printdesign", "Verpackungsdesign", "Grafiken für Social Media", "Editorial Design"],
+        "keywords": ["Grafikdesigner", "Logo Design", "Illustrator", "Corporate Design"]
+      },
+      {
+        "name": "DJ und Musik",
+        "erkennen": [" dj", "dj ", "partyband", "hochzeitsband", "musiker", "alleinunterhalter"],
+        "leistungen": ["Musik für Hochzeiten", "Firmenfeiern", "Geburtstage", "Ton- und Lichttechnik", "Vorgespräch und Musikwünsche"],
+        "keywords": ["DJ Hochzeit", "Hochzeits-DJ", "DJ buchen", "Partyband"]
+      }
+    ]
+  },
+
+  "Bildung: Nachhilfe, Fahrschule, Musikschule, Kita": {
+    "erkennen": ["schule", "bildung", "akademie", "kurse", "unterricht", "lernen"],
+    "hauptziel": "anfragen",
+    "nebenziele": "Probestunden, Anmeldungen",
+    "stil": "Frisch & Freundlich",
+    "funktionen": ["Kontaktformular", "Kursplan", "Online-Terminbuchung", "Bewertungen"],
+    "tools": "",
+    "zielgruppen": "Schülerinnen und Schüler, Eltern, Erwachsene mit konkreten Lernzielen",
+    "fragen": ["Gibt es eine kostenlose Probestunde?", "Was kostet der Unterricht?", "Wie groß sind die Gruppen?", "Gibt es auch Online-Unterricht?", "Wie schnell kann man starten?"],
+    "leistungen": ["Einzelunterricht", "Gruppenkurse", "Probestunde", "Online-Unterricht", "Ferienkurse"],
+    "keywords": ["Kurse", "Unterricht", "Probestunde"],
+    "varianten": [
+      {
+        "name": "Nachhilfe",
+        "erkennen": ["nachhilfe", "lernhilfe", "lernförder", "hausaufgaben"],
+        "leistungen": ["Nachhilfe in Mathe, Deutsch und Englisch", "Einzel- und Kleingruppenunterricht", "Prüfungsvorbereitung (z. B. Abitur)", "Online-Nachhilfe", "Lerncoaching", "Förderung über Bildung und Teilhabe"],
+        "keywords": ["Nachhilfe", "Mathe-Nachhilfe", "Englisch-Nachhilfe", "Abiturvorbereitung", "Online-Nachhilfe"]
+      },
+      {
+        "name": "Fahrschule",
+        "erkennen": ["fahrschule", "führerschein", "fahrlehr"],
+        "zielgruppen": "Jugendliche ab 16, junge Erwachsene, Erwachsene mit Wunsch nach Motorrad- oder Zusatzklassen",
+        "leistungen": ["Führerschein Klasse B", "Begleitetes Fahren ab 17 (BF17)", "Motorradführerschein (A, A2, A1)", "Ferien- und Intensivkurse", "Auffrischungsstunden", "Ausbildung auf Automatik"],
+        "keywords": ["Fahrschule", "Führerschein", "Führerschein Kosten", "Motorradführerschein", "Intensivkurs Führerschein"],
+        "fragen": ["Was kostet der Führerschein insgesamt?", "Wie lange dauert die Ausbildung?", "Wann finden die Theoriestunden statt?", "Kann ich in den Ferien einen Intensivkurs machen?", "Gibt es Ratenzahlung?"]
+      },
+      {
+        "name": "Musikschule",
+        "erkennen": ["musikschule", "musikunterricht", "gitarrenunterricht", "klavierunterricht", "gesangsunterricht", "instrumentalunterricht"],
+        "leistungen": ["Klavierunterricht", "Gitarrenunterricht", "Gesangsunterricht", "Schlagzeugunterricht", "Musikalische Früherziehung", "Bands und Ensembles"],
+        "keywords": ["Musikschule", "Klavierunterricht", "Gitarrenunterricht", "Gesangsunterricht", "Musikunterricht für Kinder"]
+      },
+      {
+        "name": "Kita und Kindertagespflege",
+        "erkennen": ["kita", "kindergarten", "krippe", "tagesmutter", "tagesvater", "kindertages"],
+        "nebenziele": "Bewerbungen von Erzieherinnen und Erziehern",
+        "zielgruppen": "Eltern mit Kindern von 1 bis 6 Jahren, pädagogische Fachkräfte auf Jobsuche",
+        "leistungen": ["Krippe (unter 3 Jahren)", "Kindergarten", "Pädagogisches Konzept", "Eingewöhnung", "Verpflegung", "Elternarbeit"],
+        "keywords": ["Kita", "Kindergarten", "Kitaplatz", "Krippe", "Tagesmutter"],
+        "fragen": ["Gibt es freie Plätze?", "Wie läuft die Eingewöhnung ab?", "Wie sind die Öffnungszeiten?", "Was kostet der Platz?", "Wie sieht ein typischer Tag aus?"]
+      },
+      {
+        "name": "Sprachschule",
+        "erkennen": ["sprachschule", "sprachkurs", "deutschkurs", "englischkurs", "integrationskurs"],
+        "leistungen": ["Deutschkurse", "Englischkurse", "Integrationskurse", "Firmenkurse", "Prüfungsvorbereitung", "Online-Kurse"],
+        "keywords": ["Sprachschule", "Deutschkurs", "Englischkurs", "Integrationskurs"]
+      },
+      {
+        "name": "Tanzschule",
+        "erkennen": ["tanzschule", "tanzkurs", "ballett", "tanzstudio"],
+        "leistungen": ["Tanzkurse für Paare", "Hochzeitstanz", "Kindertanz und Ballett", "Hip-Hop", "Discofox", "Tanzpartys"],
+        "keywords": ["Tanzschule", "Tanzkurs", "Hochzeitstanz", "Tanzkurs für Paare", "Ballett für Kinder"]
+      }
+    ]
+  },
+
+  "Verein, Non-Profit & Kirche": {
+    "erkennen": ["verein", "e. v.", "e.v.", "stiftung", "gemeinnützig", "non-profit", "ehrenamt"],
+    "hauptziel": "information",
+    "nebenziele": "Mitgliedschaften, Spenden, Ehrenamtliche",
+    "stil": "Warm & Nahbar",
+    "funktionen": ["Kontaktformular", "Newsletter", "Galerie", "Blog/Ratgeber"],
+    "tools": "Mitgliederverwaltung bzw. Spendentool",
+    "zielgruppen": "Mitglieder und Interessierte, Ehrenamtliche, Spenderinnen und Spender, Kooperationspartner",
+    "fragen": ["Wie werde ich Mitglied?", "Was kostet die Mitgliedschaft?", "Kann ich erst einmal unverbindlich vorbeikommen?", "Wie kann ich helfen oder spenden?", "Erhalte ich eine Zuwendungsbestätigung?"],
+    "leistungen": ["Angebote und Veranstaltungen", "Mitgliedschaft", "Ehrenamt", "Spenden", "Kooperationen"],
+    "keywords": ["Verein", "Ehrenamt", "Mitglied werden", "Spenden"],
+    "varianten": [
+      {
+        "name": "Sportverein",
+        "erkennen": ["sportverein", "fußball", "tennis", "turnverein", "handball", "schwimmverein", "leichtathletik"],
+        "leistungen": ["Fußball", "Turnen und Kinderturnen", "Fitness- und Gesundheitssport", "Probetraining", "Mannschaften für alle Altersklassen", "Vereinsfeste"],
+        "keywords": ["Sportverein", "Fußballverein", "Kinderturnen", "Probetraining Verein"]
+      },
+      {
+        "name": "Kirchengemeinde",
+        "erkennen": ["kirche", "kirchengemeinde", "pfarr", "evangelisch", "katholisch", "freikirche"],
+        "leistungen": ["Gottesdienste", "Taufe, Trauung und Beerdigung", "Kinder- und Jugendarbeit", "Seniorenarbeit", "Kirchenmusik", "Seelsorge"],
+        "keywords": ["Kirchengemeinde", "Gottesdienst", "Taufe", "Kirchliche Trauung"]
+      },
+      {
+        "name": "Tierschutz",
+        "erkennen": ["tierschutz", "tierheim"],
+        "leistungen": ["Tiervermittlung", "Patenschaften", "Spenden", "Ehrenamt", "Fundtiere", "Tag der offenen Tür"],
+        "keywords": ["Tierheim", "Hund adoptieren", "Katze adoptieren", "Tierschutzverein"]
+      },
+      {
+        "name": "Förderverein und Stiftung",
+        "erkennen": ["förderverein", "stiftung", "hilfsorganisation", "tafel", "hospiz"],
+        "leistungen": ["Projekte und Wirkung", "Spenden", "Ehrenamt", "Fördermitgliedschaft", "Veranstaltungen", "Transparenzbericht"],
+        "keywords": ["Spenden", "Ehrenamt", "Förderverein", "Stiftung"]
+      }
+    ]
+  }
+}

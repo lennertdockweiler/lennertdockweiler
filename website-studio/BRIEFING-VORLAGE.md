@@ -4,6 +4,7 @@ Kopiere einen der Blöcke, fülle aus, was du weißt, und sende ihn an Claude: z
 
 - **Leere Felder sind erlaubt.** Claude entscheidet dann nach Best Practice und dokumentiert seine Annahmen im Konzept.
 - Text hinter `#` ist nur eine Auswahlhilfe. Ersetze ihn durch deine Angabe oder lass ihn stehen.
+- **Bequemer geht es mit dem Generator** (`generator.html`): Er schlägt nach Eingabe der Branche Leistungen, Keywords, Zielgruppen, Kundenfragen, Ziele, Stil und Funktionen vor und kennzeichnet unbestätigte Vorschläge im Briefing mit `[Vorschlag]`. Wenn du von Hand ausfüllst, kannst du unsichere Angaben genauso markieren, z. B. `LEISTUNGEN [Vorschlag]: …`.
 - **Je mehr echte Informationen, desto besser das Ergebnis:** Leistungen, Belege, Kundenstimmen, Fotos, Logo und die Adresse der alten Website machen den größten Unterschied.
 - Anhänge (Logo, Fotos, Texte, Flyer, Preislisten) einfach mitschicken bzw. in den Projektordner legen.
 
