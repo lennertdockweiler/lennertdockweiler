@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lead-Scout · __TITLE__</title>
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:#f5f6f8;--surface:#fff;--surface-2:#f0f2f5;--border:#e2e5ea;--text:#15181d;--muted:#5b6471;--faint:#868e9b;
+  --accent:#5a4bd6;--accent-soft:#eceafd;--accent-text:#4434b8;
+  --good:#1d8a57;--good-soft:#e3f4ea;--warn:#a96400;--warn-soft:#fcf0da;--bad:#c4363b;--bad-soft:#fce7e7;--neutral-soft:#edf0f4;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.07);--radius:12px;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0e1014;--surface:#161920;--surface-2:#1c2028;--border:#2a2f39;--text:#e7e9ee;--muted:#a1a8b4;--faint:#7c8492;
+    --accent:#9387ff;--accent-soft:#25203f;--accent-text:#bdb5ff;--good:#3fcf88;--good-soft:#12281d;--warn:#f1aa3d;
+    --warn-soft:#2b2211;--bad:#ff6d71;--bad-soft:#311718;--neutral-soft:#232833;--shadow:none}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent-text);text-decoration:none}
+a:hover{text-decoration:underline}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1320px;margin:0 auto;padding:0 20px}
+header.top{padding-top:28px;padding-bottom:4px}
+[hidden]{display:none!important}
+.brand{font-size:12.5px;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-text)}
+h1{font-size:28px;line-height:1.2;margin:4px 0 6px;letter-spacing:-.015em}
+.meta{color:var(--muted);margin:0;font-size:14px}
+.notes{margin:16px 0 0;display:grid;gap:8px}
+.note{background:var(--warn-soft);border:1px solid color-mix(in srgb,var(--warn) 22%,transparent);padding:10px 14px;border-radius:10px;font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:20px 0 10px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;box-shadow:var(--shadow)}
+.kpi .v{font-size:26px;font-weight:680;letter-spacing:-.015em;font-variant-numeric:tabular-nums;line-height:1.15}
+.kpi .l{font-size:13.5px;font-weight:550}
+.kpi .s{color:var(--muted);font-size:12.5px}
+.summary{margin:6px 0 4px;color:var(--muted);font-size:14.5px;max-width:980px}
+.summary b{color:var(--text);font-weight:600}
+.toolbar{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:12px 0;margin-top:14px;border-bottom:1px solid var(--border)}
+.toolbar .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search{flex:1 1 260px;min-width:0;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--border);background:var(--surface);padding:5px 11px;border-radius:999px;font-size:13px;cursor:pointer;white-space:nowrap}
+.chip .c{color:var(--faint);margin-left:4px;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip[aria-pressed="true"] .c{color:rgba(255,255,255,.8)}
+.ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13.5px}
+select,.btn{border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:7px 11px;cursor:pointer;font-size:13.5px}
+.btn:hover,select:hover,.chip:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+label.tg{display:flex;gap:6px;align-items:center;color:var(--muted);cursor:pointer}
+.count{color:var(--muted);font-size:13.5px;margin:14px 0 0}
+.list{display:grid;gap:10px;margin:10px 0 40px}
+.lead{scroll-margin-top:150px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.lead.dim{opacity:.7}
+.row{display:grid;grid-template-columns:62px minmax(0,1.7fr) repeat(3,minmax(0,1fr)) 30px;gap:16px;align-items:start;padding:14px 14px 14px 16px;cursor:pointer}
+.row .chs{display:contents}
+.pot{display:flex;flex-direction:column;align-items:center;gap:3px;padding-top:2px}
+.pot .n{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-weight:720;font-size:17px;font-variant-numeric:tabular-nums;background:var(--accent-soft);color:var(--accent-text);border:2px solid transparent}
+.pot.hoch .n{background:var(--accent);color:#fff}
+.pot.mittel .n{border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
+.pot.gering .n{background:var(--neutral-soft);color:var(--muted)}
+.pot .t{font-size:11px;color:var(--muted)}
+.name{font-weight:640;font-size:16px;line-height:1.3;overflow-wrap:anywhere}
+.sub{color:var(--muted);font-size:13px;margin-top:2px}
+.sub .star{color:var(--warn)}
+.tops{margin:7px 0 0;padding:0;list-style:none;font-size:13px}
+.tops li{position:relative;padding-left:13px;margin-top:2px}
+.tops li::before{content:"";position:absolute;left:1px;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--bad)}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.tag{font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid var(--border);color:var(--muted)}
+.ch .h{font-size:11px;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:5px}
+.bar{display:flex;align-items:center;gap:8px}
+.bar .track{flex:1;height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.bar .fill{height:100%;border-radius:99px}
+.bar .num{font-variant-numeric:tabular-nums;font-size:13px;font-weight:650;min-width:2.1em;text-align:right}
+.lo{background:var(--bad)}.mid{background:var(--warn)}.hi{background:var(--good)}.na{background:var(--faint)}
+.ch .line{font-size:13px;margin-top:4px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badges{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.badge{font-size:11.5px;padding:1px 7px;border-radius:6px;background:var(--neutral-soft);color:var(--muted);white-space:nowrap}
+.badge.bad{background:var(--bad-soft);color:var(--bad)}
+.badge.warn{background:var(--warn-soft);color:var(--warn)}
+.none{color:var(--faint)}
+.chev{width:30px;height:30px;border-radius:8px;border:1px solid transparent;background:none;cursor:pointer;display:grid;place-items:center;color:var(--muted)}
+.chev:hover{border-color:var(--border)}
+.chev svg{transition:transform .15s}
+.lead.open .chev svg{transform:rotate(180deg)}
+.detail{display:none;border-top:1px solid var(--border);padding:18px 16px;background:var(--surface-2)}
+.lead.open .detail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.detail h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);margin:0 0 8px}
+.detail h4{font-size:14px;margin:14px 0 6px}
+.detail h4:first-of-type{margin-top:0}
+.detail p{margin:0 0 6px;font-size:14px}
+.st{color:var(--muted)}
+.checks{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:7px;font-size:13.5px}
+.checks li{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:8px;align-items:start}
+.ic{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:10.5px;font-weight:800;margin-top:1px}
+.ic.y{background:var(--good-soft);color:var(--good)}.ic.n{background:var(--bad-soft);color:var(--bad)}.ic.q{background:var(--neutral-soft);color:var(--faint)}
+.dt{color:var(--muted)}
+.pts{color:var(--faint);font-variant-numeric:tabular-nums;font-size:12px;white-space:nowrap}
+dl.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 12px;font-size:13.5px;margin:10px 0 0}
+dl.kv dt{color:var(--muted)}
+dl.kv dd{margin:0;overflow-wrap:anywhere}
+ol.pitch,ul.good{margin:0 0 8px;padding-left:20px;font-size:14px}
+ol.pitch li,ul.good li{margin:4px 0}
+ul.good li::marker{color:var(--good)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.actions a.btn{color:var(--text);text-decoration:none}
+.empty{padding:40px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius)}
+footer{color:var(--faint);font-size:12.5px;padding:10px 0 40px}
+@media (max-width:1000px){
+  .row{grid-template-columns:56px minmax(0,1fr) 30px;grid-template-areas:"pot firm chev" "ch ch ch";gap:12px}
+  .row .pot{grid-area:pot}.row .firm{grid-area:firm}.row .chevc{grid-area:chev}
+  .row .chs{grid-area:ch;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .lead.open .detail{grid-template-columns:1fr}
+}
+@media (max-width:600px){
+  .wrap{padding:0 16px}
+  .toolbar{position:static}
+  .chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;width:100%}
+  h1{font-size:22px}
+  .row{padding:12px}
+  .row .chs{grid-template-columns:1fr;gap:10px}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media print{
+  .toolbar,.chev,.actions{display:none!important}
+  body{background:#fff}
+  .lead{break-inside:avoid;box-shadow:none}
+}
+</style>
+</head>
+<body>
+<header class="top wrap">
+  <div class="brand">Lead-Scout</div>
+  <h1 id="title"></h1>
+  <p class="meta" id="meta"></p>
+  <div class="notes" id="notes"></div>
+  <div class="kpis" id="kpis"></div>
+  <p class="summary" id="summary"></p>
+</header>
+<div class="toolbar">
+  <div class="wrap">
+    <input class="search" id="q" type="search" placeholder="Suchen: Firma, Ort, Ansatzpunkt …" aria-label="Suchen">
+    <div class="chips" id="filters" role="group" aria-label="Filter"></div>
+    <div class="ctrl">
+      <label class="tg"><input type="checkbox" id="hideChains"> Ketten &amp; Geschlossene ausblenden</label>
+      <select id="sort" aria-label="Sortierung">
+        <option value="potenzial">Sortieren: Potenzial</option>
+        <option value="praesenz">Schwächste Präsenz zuerst</option>
+        <option value="website">Schwächste Website zuerst</option>
+        <option value="bewertungen">Meiste Google-Rezensionen</option>
+        <option value="name">Name A–Z</option>
+      </select>
+      <button class="btn" id="csv" type="button">Auswahl als CSV</button>
+    </div>
+  </div>
+</div>
+<main class="wrap">
+  <p class="count" id="count"></p>
+  <div class="list" id="list"></div>
+</main>
+<footer class="wrap">Erstellt mit Lead-Scout. Alle Werte sind automatisch ermittelt – vor einem Gespräch kurz gegenprüfen. Firmen nur im Rahmen des UWG kontaktieren.</footer>
+<script type="application/json" id="data">__DATA__</script>
+<script>
+(function () {
+  "use strict";
+  var DATA = JSON.parse(document.getElementById("data").textContent);
+  var LEADS = DATA.leads || [];
+  var S = DATA.suche || {}, M = DATA.markt || {}, OPT = DATA.optionen || {};
+
+  function $(s) { return document.querySelector(s); }
+  function el(tag, props) {
+    var n = document.createElement(tag);
+    if (props) {
+      Object.keys(props).forEach(function (k) {
+        var v = props[k];
+        if (v === null || v === undefined || v === false) return;
+        if (k === "class") n.className = v;
+        else if (k === "text") n.textContent = v;
+        else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), v);
+        else n.setAttribute(k, v === true ? "" : v);
+      });
+    }
+    for (var i = 2; i < arguments.length; i++) add(n, arguments[i]);
+    return n;
+  }
+  function add(n, kid) {
+    if (kid === null || kid === undefined || kid === false) return;
+    if (Array.isArray(kid)) { kid.forEach(function (k) { add(n, k); }); return; }
+    n.append(kid instanceof Node ? kid : document.createTextNode(String(kid)));
+  }
+  var NF = new Intl.NumberFormat("de-DE");
+  function fmt(v) { return (v === null || v === undefined || v === "") ? "–" : NF.format(v); }
+  function dec(v, d) { return (v === null || v === undefined) ? "–" : Number(v).toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function days(d) {
+    if (d === null || d === undefined) return "";
+    if (d <= 0) return "heute";
+    if (d === 1) return "gestern";
+    if (d < 60) return "vor " + d + " Tagen";
+    if (d < 730) return "vor " + Math.round(d / 30.4) + " Monaten";
+    return "vor " + Math.round(d / 365) + " Jahren";
+  }
+  function safeUrl(u) { return (typeof u === "string" && /^https?:\/\//i.test(u)) ? u : null; }
+  function link(u, text) {
+    var s = safeUrl(u);
+    return s ? el("a", { href: s, target: "_blank", rel: "noopener noreferrer" }, text || s) : el("span", null, text || "");
+  }
+  function host(u) { try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return u || ""; } }
+  function cls(v) { return v === null || v === undefined ? "na" : (v < 40 ? "lo" : (v < 70 ? "mid" : "hi")); }
+  function bar(v) {
+    return el("div", { class: "bar", title: v === null || v === undefined ? "nicht bewertbar" : v + " von 100" },
+      el("div", { class: "track" }, el("div", { class: "fill " + cls(v), style: "width:" + (v === null || v === undefined ? 0 : Math.max(3, v)) + "%" })),
+      el("span", { class: "num" }, v === null || v === undefined ? "?" : String(v)));
+  }
+  function g(obj, path) { return path.split(".").reduce(function (o, k) { return o === null || o === undefined ? undefined : o[k]; }, obj); }
+  function pct(a, b) { return b ? Math.round(a / b * 100) : 0; }
+
+  // ---------- Kopf ----------
+  var QUELLE = { google: "Google Maps", osm: "OpenStreetMap", liste: "Eigene Liste" };
+  $("#title").textContent = S.titel || "Lead-Scout";
+  var created = DATA.erstellt ? new Date(DATA.erstellt) : null;
+  $("#meta").textContent = [
+    fmt(M.firmen) + " Firmen",
+    QUELLE[S.quelle] ? "Quelle: " + QUELLE[S.quelle] : "",
+    created && !isNaN(created) ? "erstellt am " + created.toLocaleString("de-DE", { dateStyle: "medium", timeStyle: "short" }) : "",
+    DATA.dauer_s ? "Dauer " + Math.max(1, Math.round(DATA.dauer_s / 60)) + " min" : "",
+    "PageSpeed " + (!OPT.pagespeed ? "nicht gemessen" : (LEADS.some(function (l) { return g(l, "website.pagespeed.performance") !== undefined && g(l, "website.pagespeed.performance") !== null; }) ? "gemessen" : "nicht verfügbar")),
+    "Instagram-Kennzahlen " + (OPT.instagram_meta ? "aktiv" : "nicht aktiv")
+  ].filter(Boolean).join(" · ");
+  (DATA.hinweise || []).forEach(function (t) { $("#notes").append(el("div", { class: "note" }, t)); });
+
+  var kpis = [
+    [fmt(M.firmen), "Firmen", "analysiert"],
+    [pct(M.mit_website, M.firmen) + " %", "mit Website-Link", fmt(M.mit_website) + " von " + fmt(M.firmen) + (M.website_unbekannt ? " · " + fmt(M.website_unbekannt) + " unbekannt" : "")],
+    [M.website_ok ? pct(M.mobil, M.website_ok) + " %" : "–", "davon mobil optimiert", M.website_ok ? fmt(M.mobil) + " von " + fmt(M.website_ok) + " geprüften" : ""],
+    [pct(M.mit_instagram, M.firmen) + " %", "mit Instagram", fmt(M.mit_instagram) + " Profile" + (M.ig_mit_kennzahlen ? " · " + fmt(M.ig_aktiv) + " aktiv" : "")],
+    [pct(M.mit_tiktok, M.firmen) + " %", "mit TikTok", fmt(M.mit_tiktok) + " Profile" + (M.tt_mit_kennzahlen ? " · " + fmt(M.tt_aktiv) + " aktiv" : "")],
+    [M.website_schnitt === null || M.website_schnitt === undefined ? "–" : String(M.website_schnitt), "Ø Website-Score", "von 100"],
+    [fmt(M.potenzial_hoch), "hohes Potenzial", fmt(M.potenzial_mittel) + " mittel"]
+  ];
+  kpis.forEach(function (k) { $("#kpis").append(el("div", { class: "kpi" }, el("div", { class: "v" }, k[0]), el("div", { class: "l" }, k[1]), el("div", { class: "s" }, k[2]))); });
+
+  var sum = [];
+  if (M.firmen) {
+    sum.push(el("b", null, fmt(M.mit_tiktok) + " von " + fmt(M.firmen)), " Firmen sind auf TikTok, ", el("b", null, fmt(M.mit_instagram)), " auf Instagram");
+    if (M.ohne_website > 0) sum.push(", ", el("b", null, fmt(M.ohne_website)), " haben keine eigene Website");
+    var notMobile = M.website_ok ? M.website_ok - M.mobil : 0;
+    if (notMobile > 0) sum.push(", ", el("b", null, fmt(notMobile)), notMobile === 1 ? " Website ist nicht für Smartphones optimiert" : " Websites sind nicht für Smartphones optimiert");
+    sum.push(".");
+    var best = LEADS.filter(function (l) { return l.scores.praesenz >= 50; }).sort(function (a, b) { return b.scores.praesenz - a.scores.praesenz; }).slice(0, 3);
+    if (best.length) {
+      sum.push(" Vorbilder dieser Suche: ");
+      best.forEach(function (l, i) { sum.push(i ? ", " : "", el("b", null, l.name), " (" + l.scores.praesenz + ")"); });
+      sum.push(".");
+    }
+  }
+  add($("#summary"), sum);
+
+  // ---------- Filter & Sortierung ----------
+  function igDays(l) { return g(l, "instagram.metrics.last_post_days"); }
+  function ttDays(l) { return g(l, "tiktok.metrics.last_video_days"); }
+  var FILTERS = [
+    ["alle", "Alle", function () { return true; }],
+    ["hoch", "Potenzial hoch", function (l) { return l.scores.potenzial >= 70; }],
+    ["ohne_website", "Ohne Website", function (l) { return !l.website_url && l.scores.website === 0; }],
+    ["website_schwach", "Website schwach", function (l) { return l.website_url && l.scores.website !== null && l.scores.website < 50; }],
+    ["ohne_instagram", "Ohne Instagram", function (l) { return !g(l, "instagram.handle") && g(l, "instagram.status") !== "feed"; }],
+    ["ohne_tiktok", "Ohne TikTok", function (l) { return !g(l, "tiktok.handle") || g(l, "tiktok.exists") === false; }],
+    ["inaktiv", "Social inaktiv", function (l) { var a = igDays(l), b = ttDays(l); return (a !== undefined && a !== null && a > 30) || (b !== undefined && b !== null && b > 30); }],
+    ["recht", "Rechtliche Mängel", function (l) { return (l.tags || []).indexOf("Rechtliche Mängel") >= 0; }]
+  ];
+  var SORTS = {
+    potenzial: function (a, b) { return b.scores.potenzial - a.scores.potenzial || a.name.localeCompare(b.name, "de"); },
+    praesenz: function (a, b) { return a.scores.praesenz - b.scores.praesenz || b.scores.potenzial - a.scores.potenzial; },
+    website: function (a, b) { return (a.scores.website === null ? 101 : a.scores.website) - (b.scores.website === null ? 101 : b.scores.website); },
+    bewertungen: function (a, b) { return (b.reviews === null || b.reviews === undefined ? -1 : b.reviews) - (a.reviews === null || a.reviews === undefined ? -1 : a.reviews); },
+    name: function (a, b) { return a.name.localeCompare(b.name, "de"); }
+  };
+  var state = { q: "", filter: "alle", sort: "potenzial", hide: false };
+  function isHidden(l) { return (l.tags || []).indexOf("Kette") >= 0 || (l.tags || []).indexOf("Geschlossen") >= 0; }
+  function haystack(l) {
+    if (!l._h) {
+      l._h = [l.name, l.address, l.category, l.website_url, g(l, "instagram.handle"), g(l, "tiktok.handle")]
+        .concat((l.ansatzpunkte || []).map(function (a) { return a.text; })).concat(l.tags || []).join(" ").toLowerCase();
+    }
+    return l._h;
+  }
+  function currentList() {
+    var f = FILTERS.filter(function (x) { return x[0] === state.filter; })[0] || FILTERS[0];
+    var q = state.q.trim().toLowerCase();
+    return LEADS.filter(function (l) {
+      return f[2](l) && (!state.hide || !isHidden(l)) && (!q || haystack(l).indexOf(q) >= 0);
+    }).sort(SORTS[state.sort]);
+  }
+  function renderFilters() {
+    var box = $("#filters");
+    box.textContent = "";
+    FILTERS.forEach(function (f) {
+      var n = LEADS.filter(function (l) { return f[2](l) && (!state.hide || !isHidden(l)); }).length;
+      box.append(el("button", { class: "chip", type: "button", "aria-pressed": String(state.filter === f[0]), onclick: function () { state.filter = f[0]; renderFilters(); render(); } },
+        f[1], el("span", { class: "c" }, String(n))));
+    });
+  }
+
+  // ---------- Zeilen ----------
+  var VIA = { link: "auf der Website verlinkt", quelltext: "im Quelltext der Website", text: "im Website-Text erwähnt",
+    google: "im Google-Eintrag", osm: "im OpenStreetMap-Eintrag", linkhub: "auf der Link-Seite (z. B. Linktree)",
+    "meta-suche": "über die Meta-API gefunden (Website stimmt überein)", liste: "aus der eigenen Liste" };
+  var OTHER = { facebook: "Facebook", youtube: "YouTube", youtube_video: "YouTube-Video", linkedin: "LinkedIn", xing: "XING", x: "X (Twitter)", pinterest: "Pinterest", whatsapp: "WhatsApp", threads: "Threads" };
+
+  function badges(list, skip) {
+    var items = (list || []).filter(function (b) { return !skip || skip.indexOf(b[0]) < 0; }).slice(0, 4);
+    return items.length ? el("div", { class: "badges" }, items.map(function (b) { return el("span", { class: "badge " + (b[1] || "") }, b[0]); })) : null;
+  }
+  function cellWebsite(l) {
+    var w = l.website || {};
+    var box = el("div", { class: "ch" }, el("div", { class: "h" }, "Website"));
+    if (!l.website_url) {
+      if (l.scores.website === null) {
+        box.append(bar(null), el("div", { class: "line none" }, "nicht hinterlegt"), el("div", { class: "line" }, link(g(l, "suchlinks.website"), "Website suchen")));
+        return box;
+      }
+      box.append(bar(0), el("div", { class: "line" }, l.website_platform ? "nur " + l.website_platform : "keine eigene Website"));
+      return box;
+    }
+    var url = w.final_url || l.website_url;
+    box.append(bar(l.scores.website), el("div", { class: "line" }, link(url, host(url))));
+    add(box, badges(l.badges && l.badges.website));
+    return box;
+  }
+  function cellSocial(l, kind) {
+    var p = l[kind] || {};
+    var box = el("div", { class: "ch" }, el("div", { class: "h" }, kind === "instagram" ? "Instagram" : "TikTok"));
+    if (!p.handle && p.status === "feed") {
+      box.append(bar(null), el("div", { class: "line" }, "Feed auf der Website"), el("div", { class: "line" }, link(g(l, "suchlinks." + kind), "Profil suchen")));
+      return box;
+    }
+    if (!p.handle || p.exists === false) {
+      box.append(bar(0), el("div", { class: "line none" }, p.exists === false ? "@" + p.handle + " existiert nicht" : "nicht gefunden"));
+      return box;
+    }
+    var m = p.metrics;
+    var rated = m || p.status === "kein_business" || (kind === "tiktok" && m && m.private);
+    box.append(bar(rated ? l.scores[kind] : null), el("div", { class: "line" }, link(p.url, "@" + p.handle)));
+    if (m) {
+      var last = kind === "instagram" ? m.last_post_days : m.last_video_days;
+      box.append(el("div", { class: "line" }, fmt(m.followers) + " Follower · " + (last === null || last === undefined ? "keine Beiträge" : "zuletzt " + days(last))));
+    } else {
+      box.append(el("div", { class: "line none" }, p.status === "kein_business" ? "kein Business-Konto" : "Kennzahlen nicht abgerufen"));
+    }
+    add(box, badges(l.badges && l.badges[kind], ["Kennzahlen offen"]));
+    return box;
+  }
+  var CHEV = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function rowFor(l) {
+    var s = l.scores;
+    var art = el("article", { class: "lead" + (isHidden(l) ? " dim" : "") });
+    var sub = [];
+    if (l.category) sub.push(l.category);
+    if (l.rating) sub.push(el("span", null, el("span", { class: "star" }, "★ "), dec(l.rating, 1) + " (" + fmt(l.reviews) + ")"));
+    if (l.address) sub.push(l.address);
+    var subEl = el("div", { class: "sub" });
+    sub.forEach(function (x, i) { if (i) subEl.append(" · "); add(subEl, x); });
+    var tops = (l.ansatzpunkte || []).slice(0, 2);
+    var firm = el("div", { class: "firm" }, el("div", { class: "name" }, l.name || "(ohne Namen)"), subEl,
+      tops.length ? el("ul", { class: "tops" }, tops.map(function (t) { return el("li", null, t.text); })) : null,
+      (l.tags || []).length ? el("div", { class: "tags" }, l.tags.map(function (t) { return el("span", { class: "tag" }, t); })) : null);
+    var btn = el("button", { class: "chev", type: "button", "aria-expanded": "false", "aria-label": "Details zu " + (l.name || "Firma") });
+    btn.innerHTML = CHEV;
+    var row = el("div", { class: "row" },
+      el("div", { class: "pot " + s.potenzial_label, title: "Potenzial " + s.potenzial + "/100 · Präsenz " + s.praesenz + "/100" },
+        el("div", { class: "n" }, String(s.potenzial)), el("div", { class: "t" }, s.potenzial_label)),
+      firm,
+      el("div", { class: "chs" }, cellWebsite(l), cellSocial(l, "instagram"), cellSocial(l, "tiktok")),
+      el("div", { class: "chevc" }, btn));
+    function toggle() {
+      var open = !art.classList.contains("open");
+      if (open && !art.querySelector(".detail")) art.append(detail(l));
+      art.classList.toggle("open", open);
+      btn.setAttribute("aria-expanded", String(open));
+    }
+    row.addEventListener("click", function (e) { if (!e.target.closest("a")) toggle(); });
+    art.append(row);
+    return art;
+  }
+
+  function checksList(items) {
+    if (!items || !items.length) return null;
+    return el("ul", { class: "checks" }, items.map(function (c) {
+      var ic = c.ok === true ? ["y", "✓"] : (c.ok === false ? ["n", "✕"] : ["q", "?"]);
+      return el("li", null, el("span", { class: "ic " + ic[0], "aria-hidden": "true" }, ic[1]),
+        el("span", null, c.label, c.detail ? el("span", { class: "dt" }, " – " + c.detail) : null),
+        el("span", { class: "pts" }, Math.round(c.points) + "/" + c.max));
+    }));
+  }
+  function kv(rows) {
+    var dl = el("dl", { class: "kv" });
+    rows.forEach(function (r) { if (r[1] === null || r[1] === undefined || r[1] === "" || (Array.isArray(r[1]) && !r[1].length)) return; dl.append(el("dt", null, r[0]), el("dd", null, r[1])); });
+    return dl.children.length ? dl : null;
+  }
+  function yes(v) { return v ? "ja" : "nein"; }
+
+  function detail(l) {
+    var w = l.website || {}, d = el("div", { class: "detail" });
+    // Website
+    var c1 = el("section", null, el("h3", null, "Website"));
+    if (!l.website_url) {
+      c1.append(el("p", null, l.website_platform ? "Keine eigene Website – hinterlegt ist " + l.website_platform + "."
+        : (l.scores.website === null ? "In den Daten ist keine Website hinterlegt – das heißt nicht, dass es keine gibt." : "Im Google-Profil ist keine Website hinterlegt.")));
+      if (l.scores.website === null) c1.append(el("p", null, link(g(l, "suchlinks.website"), "Website bei Google suchen")));
+      if (safeUrl(l.website_raw)) c1.append(el("p", null, link(l.website_raw)));
+    } else {
+      c1.append(el("p", { class: "st" }, w.status_text || ""), el("p", null, link(w.final_url || l.website_url)));
+      add(c1, checksList(l.checks && l.checks.website));
+      var psi = w.pagespeed || {};
+      add(c1, kv([
+        ["PageSpeed mobil", psi.performance !== undefined && psi.performance !== null ? psi.performance + "/100" + (psi.lcp ? " · LCP " + psi.lcp : "") + (psi.seo !== null && psi.seo !== undefined ? " · SEO " + psi.seo : "") : (psi.error || "")],
+        ["System", [w.cms, w.page_builder].filter(Boolean).join(" + ")],
+        ["Copyright", w.copyright_year],
+        ["Server-Antwort", w.ttfb !== null && w.ttfb !== undefined ? dec(w.ttfb, 2) + " s" : ""],
+        ["Tracking", (w.tracking || []).join(", ")],
+        ["Cookie-Banner", w.status === "ok" ? (w.consent_tool || (w.consent_hint ? "erkannt" : "nicht erkannt")) : ""],
+        ["Online-Buchung", w.booking_tool],
+        ["E-Mail", (w.emails || []).join(", ") || l.email_hint],
+        ["Telefon", l.phone || (w.phones || []).join(", ")],
+        ["Geprüfte Seiten", (w.pages_checked || []).length ? String(w.pages_checked.length) : ""]
+      ]));
+    }
+    // Social
+    var c2 = el("section", null, el("h3", null, "Social Media"));
+    ["instagram", "tiktok"].forEach(function (kind) {
+      var p = l[kind] || {}, m = p.metrics, label = kind === "instagram" ? "Instagram" : "TikTok";
+      var rated = m || p.status === "kein_business" || p.exists === false || (!p.handle && p.status !== "feed");
+      c2.append(el("h4", null, label + " · " + (rated ? l.scores[kind] + "/100" : "nicht bewertet")));
+      if (!p.handle) {
+        c2.append(el("p", { class: "st" }, p.status === "feed" ? "Ein Instagram-Feed ist auf der Website eingebunden, der Profilname ist dort aber nicht lesbar."
+          : "Nicht gefunden (nicht auf Website oder im Eintrag verlinkt)."),
+          el("p", null, link(g(l, "suchlinks." + kind), "Manuell bei Google suchen")));
+        return;
+      }
+      c2.append(el("p", null, link(p.url, "@" + p.handle), el("span", { class: "dt" }, " – " + (VIA[p.via] || p.via || ""))));
+      if (p.exists === false) { c2.append(el("p", { class: "st" }, "Das Profil existiert nicht (mehr).")); return; }
+      if (m && kind === "instagram") {
+        add(c2, kv([["Follower", fmt(m.followers)], ["Beiträge", fmt(m.posts)], ["Letzter Beitrag", m.last_post_days === null ? "–" : days(m.last_post_days) + " (" + m.last_post_date + ")"],
+          ["Beiträge (30 Tage)", fmt(m.posts_30d)], ["Reels-Anteil", m.reels_share === null ? "–" : Math.round(m.reels_share * 100) + " % (" + m.videos_recent + " von " + m.sample + ")"],
+          ["Engagement", m.engagement === null ? "Likes ausgeblendet" : dec(m.engagement, 2) + " %"], ["Bio", m.bio]]));
+      } else if (m) {
+        add(c2, kv([["Follower", fmt(m.followers)], ["Likes gesamt", fmt(m.likes)], ["Letztes Video", m.last_video_days === null ? "–" : days(m.last_video_days) + " (" + m.last_video_date + ")"],
+          ["Videos (30 Tage)", fmt(m.videos_30d) + (m.videos_visible >= 10 ? " (von den letzten 10)" : "")], ["Ø Aufrufe", fmt(m.avg_views)], ["Privat", m.private ? "ja" : ""], ["Bio", m.bio]]));
+      } else {
+        c2.append(el("p", { class: "st" }, p.status === "kein_business" ? "Kein Business-/Creator-Konto – Kennzahlen nicht abrufbar."
+          : (kind === "instagram" ? "Kennzahlen nicht abgerufen (Meta-API nicht eingerichtet)." : (p.error || "Kennzahlen nicht abrufbar."))));
+      }
+      if ((p.andere || []).length) c2.append(el("p", { class: "st" }, "Weitere gefundene Namen: " + p.andere.map(function (x) { return "@" + x; }).join(", ")));
+    });
+    var others = Object.keys(l.profile || {});
+    if (others.length) {
+      c2.append(el("h4", null, "Weitere Kanäle"));
+      var p2 = el("p");
+      others.forEach(function (k, i) { if (i) p2.append(" · "); p2.append(link(l.profile[k], OTHER[k] || k)); });
+      c2.append(p2);
+    }
+    // Ansatzpunkte
+    var c3 = el("section", null, el("h3", null, "Ansatzpunkte fürs Gespräch"));
+    var ap = l.ansatzpunkte || [];
+    c3.append(ap.length ? el("ol", { class: "pitch" }, ap.slice(0, 10).map(function (a) { return el("li", null, a.text); })) : el("p", { class: "st" }, "Keine Schwachstellen gefunden."));
+    if ((l.hinweise || []).length) {
+      c3.append(el("h3", { style: "margin-top:14px" }, "Gut zu wissen"), el("ul", { class: "good" }, l.hinweise.map(function (h) { return el("li", null, h.text); })));
+    }
+    var copyBtn = el("button", { class: "btn primary", type: "button" }, "Notiz kopieren");
+    copyBtn.addEventListener("click", function (e) { e.stopPropagation(); copy(note(l), copyBtn); });
+    var briefBtn = el("button", { class: "btn", type: "button", title: "Kunden-Briefing (Website-Studio) für eine Pitch-Demo kopieren" }, "Briefing für Pitch-Demo");
+    briefBtn.addEventListener("click", function (e) { e.stopPropagation(); copy(briefing(l), briefBtn); });
+    var acts = el("div", { class: "actions" }, copyBtn, briefBtn);
+    if (safeUrl(l.maps_url)) acts.append(link(l.maps_url, "Google Maps"));
+    if (safeUrl(l.osm_url)) acts.append(link(l.osm_url, "OpenStreetMap"));
+    acts.querySelectorAll("a").forEach(function (a) { a.className = "btn"; });
+    c3.append(acts);
+    d.append(c1, c2, c3);
+    return d;
+  }
+
+  function note(l) {
+    var s = l.scores, lines = [];
+    lines.push(l.name + " – Potenzial " + s.potenzial + "/100 (" + s.potenzial_label + "), Präsenz " + s.praesenz + "/100");
+    if (l.address) lines.push(l.address);
+    if (l.phone) lines.push("Tel. " + l.phone);
+    var w = l.website || {};
+    lines.push("Website: " + (l.website_url ? (s.website === null ? "?" : s.website) + "/100 " + host(w.final_url || l.website_url) : "keine eigene Website"));
+    ["instagram", "tiktok"].forEach(function (k) {
+      var p = l[k] || {}, m = p.metrics;
+      var label = k === "instagram" ? "Instagram" : "TikTok";
+      if (!p.handle && p.status === "feed") { lines.push(label + ": Feed auf der Website (Profilname offen)"); return; }
+      if (!p.handle || p.exists === false) { lines.push(label + ": nicht gefunden"); return; }
+      lines.push(label + ": @" + p.handle + (m ? " (" + fmt(m.followers) + " Follower, zuletzt " + (days(k === "instagram" ? m.last_post_days : m.last_video_days) || "–") + ")" : ""));
+    });
+    var ap = (l.ansatzpunkte || []).slice(0, 6);
+    if (ap.length) { lines.push("", "Ansatzpunkte:"); ap.forEach(function (a) { lines.push("- " + a.text); }); }
+    var hw = (l.hinweise || []).slice(0, 4);
+    if (hw.length) { lines.push("", "Gut zu wissen:"); hw.forEach(function (h) { lines.push("- " + h.text); }); }
+    return lines.join("\n");
+  }
+  function briefing(l) {
+    var w = l.website || {}, socials = [];
+    ["instagram", "tiktok"].forEach(function (k) { var p = l[k] || {}; if (p.handle && p.exists !== false && safeUrl(p.url)) socials.push(p.url); });
+    Object.keys(l.profile || {}).forEach(function (k) { if (k !== "youtube_video" && k !== "whatsapp") socials.push(l.profile[k]); });
+    var google = [l.maps_url, l.rating ? dec(l.rating, 1) + " ★ (" + fmt(l.reviews) + " Rezensionen)" : ""].filter(Boolean).join(", ");
+    var rows = [
+      ["PROJEKTZWECK", "pitch-demo"],
+      ["BRANCHE", l.category || l.branche || S.branchen && S.branchen[0] || ""],
+      ["FIRMENNAME", l.name],
+      ["ORT / EINZUGSGEBIET", l.ort || ""],
+      ["LEISTUNGEN", ""],
+      ["BESONDERHEIT", ""],
+      ["STIL", ""],
+      ["BESTEHENDE WEBSITE", l.website_url ? (w.final_url || l.website_url) : "keine"],
+      ["ADRESSE", l.address || ""],
+      ["TELEFON", l.phone || (w.phones || [])[0] || ""],
+      ["E-MAIL", (w.emails || [])[0] || l.email_hint || ""],
+      ["GOOGLE-PROFIL / BEWERTUNGEN", google],
+      ["SOCIAL MEDIA", socials.join(", ")]
+    ];
+    return ["=== KUNDEN-BRIEFING ==="].concat(rows.map(function (r) {
+      var key = r[0] + ":";
+      while (key.length < 20) key += " ";
+      return key + " " + (r[1] || "");
+    })).join("\n");
+  }
+  function copy(text, btn) {
+    function done() { var t = btn.textContent; btn.textContent = "Kopiert ✓"; setTimeout(function () { btn.textContent = t; }, 1500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else { fallback(); }
+    function fallback() {
+      var t = el("textarea"); t.value = text; t.style.position = "fixed"; t.style.opacity = "0";
+      document.body.append(t); t.select();
+      try { document.execCommand("copy"); done(); } catch (e) { /* ignorieren */ }
+      t.remove();
+    }
+  }
+
+  // ---------- CSV ----------
+  function exportCsv() {
+    var cols = [
+      ["Potenzial", function (l) { return l.scores.potenzial; }], ["Präsenz", function (l) { return l.scores.praesenz; }],
+      ["Firma", function (l) { return l.name; }], ["Kategorie", function (l) { return l.category; }], ["Adresse", function (l) { return l.address; }],
+      ["Telefon", function (l) { return l.phone || (g(l, "website.phones") || [])[0]; }],
+      ["E-Mail", function (l) { return (g(l, "website.emails") || [])[0] || l.email_hint; }],
+      ["Website", function (l) { return l.website_url || (l.website_platform ? "nur " + l.website_platform : ""); }],
+      ["Website-Score", function (l) { return l.scores.website; }],
+      ["Instagram", function (l) { return g(l, "instagram.url"); }], ["IG-Follower", function (l) { return g(l, "instagram.metrics.followers"); }],
+      ["IG letzter Beitrag (Tage)", function (l) { return igDays(l); }],
+      ["TikTok", function (l) { return g(l, "tiktok.exists") === false ? "" : g(l, "tiktok.url"); }], ["TT-Follower", function (l) { return g(l, "tiktok.metrics.followers"); }],
+      ["TT letztes Video (Tage)", function (l) { return ttDays(l); }],
+      ["Google-Bewertung", function (l) { return l.rating ? String(l.rating).replace(".", ",") : ""; }], ["Rezensionen", function (l) { return l.reviews; }],
+      ["Google Maps", function (l) { return l.maps_url; }], ["Merkmale", function (l) { return (l.tags || []).join(", "); }],
+      ["Ansatzpunkte", function (l) { return (l.ansatzpunkte || []).slice(0, 6).map(function (a) { return a.text; }).join(" | "); }]
+    ];
+    function esc(v) {
+      var s = v === null || v === undefined ? "" : String(v);
+      if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+      return /[";\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    }
+    var lines = [cols.map(function (c) { return esc(c[0]); }).join(";")];
+    currentList().forEach(function (l) { lines.push(cols.map(function (c) { return esc(c[1](l)); }).join(";")); });
+    var blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+    var name = ((DATA.dateien && DATA.dateien.csv) || "leads.csv").replace(/\.csv$/, "") + "_auswahl.csv";
+    var a = el("a", { href: URL.createObjectURL(blob), download: name });
+    document.body.append(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  }
+
+  // ---------- Rendern ----------
+  function render() {
+    var list = $("#list"), items = currentList();
+    list.textContent = "";
+    $("#count").textContent = items.length === LEADS.length ? LEADS.length + " Firmen" : items.length + " von " + LEADS.length + " Firmen";
+    if (!items.length) { list.append(el("div", { class: "empty" }, LEADS.length ? "Keine Firmen für diese Auswahl." : "Keine Firmen gefunden.")); return; }
+    var frag = document.createDocumentFragment();
+    items.forEach(function (l) { frag.append(rowFor(l)); });
+    list.append(frag);
+  }
+  var timer;
+  $("#q").addEventListener("input", function (e) { clearTimeout(timer); timer = setTimeout(function () { state.q = e.target.value; render(); }, 120); });
+  $("#sort").addEventListener("change", function (e) { state.sort = e.target.value; render(); });
+  $("#hideChains").addEventListener("change", function (e) { state.hide = e.target.checked; renderFilters(); render(); });
+  $("#csv").addEventListener("click", exportCsv);
+  renderFilters();
+  render();
+})();
+</script>
+</body>
+</html>

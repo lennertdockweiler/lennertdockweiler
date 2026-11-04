@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lead-Scout</title>
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:#f5f6f8;--surface:#fff;--surface-2:#f0f2f5;--border:#e2e5ea;--text:#15181d;--muted:#5b6471;--faint:#868e9b;
+  --accent:#5a4bd6;--accent-soft:#eceafd;--accent-text:#4434b8;
+  --good:#1d8a57;--good-soft:#e3f4ea;--warn:#a96400;--warn-soft:#fcf0da;--bad:#c4363b;--bad-soft:#fce7e7;--neutral-soft:#edf0f4;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.07);--radius:14px;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0e1014;--surface:#161920;--surface-2:#1c2028;--border:#2a2f39;--text:#e7e9ee;--muted:#a1a8b4;--faint:#7c8492;
+    --accent:#9387ff;--accent-soft:#25203f;--accent-text:#bdb5ff;--good:#3fcf88;--good-soft:#12281d;--warn:#f1aa3d;
+    --warn-soft:#2b2211;--bad:#ff6d71;--bad-soft:#311718;--neutral-soft:#232833;--shadow:none}
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent-text)}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:860px;margin:0 auto;padding:28px 20px 48px}
+.brand{font-size:12.5px;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-text)}
+h1{font-size:28px;line-height:1.2;margin:4px 0 8px;letter-spacing:-.015em}
+h2{font-size:17px;margin:0 0 12px}
+.intro{color:var(--muted);margin:0 0 14px;max-width:680px}
+.status{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:var(--surface)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--faint)}
+.dot.ok{background:var(--good)}.dot.no{background:var(--bad)}.dot.warn{background:var(--warn)}
+.linkbtn{background:none;border:0;color:var(--accent-text);cursor:pointer;font-size:13px;padding:4px 6px;text-decoration:underline}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-top:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label.f{display:grid;gap:6px;font-weight:600;font-size:14px}
+input[type=text],textarea{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:10px;background:var(--surface);font-weight:400;font-size:15px}
+textarea{resize:vertical;min-height:120px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px}
+input[type=text]:focus,textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+.hint{color:var(--muted);font-size:13px;margin:8px 0 0}
+fieldset{border:0;padding:0;margin:18px 0 0}
+legend{font-weight:600;font-size:14px;padding:0;margin-bottom:8px}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.seg label{cursor:pointer}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg span{display:block;padding:7px 16px;font-size:14px;border-right:1px solid var(--border);font-variant-numeric:tabular-nums}
+.seg label:last-child span{border-right:0}
+.seg input:checked + span{background:var(--accent);color:#fff}
+.seg input:focus-visible + span{outline:2px solid var(--accent);outline-offset:-2px}
+.sources{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.src{position:relative;display:block;border:1px solid var(--border);border-radius:12px;padding:11px 12px 11px 38px;cursor:pointer}
+.src input{position:absolute;left:13px;top:14px;accent-color:var(--accent)}
+.src b{display:block;font-size:14px}
+.src small{display:block;color:var(--muted);font-size:12.5px;line-height:1.35;margin-top:2px}
+.src:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.src.disabled{opacity:.55;cursor:not-allowed}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;font-size:14px;cursor:pointer}
+.opt input{margin-top:3px;accent-color:var(--accent)}
+.opt small{display:block;color:var(--muted);font-size:12.5px}
+.opt.disabled{opacity:.6;cursor:not-allowed}
+.actions{display:flex;gap:10px;align-items:center;margin-top:20px;flex-wrap:wrap}
+.btn{border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:9px 16px;cursor:pointer;font-size:14.5px;font-weight:550;text-decoration:none;color:var(--text);display:inline-block}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:disabled{opacity:.6;cursor:wait}
+.err{background:var(--bad-soft);color:var(--bad);border-radius:10px;padding:10px 12px;font-size:14px;margin-top:12px}
+.jobhead{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.jobhead h2{margin:0}
+.phase{color:var(--muted);font-size:14px;margin:6px 0 10px}
+.progress{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.progress .fill{height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .4s}
+.progress.indet .fill{width:30%;animation:slide 1.4s ease-in-out infinite}
+@keyframes slide{0%{margin-left:-30%}100%{margin-left:100%}}
+.log{margin:12px 0 0;background:var(--surface-2);border-radius:10px;padding:10px 12px;font:12.5px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--muted);max-height:240px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+.done{margin-top:14px}
+.done p{margin:0 0 8px}
+.notes{display:grid;gap:6px;margin:10px 0}
+.note{background:var(--warn-soft);padding:8px 12px;border-radius:10px;font-size:13.5px}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.checks li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:8px;font-size:14px}
+.checks .ic{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800}
+.ic.y{background:var(--good-soft);color:var(--good)}.ic.n{background:var(--bad-soft);color:var(--bad)}.ic.q{background:var(--neutral-soft);color:var(--faint)}
+.checks small{display:block;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);font-weight:650}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.muted{color:var(--muted)}
+footer{color:var(--faint);font-size:12.5px;margin-top:22px}
+@media (max-width:640px){
+  .wrap{padding:20px 16px 40px}
+  h1{font-size:23px}
+  .grid2,.sources{grid-template-columns:1fr}
+  th.hide,td.hide{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">Lead-Scout</div>
+  <h1>Firmen finden &amp; Online-Präsenz bewerten</h1>
+  <p class="intro">Branche und Ort eingeben: Lead-Scout sucht passende Firmen, prüft Website, Instagram und TikTok und sortiert nach Potenzial für eure Agentur.</p>
+  <div class="status" id="status"></div>
+
+  <form class="card" id="form" novalidate>
+    <div class="grid2">
+      <label class="f">Branche
+        <input type="text" id="branche" list="branchen" placeholder="z. B. Friseur" autocomplete="off">
+      </label>
+      <label class="f">Ort
+        <input type="text" id="ort" placeholder="z. B. Bielefeld" autocomplete="off">
+      </label>
+    </div>
+    <datalist id="branchen">
+      <option value="Friseur"><option value="Barbershop"><option value="Kosmetikstudio"><option value="Nagelstudio">
+      <option value="Zahnarzt"><option value="Physiotherapie"><option value="Tierarzt"><option value="Restaurant">
+      <option value="Café"><option value="Bäckerei"><option value="Fitnessstudio"><option value="Yoga"><option value="Tattoo">
+      <option value="Autowerkstatt"><option value="Autohaus"><option value="Immobilienmakler"><option value="Steuerberater">
+      <option value="Rechtsanwalt"><option value="Elektriker"><option value="Sanitär Heizung"><option value="Dachdecker">
+      <option value="Maler"><option value="Tischler"><option value="Hotel"><option value="Fahrschule"><option value="Optiker">
+      <option value="Blumen"><option value="Hundesalon"><option value="Massage"><option value="Bar">
+    </datalist>
+    <p class="hint">Mehrere Begriffe mit Komma trennen, z. B. „Friseur, Barbershop“ oder „Bielefeld, Gütersloh“.</p>
+
+    <fieldset>
+      <legend>Firmen pro Suche</legend>
+      <div class="seg" role="radiogroup">
+        <label><input type="radio" name="anzahl" value="20" checked><span>20</span></label>
+        <label><input type="radio" name="anzahl" value="40"><span>40</span></label>
+        <label><input type="radio" name="anzahl" value="60"><span>60</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Quelle</legend>
+      <div class="sources">
+        <label class="src" id="srcGoogle"><input type="radio" name="quelle" value="google"><b>Google Maps</b><small>Empfohlen · vollständig, mit Bewertungen · braucht Google-Schlüssel</small></label>
+        <label class="src"><input type="radio" name="quelle" value="osm"><b>OpenStreetMap</b><small>Kostenlos, ohne Schlüssel · weniger vollständig</small></label>
+        <label class="src"><input type="radio" name="quelle" value="liste"><b>Eigene Liste</b><small>Firmen oder Websites, die ihr schon habt</small></label>
+      </div>
+      <div id="listeBox" hidden style="margin-top:12px">
+        <label class="f">Eigene Liste (eine Firma pro Zeile)
+          <textarea id="liste" rows="6" placeholder="Salon Beispiel; https://salon-beispiel.de&#10;friseur-muster.de&#10;Café Sonnenschein; Bielefeld"></textarea>
+        </label>
+        <p class="hint">Format: „Name; Website“, nur „website.de“ oder nur „Name; Ort“ (wird mit Google-Schlüssel über Google Maps ergänzt).</p>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Prüfungen</legend>
+      <div class="opts">
+        <label class="opt"><input type="checkbox" id="tiktok" checked><span>TikTok-Profile prüfen<small>Follower, letztes Video, Ø Aufrufe</small></span></label>
+        <label class="opt" id="optInstagram"><input type="checkbox" id="instagram" checked><span>Instagram-Kennzahlen über die Meta-API<small id="igHint">Follower, letzter Beitrag, Reels-Anteil, Engagement</small></span></label>
+        <label class="opt"><input type="checkbox" id="pagespeed"><span>Ladezeit mit Google PageSpeed messen<small>Genauer, aber ca. 20 Sekunden pro Website</small></span></label>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button class="btn primary" id="start" type="submit">Suche starten</button>
+      <span class="muted" id="estimate"></span>
+    </div>
+    <div class="err" id="formErr" hidden></div>
+  </form>
+
+  <section class="card" id="job" hidden aria-live="polite">
+    <div class="jobhead"><h2 id="jobTitle"></h2><button class="btn" id="cancel" type="button">Abbrechen</button></div>
+    <div class="phase" id="phase"></div>
+    <div class="progress" id="progress"><div class="fill" id="pfill"></div></div>
+    <pre class="log" id="log"></pre>
+    <div id="jobResult"></div>
+  </section>
+
+  <section class="card" id="checksCard" hidden>
+    <h2>Verbindungen</h2>
+    <ul class="checks" id="checks"></ul>
+  </section>
+
+  <section class="card">
+    <h2>Berichte</h2>
+    <div id="reports"><p class="muted">Noch keine Berichte.</p></div>
+  </section>
+  <footer>Lead-Scout läuft nur auf diesem Rechner. Berichte liegen im Ordner „berichte“. Schlüssel und Einstellungen stehen in der Datei „.env“ (siehe README).</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  function $(s) { return document.querySelector(s); }
+  function el(tag, props) {
+    var n = document.createElement(tag);
+    if (props) Object.keys(props).forEach(function (k) {
+      var v = props[k];
+      if (v === null || v === undefined || v === false) return;
+      if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else n.setAttribute(k, v === true ? "" : v);
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var kid = arguments[i];
+      if (kid === null || kid === undefined || kid === false) continue;
+      n.append(kid instanceof Node ? kid : document.createTextNode(String(kid)));
+    }
+    return n;
+  }
+  function api(path, body) {
+    var opts = body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {};
+    return fetch(path, opts).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (data) {
+        if (!r.ok) throw new Error((data && data.fehler) || ("HTTP " + r.status));
+        return data;
+      });
+    });
+  }
+  var settings = {}, pollTimer = null, lastLogLen = 0;
+
+  function pill(ok, text) { return el("span", { class: "pill" }, el("span", { class: "dot " + ok }), text); }
+  function renderStatus(e) {
+    settings = e || {};
+    var box = $("#status");
+    box.textContent = "";
+    box.append(pill(e.google ? "ok" : "no", e.google ? "Google-Schlüssel hinterlegt" : "Kein Google-Schlüssel"));
+    box.append(pill(e.meta ? "ok" : (e.meta_token_ohne_id ? "warn" : "no"),
+      e.meta ? "Meta-API aktiv" : (e.meta_token_ohne_id ? "Meta: Instagram-ID fehlt" : "Meta-API nicht eingerichtet")));
+    var b = el("button", { class: "linkbtn", type: "button" }, "Verbindungen testen");
+    b.addEventListener("click", runChecks);
+    box.append(b);
+    var g = $("#srcGoogle"), gi = g.querySelector("input");
+    gi.disabled = !e.google;
+    g.classList.toggle("disabled", !e.google);
+    if (!document.querySelector("input[name=quelle]:checked")) {
+      document.querySelector("input[name=quelle][value=" + (e.google ? "google" : "osm") + "]").checked = true;
+    } else if (!e.google && gi.checked) {
+      document.querySelector("input[name=quelle][value=osm]").checked = true;
+    }
+    var ig = $("#instagram");
+    ig.disabled = !e.meta;
+    if (!e.meta) ig.checked = false;
+    $("#optInstagram").classList.toggle("disabled", !e.meta);
+    $("#igHint").textContent = e.meta ? "Follower, letzter Beitrag, Reels-Anteil, Engagement"
+      : "Nicht eingerichtet – Profile werden trotzdem erkannt und verlinkt (README: „Instagram-Kennzahlen“)";
+    toggleList();
+    estimate();
+  }
+  function fmtDate(iso) { var d = new Date(iso); return isNaN(d) ? "" : d.toLocaleString("de-DE", { dateStyle: "medium", timeStyle: "short" }); }
+  function renderReports(list) {
+    var box = $("#reports");
+    box.textContent = "";
+    if (!list || !list.length) { box.append(el("p", { class: "muted" }, "Noch keine Berichte.")); return; }
+    var tb = el("tbody");
+    list.forEach(function (r) {
+      tb.append(el("tr", null,
+        el("td", null, el("a", { href: "/berichte/" + encodeURIComponent(r.html), target: "_blank", rel: "noopener" }, r.titel)),
+        el("td", { class: "num hide" }, fmtDate(r.erstellt)),
+        el("td", { class: "num" }, String(r.firmen)),
+        el("td", { class: "num" }, String(r.potenzial_hoch)),
+        el("td", { class: "hide" }, r.csv ? el("a", { href: "/berichte/" + encodeURIComponent(r.csv) }, "CSV") : "")));
+    });
+    box.append(el("table", null, el("thead", null, el("tr", null, el("th", null, "Suche"), el("th", { class: "hide" }, "Erstellt"),
+      el("th", null, "Firmen"), el("th", null, "Hoch"), el("th", { class: "hide" }, "Export"))), tb));
+  }
+  function quelle() { var q = document.querySelector("input[name=quelle]:checked"); return q ? q.value : "osm"; }
+  function anzahl() { var a = document.querySelector("input[name=anzahl]:checked"); return a ? Number(a.value) : 20; }
+  function terms(v) { return v.split(/[,;\n]+/).map(function (x) { return x.trim(); }).filter(Boolean); }
+  function toggleList() {
+    var isList = quelle() === "liste";
+    $("#listeBox").hidden = !isList;
+    $("#branche").disabled = isList;
+    $("#ort").disabled = isList;
+  }
+  function estimate() {
+    var listLines = $("#liste").value.split("\n").filter(function (x) { x = x.trim(); return x && x.charAt(0) !== "#"; }).length;
+    var n = quelle() === "liste" ? listLines : anzahl() * Math.max(1, terms($("#branche").value).length) * Math.max(1, terms($("#ort").value).length);
+    var sec = n * 2.5 + ($("#tiktok").checked ? n * 2.5 : 0) + ($("#pagespeed").checked ? n * (settings.google ? 6 : 25) : 0) + ($("#instagram").checked ? n * 0.6 : 0);
+    $("#estimate").textContent = n ? "bis zu " + n + " Firmen · ca. " + Math.max(1, Math.round(sec / 60)) + " min" : "";
+  }
+  document.querySelectorAll("input[name=quelle]").forEach(function (r) { r.addEventListener("change", function () { toggleList(); estimate(); }); });
+  ["#branche", "#ort", "#liste", "#tiktok", "#pagespeed", "#instagram"].forEach(function (s) { $(s).addEventListener("input", estimate); $(s).addEventListener("change", estimate); });
+  document.querySelectorAll("input[name=anzahl]").forEach(function (r) { r.addEventListener("change", estimate); });
+
+  $("#form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var err = $("#formErr");
+    err.hidden = true;
+    var body = { branche: $("#branche").value, ort: $("#ort").value, anzahl: anzahl(), quelle: quelle(), liste: $("#liste").value,
+      tiktok: $("#tiktok").checked, instagram: $("#instagram").checked, pagespeed: $("#pagespeed").checked };
+    if (body.quelle !== "liste" && (!terms(body.branche).length || !terms(body.ort).length)) {
+      err.textContent = "Bitte Branche und Ort eingeben."; err.hidden = false; return;
+    }
+    if (body.quelle === "liste" && !body.liste.trim()) {
+      err.textContent = "Bitte mindestens eine Firma oder Website in die Liste eintragen."; err.hidden = false; return;
+    }
+    $("#start").disabled = true;
+    api("/api/start", body).then(function () { lastLogLen = 0; poll(); }).catch(function (e) {
+      err.textContent = e.message; err.hidden = false; $("#start").disabled = false;
+    });
+  });
+  $("#cancel").addEventListener("click", function () { api("/api/cancel", {}); });
+
+  function showJob(job) {
+    if (!job) return;
+    $("#job").hidden = false;
+    $("#jobTitle").textContent = job.titel;
+    var running = job.status === "laeuft";
+    $("#cancel").hidden = !running;
+    $("#start").disabled = running;
+    $("#phase").textContent = running ? (job.phase || "Startet …") + (job.total ? " · " + job.done + " von " + job.total : "")
+      : (job.status === "fertig" ? "Fertig nach " + Math.max(1, Math.round(job.sekunden / 60)) + " min" : "Abgebrochen mit Fehler");
+    var p = $("#progress"), indet = running && !job.total;
+    p.classList.toggle("indet", indet);
+    $("#pfill").style.width = indet ? "" : (running ? Math.round(job.done / Math.max(1, job.total) * 100) + "%" : "100%");
+    var log = $("#log");
+    var atBottom = log.scrollTop + log.clientHeight >= log.scrollHeight - 8;
+    log.textContent = (job.logs || []).join("\n");
+    if (atBottom || (job.logs || []).length !== lastLogLen) log.scrollTop = log.scrollHeight;
+    lastLogLen = (job.logs || []).length;
+    var res = $("#jobResult");
+    res.textContent = "";
+    if (job.status === "fertig" && job.ergebnis) {
+      var e = job.ergebnis, m = e.markt || {}, f = e.dateien || {};
+      var wrap = el("div", { class: "done" });
+      wrap.append(el("p", null, (e.abgebrochen ? "Teilergebnis: " : "") + m.firmen + " Firmen bewertet · " + (m.potenzial_hoch || 0) + " mit hohem, " + (m.potenzial_mittel || 0) + " mit mittlerem Potenzial."));
+      if ((e.hinweise || []).length) wrap.append(el("div", { class: "notes" }, (e.hinweise || []).map(function (h) { return el("div", { class: "note" }, h); })));
+      var acts = el("div", { class: "actions" });
+      acts.append(el("a", { class: "btn primary", href: "/berichte/" + encodeURIComponent(f.html), target: "_blank", rel: "noopener" }, "Bericht öffnen"));
+      if (f.csv) acts.append(el("a", { class: "btn", href: "/berichte/" + encodeURIComponent(f.csv) }, "CSV für Excel"));
+      wrap.append(acts);
+      res.append(wrap);
+    } else if (job.status === "fehler") {
+      res.append(el("div", { class: "err" }, job.fehler || "Unbekannter Fehler"));
+    }
+  }
+  function poll() {
+    clearTimeout(pollTimer);
+    api("/api/job").then(function (job) {
+      showJob(job);
+      if (job && job.status === "laeuft") pollTimer = setTimeout(poll, 1000);
+      else { $("#start").disabled = false; loadStatus(false); }
+    }).catch(function () { pollTimer = setTimeout(poll, 2500); });
+  }
+  function runChecks() {
+    var card = $("#checksCard"), list = $("#checks");
+    card.hidden = false;
+    list.textContent = "";
+    list.append(el("li", null, el("span", { class: "ic q" }, "…"), el("span", null, "Teste Verbindungen (bis zu 30 Sekunden) …")));
+    api("/api/pruefen", {}).then(function (data) {
+      list.textContent = "";
+      (data.ergebnisse || []).forEach(function (r) {
+        var ic = r[1] === true ? ["y", "✓"] : (r[1] === false ? ["n", "✕"] : ["q", "–"]);
+        list.append(el("li", null, el("span", { class: "ic " + ic[0] }, ic[1]), el("span", null, r[0], el("small", null, r[2]))));
+      });
+    }).catch(function (e) { list.textContent = ""; list.append(el("li", null, el("span", { class: "ic n" }, "✕"), el("span", null, e.message))); });
+  }
+  function loadStatus(resumeJob) {
+    return api("/api/status").then(function (s) {
+      renderStatus(s.einstellungen || {});
+      renderReports(s.berichte || []);
+      if (resumeJob && s.job) { showJob(s.job); if (s.job.status === "laeuft") poll(); }
+    }).catch(function () { $("#status").textContent = "Server nicht erreichbar – läuft Lead-Scout noch?"; });
+  }
+  loadStatus(true);
+})();
+</script>
+</body>
+</html>
