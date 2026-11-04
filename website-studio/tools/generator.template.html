@@ -1,0 +1,875 @@
+<title>Website-Studio Generator</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Auftragsbogen (Briefing-Formular) links, Druckfahne (fertiger Prompt) rechts – auf dem Handy untereinander. */
+:root {
+  --ground: #E7EAEE;
+  --sheet: #FBFCFD;
+  --field: #F1F3F6;
+  --ink: #121722;
+  --ink-soft: #4A5365;
+  --line: #CBD2DC;
+  --accent: #2741C9;
+  --accent-hover: #1D33A8;
+  --accent-ink: #FFFFFF;
+  --accent-wash: #E2E7FB;
+  --demo: #8A5300;
+  --demo-wash: #FFF1D6;
+  --mark-c: #00A0D6;
+  --mark-m: #D1007A;
+  --mark-y: #EDBE00;
+  --mark-k: #121722;
+  --shadow: 0 1px 2px rgb(18 23 34 / 0.06), 0 10px 28px rgb(18 23 34 / 0.07);
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0D1015;
+    --sheet: #151A22;
+    --field: #1C222C;
+    --ink: #E5E9F0;
+    --ink-soft: #9DA7B8;
+    --line: #2B3340;
+    --accent: #93A5FF;
+    --accent-hover: #B2BFFF;
+    --accent-ink: #0D1015;
+    --accent-wash: #1E2647;
+    --demo: #F2B65A;
+    --demo-wash: #3A2A0E;
+    --mark-c: #33B8E6;
+    --mark-m: #F0479E;
+    --mark-y: #F5CF3A;
+    --mark-k: #E5E9F0;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 28px rgb(0 0 0 / 0.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0D1015;
+  --sheet: #151A22;
+  --field: #1C222C;
+  --ink: #E5E9F0;
+  --ink-soft: #9DA7B8;
+  --line: #2B3340;
+  --accent: #93A5FF;
+  --accent-hover: #B2BFFF;
+  --accent-ink: #0D1015;
+  --accent-wash: #1E2647;
+  --demo: #F2B65A;
+  --demo-wash: #3A2A0E;
+  --mark-c: #33B8E6;
+  --mark-m: #F0479E;
+  --mark-y: #F5CF3A;
+  --mark-k: #E5E9F0;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 28px rgb(0 0 0 / 0.35);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1320px; margin-inline: auto; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+p { margin: 0; }
+code { font-family: var(--font-mono); font-size: 0.9em; }
+a { color: var(--accent); }
+::selection { background: var(--accent); color: var(--accent-ink); }
+
+/* Kopf */
+.masthead { padding-block: 28px 0; }
+.masthead__row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px 48px; }
+.brand { display: flex; align-items: center; gap: 16px; }
+.cmyk { display: grid; grid-template-columns: repeat(2, 11px); gap: 3px; flex: none; }
+.cmyk i { display: block; width: 11px; height: 11px; }
+.cmyk i:nth-child(1) { background: var(--mark-c); }
+.cmyk i:nth-child(2) { background: var(--mark-m); }
+.cmyk i:nth-child(3) { background: var(--mark-y); }
+.cmyk i:nth-child(4) { background: var(--mark-k); }
+.eyebrow {
+  font-size: 0.75rem; font-weight: 600; font-stretch: 85%;
+  text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-soft);
+  margin-bottom: 4px;
+}
+h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.75rem); font-weight: 800; font-stretch: 118%; letter-spacing: -0.02em; line-height: 1; }
+.lede { max-width: 58ch; color: var(--ink-soft); }
+
+.tabs { display: flex; gap: 2px; margin-top: 22px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+.tabs a {
+  padding: 11px 14px 10px; color: var(--ink-soft); text-decoration: none; white-space: nowrap;
+  font-weight: 650; font-stretch: 104%; border-bottom: 3px solid transparent; margin-bottom: -1px;
+}
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+.tabs a:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 4px; }
+@media (max-width: 480px) {
+  .tabs a { padding: 10px 8px 9px; font-size: 0.9375rem; font-stretch: 90%; }
+}
+@media (max-width: 400px) {
+  .tabs a { padding-inline: 6px; font-size: 0.875rem; }
+}
+
+/* Bedienelemente */
+.btn {
+  font: inherit; font-size: 0.9375rem; font-weight: 700; font-stretch: 104%;
+  border-radius: 4px; border: 1.5px solid transparent; padding: 10px 18px; min-height: 44px;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.btn--primary { background: var(--accent); color: var(--accent-ink); }
+.btn--primary:hover { background: var(--accent-hover); }
+.btn--ghost { background: transparent; color: var(--ink); border-color: var(--ink-soft); }
+.btn--ghost:hover { border-color: var(--ink); background: var(--field); }
+.btn--sm { min-height: 32px; padding: 5px 11px; font-size: 0.8125rem; }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Generator */
+.gen { display: grid; gap: 24px; padding-block: 24px 48px; }
+.ticket { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.ticket__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.ticket__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
+.note { font-size: 0.875rem; font-weight: 600; border-radius: 4px; padding: 8px 12px; }
+.note--demo { background: var(--demo-wash); color: var(--demo); }
+.hint { font-size: 0.875rem; color: var(--ink-soft); }
+
+.sheet { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--radius); }
+.sheet > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 18px; min-height: 52px;
+}
+.sheet > summary::-webkit-details-marker { display: none; }
+.sheet > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: var(--radius); }
+.sheet__title { font-family: var(--font-display); font-weight: 750; font-stretch: 110%; font-size: 1.0625rem; }
+.sheet__meta { display: flex; align-items: center; gap: 14px; }
+.count { font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.count.is-filled { color: var(--accent); }
+.chev { width: 9px; height: 9px; border-right: 2px solid var(--ink-soft); border-bottom: 2px solid var(--ink-soft); transform: translateY(-2px) rotate(45deg); transition: transform 0.2s ease; }
+.sheet[open] > summary .chev { transform: translateY(2px) rotate(-135deg); }
+
+.fields {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px 16px;
+  padding: 16px 18px 20px; border-top: 1px dashed var(--line);
+}
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field--wide { grid-column: 1 / -1; }
+.field label, .checks legend { font-size: 0.8125rem; font-weight: 650; font-stretch: 94%; color: var(--ink); }
+.field small { font-size: 0.75rem; color: var(--ink-soft); }
+.field input, .field select, .field textarea {
+  font: inherit; font-size: 0.9375rem; color: var(--ink); width: 100%; min-height: 44px;
+  background: var(--field); border: 0; border-bottom: 1.5px solid var(--ink-soft); border-radius: 4px 4px 0 0;
+  padding: 10px 12px;
+}
+.field textarea { min-height: 76px; resize: vertical; line-height: 1.45; }
+.field input::placeholder, .field textarea::placeholder { color: var(--ink-soft); opacity: 0.8; }
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-bottom-color: var(--accent); }
+
+.checks { border: 0; margin: 0; padding: 0; min-width: 0; }
+.checks__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 196px), 1fr)); gap: 2px 16px; margin-top: 8px; }
+.check { display: flex; align-items: center; gap: 9px; min-height: 34px; font-size: 0.9rem; cursor: pointer; }
+.check input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); flex: none; }
+
+/* Druckfahne */
+.galley {
+  position: relative; min-width: 0; display: flex; flex-direction: column;
+  background: var(--sheet); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.galley::before, .galley::after {
+  content: ""; position: absolute; top: -9px; width: 18px; height: 18px; opacity: 0.55; pointer-events: none;
+  background:
+    radial-gradient(circle, transparent 0 4px, var(--ink-soft) 4px 5px, transparent 5px),
+    linear-gradient(var(--ink-soft), var(--ink-soft)) center / 1px 100% no-repeat,
+    linear-gradient(var(--ink-soft), var(--ink-soft)) center / 100% 1px no-repeat;
+}
+.galley::before { left: -9px; }
+.galley::after { right: -9px; }
+.galley__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; padding: 16px 18px 12px; }
+.galley__head h2 { font-size: 1.125rem; font-weight: 750; font-stretch: 112%; }
+.stats { font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.galley__opts { display: flex; flex-wrap: wrap; gap: 10px 22px; padding: 0 18px 12px; }
+.seg { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.seg__label { font-size: 0.75rem; font-weight: 650; font-stretch: 90%; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin-right: 4px; }
+.seg__opt { position: relative; }
+.seg__opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg__opt span {
+  display: inline-flex; align-items: center; min-height: 32px; padding: 4px 11px; border-radius: 999px;
+  border: 1.5px solid var(--line); font-size: 0.8125rem; font-weight: 600; color: var(--ink-soft);
+}
+.seg__opt input:checked + span { border-color: var(--accent); background: var(--accent-wash); color: var(--ink); }
+.seg__opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.seg__opt input:disabled + span { opacity: 0.45; }
+.seg__opt input:disabled { cursor: not-allowed; }
+.galley__hint { padding: 0 18px 12px; font-size: 0.8125rem; color: var(--ink-soft); }
+.out {
+  display: block; width: 100%; min-height: 360px; flex: 1 1 auto; resize: none;
+  border: 0; border-block: 1px solid var(--line); border-radius: 0; margin: 0;
+  background: var(--field); color: var(--ink);
+  font-family: var(--font-mono); font-size: 0.8125rem; line-height: 1.6; padding: 16px 18px;
+}
+.out:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.galley__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 14px 18px 16px; }
+.galley__foot p { font-size: 0.8125rem; color: var(--ink-soft); max-width: 44ch; }
+
+@media (min-width: 1100px) {
+  .gen { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: start; }
+  .galley {
+    position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px);
+    height: calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    max-height: 980px;
+  }
+  .out { min-height: 0; }
+}
+
+/* Mobile Leiste */
+.dock {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: var(--sheet); border-top: 1px solid var(--line); box-shadow: 0 -8px 24px rgb(0 0 0 / 0.08);
+}
+.dock .stats { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dock__actions { display: flex; gap: 8px; flex: none; }
+@media (max-width: 1099px) {
+  .view--generator { padding-bottom: 88px; }
+}
+@media (min-width: 1100px) { .dock { display: none; } }
+
+/* Weitere Ansichten */
+.view { padding-block: 24px 56px; }
+.panel-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px 24px; margin-bottom: 18px; }
+.panel-head h2 { font-size: 1.5rem; font-weight: 800; font-stretch: 114%; letter-spacing: -0.01em; }
+.panel-head p { color: var(--ink-soft); max-width: 70ch; margin-top: 6px; }
+.panel-head__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.sheet--flat { overflow: hidden; }
+.sheet--flat .out { border-top: 0; border-bottom: 0; min-height: 70vh; }
+
+.cmds { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); gap: 12px; }
+.cmd { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.cmd__name { font-family: var(--font-mono); font-size: 0.9375rem; font-weight: 500; color: var(--accent); overflow-wrap: anywhere; }
+.cmd__effect { font-size: 0.9rem; flex: 1; }
+.cmd__effect code { background: var(--field); padding: 1px 4px; border-radius: 3px; }
+.cmd__ex { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--field); border-radius: 4px; padding: 6px 6px 6px 10px; }
+.cmd__ex code { font-size: 0.8rem; overflow-wrap: anywhere; min-width: 0; }
+
+.guide { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; }
+.guide__card { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.guide__card h3 { font-size: 1.0625rem; font-weight: 750; font-stretch: 110%; }
+.guide__tag { font-size: 0.75rem; font-weight: 650; font-stretch: 90%; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); }
+.guide__card ol, .guide__card ul { margin: 0; padding-left: 1.25em; display: flex; flex-direction: column; gap: 8px; font-size: 0.9375rem; }
+.guide__result { font-size: 0.875rem; color: var(--ink-soft); border-top: 1px dashed var(--line); padding-top: 10px; margin-top: auto; }
+.snippet { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--field); border-radius: 4px; padding: 6px 6px 6px 10px; margin-top: 6px; }
+.snippet code { font-size: 0.8rem; overflow-wrap: anywhere; min-width: 0; }
+.guide__card--wide { grid-column: 1 / -1; }
+
+.colophon { padding-block: 8px 40px; font-size: 0.8125rem; color: var(--ink-soft); border-top: 1px solid var(--line); padding-top: 16px; }
+
+/* Rückmeldung */
+.toast {
+  position: fixed; left: 50%; bottom: calc(92px + env(safe-area-inset-bottom, 0px)); z-index: 30;
+  transform: translate(-50%, 0); max-width: calc(100% - 32px);
+  display: flex; align-items: center; gap: 14px; padding: 11px 16px; border-radius: 6px;
+  background: var(--ink); color: var(--sheet); font-size: 0.9rem; font-weight: 600; box-shadow: var(--shadow);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.toast:not(.is-on) { opacity: 0; transform: translate(-50%, 8px); pointer-events: none; }
+.toast button { font: inherit; color: inherit; background: none; border: 0; padding: 4px 2px; text-decoration: underline; cursor: pointer; min-height: 32px; }
+.toast button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+@media (min-width: 1100px) { .toast { bottom: calc(24px + env(safe-area-inset-bottom, 0px)); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
+</style>
+<!--BODY-->
+<header class="masthead">
+  <div class="wrap">
+    <div class="masthead__row">
+      <div class="brand">
+        <span class="cmyk" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <div>
+          <p class="eyebrow">Prompt-Paket für Kunden-Websites</p>
+          <h1>Website-Studio</h1>
+        </div>
+      </div>
+      <p class="lede">Briefing ausfüllen, Branche wählen, Prompt kopieren und in Claude einfügen. Der Master-Prompt regelt Design, Texte, Technik, SEO, Barrierefreiheit und Datenschutz.</p>
+    </div>
+    <nav class="tabs" aria-label="Bereiche">
+      <a href="#generator" data-view="generator">Generator</a>
+      <a href="#master-prompt" data-view="master-prompt">Master-Prompt</a>
+      <a href="#befehle" data-view="befehle">Befehle</a>
+      <a href="#anleitung" data-view="anleitung">Anleitung</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="view view--generator wrap" data-panel="generator" aria-label="Generator">
+    <div class="gen">
+      <form class="ticket" id="briefing-form" autocomplete="off">
+        <div class="ticket__bar">
+          <p class="note note--demo" id="example-note">Beispieldaten eines fiktiven Sanitärbetriebs – ersetze sie durch deine Kundendaten.</p>
+          <div class="ticket__actions">
+            <button type="button" class="btn btn--ghost btn--sm" id="btn-example">Beispiel laden</button>
+            <button type="button" class="btn btn--ghost btn--sm" id="btn-clear">Formular leeren</button>
+          </div>
+        </div>
+        <p class="hint">Minimum: Branche, Firmenname, Ort und Leistungen. Leere Felder entscheidet Claude nach Best Practice und dokumentiert seine Annahmen.</p>
+        <div id="sections" class="ticket"></div>
+      </form>
+
+      <aside class="galley" aria-labelledby="galley-title">
+        <div class="galley__head">
+          <h2 id="galley-title">Fertiger Prompt</h2>
+          <p class="stats" id="gen-stats"></p>
+        </div>
+        <div class="galley__opts">
+          <div class="seg" role="radiogroup" aria-labelledby="lbl-ausgabe">
+            <span class="seg__label" id="lbl-ausgabe">Ausgabe</span>
+            <label class="seg__opt"><input type="radio" name="ausgabe" id="ausgabe-komplett" value="komplett" checked><span>Komplett</span></label>
+            <label class="seg__opt"><input type="radio" name="ausgabe" id="ausgabe-briefing" value="briefing"><span>Nur Briefing</span></label>
+          </div>
+          <div class="seg" role="radiogroup" aria-labelledby="lbl-profile">
+            <span class="seg__label" id="lbl-profile">Branchenprofile</span>
+            <label class="seg__opt"><input type="radio" name="profile" id="profile-one" value="gewählt" checked><span>Nur gewählte</span></label>
+            <label class="seg__opt"><input type="radio" name="profile" id="profile-all" value="alle"><span>Alle</span></label>
+          </div>
+        </div>
+        <p class="galley__hint" id="gen-hint"></p>
+        <textarea class="out" id="out" readonly spellcheck="false" aria-label="Fertiger Prompt"></textarea>
+        <div class="galley__foot">
+          <p id="gen-where"></p>
+          <button type="button" class="btn btn--primary" id="btn-copy">Prompt kopieren</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="view wrap" data-panel="master-prompt" aria-label="Master-Prompt" hidden>
+    <div class="panel-head">
+      <div>
+        <h2>Master-Prompt</h2>
+        <p id="master-note"></p>
+      </div>
+      <div class="panel-head__actions">
+        <span class="stats" id="master-stats"></span>
+        <button type="button" class="btn btn--primary" id="btn-copy-master">Master-Prompt kopieren</button>
+      </div>
+    </div>
+    <div class="sheet sheet--flat">
+      <textarea class="out" id="master-out" readonly spellcheck="false" aria-label="Master-Prompt"></textarea>
+    </div>
+  </section>
+
+  <section class="view wrap" data-panel="befehle" aria-label="Befehle" hidden>
+    <div class="panel-head">
+      <div>
+        <h2>Befehle zum Anpassen</h2>
+        <p>Nach der ersten Version passt du die Website mit diesen Befehlen an. Freie Formulierungen funktionieren genauso. Claude ändert dann alles, was dazugehört, prüft kurz und protokolliert die Änderung.</p>
+      </div>
+    </div>
+    <div class="cmds" id="cmds"></div>
+  </section>
+
+  <section class="view wrap" data-panel="anleitung" aria-label="Anleitung" hidden>
+    <div class="panel-head">
+      <div>
+        <h2>So setzt du den Prompt ein</h2>
+        <p>Drei Wege, je nachdem, wo du mit Claude arbeitest. Für echte Kundenprojekte mit Livegang ist Claude Code am stärksten: Dort baut und testet Claude ein vollständiges Projekt.</p>
+      </div>
+    </div>
+    <div class="guide">
+      <article class="guide__card">
+        <p class="guide__tag">Empfohlen für Produktion</p>
+        <h3>In Claude Code</h3>
+        <ol>
+          <li>Studio-Ordner anlegen:
+            <div class="snippet"><code>mkdir -p ~/website-studio/kunden</code><button type="button" class="btn btn--ghost btn--sm" data-copy="mkdir -p ~/website-studio/kunden">Kopieren</button></div>
+          </li>
+          <li>Den Master-Prompt (Bereich „Master-Prompt“) als <code>~/website-studio/CLAUDE.md</code> speichern. Er gilt dann für alle Kundenordner darunter.</li>
+          <li>Pro Kunde einen Unterordner anlegen und darin <code>BRIEFING.md</code> speichern (Ausgabe „Nur Briefing“), dazu Logo und Fotos.</li>
+          <li>Claude Code im Kundenordner starten:
+            <div class="snippet"><code>cd ~/website-studio/kunden/kundenname &amp;&amp; claude</code><button type="button" class="btn btn--ghost btn--sm" data-copy="cd ~/website-studio/kunden/kundenname &amp;&amp; claude">Kopieren</button></div>
+          </li>
+          <li>Schreiben: „Lies BRIEFING.md und erstelle die Website.“</li>
+        </ol>
+        <p class="guide__result">Ergebnis: Astro-Projekt mit Build, Screenshots, Barrierefreiheits- und Lighthouse-Prüfung, Dokumentation und TODO-Liste für den Livegang.</p>
+      </article>
+      <article class="guide__card">
+        <p class="guide__tag">Ideal für Pitch-Demos</p>
+        <h3>In einem Claude-Projekt</h3>
+        <ol>
+          <li>Auf claude.ai ein Projekt „Website-Studio“ anlegen.</li>
+          <li>Den Master-Prompt in die Projektanweisungen einfügen oder als Datei ins Projektwissen hochladen.</li>
+          <li>Pro Kunde einen neuen Chat öffnen, Ausgabe „Nur Briefing“ kopieren und senden.</li>
+        </ol>
+        <p class="guide__result">Ergebnis: Startseite als vollständige HTML-Vorschau, weitere Seiten auf Anfrage. Für den Livegang später in Claude Code weiterbauen.</p>
+      </article>
+      <article class="guide__card">
+        <p class="guide__tag">Schnell ausprobieren</p>
+        <h3>In einem einzelnen Chat</h3>
+        <ol>
+          <li>Im Generator die Ausgabe „Komplett“ wählen.</li>
+          <li>Prompt kopieren und als erste Nachricht senden.</li>
+          <li>Danach mit Befehlen anpassen, z. B. <code>VARIANTEN: Hero 3</code>.</li>
+        </ol>
+        <p class="guide__result">Ergebnis wie im Projekt, nur ohne gespeicherte Anweisungen.</p>
+      </article>
+      <article class="guide__card guide__card--wide">
+        <p class="guide__tag">Damit es richtig gut wird</p>
+        <h3>Was den größten Unterschied macht</h3>
+        <ul>
+          <li><strong>Echtes Material:</strong> Fotos, Belege (Zahlen, Zertifikate), Kundenstimmen und die Adresse der alten Website.</li>
+          <li><strong>Vorbilder und No-Gos</strong> nennen, mit einem Satz, was gefällt oder stört.</li>
+          <li><strong>Erst Pitch-Demo, dann Produktion:</strong> Für die Akquise reicht das Schnellstart-Minimum, für den Livegang braucht es echte Daten.</li>
+          <li><strong>Vor der Übergabe</strong> <code>PRÜFEN</code> senden und die <code>TODO-LIVEGANG.md</code> abarbeiten.</li>
+          <li><strong>Rechtstexte</strong> (Impressum, Datenschutz, AGB) immer über einen Generator oder anwaltlich prüfen lassen. Claude liefert strukturierte Entwürfe.</li>
+          <li><strong>Spezialisierung:</strong> Arbeitest du vor allem für eine Branche, baue ihr Profil im Master-Prompt mit deinem Wissen aus.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <footer class="wrap colophon" id="colophon"></footer>
+</main>
+
+<div class="dock" id="dock">
+  <span class="stats" id="dock-stats"></span>
+  <div class="dock__actions">
+    <button type="button" class="btn btn--ghost btn--sm" id="btn-jump">Zum Prompt</button>
+    <button type="button" class="btn btn--primary btn--sm" id="btn-copy-dock">Kopieren</button>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+  const D = __DATA__;
+  document.documentElement.lang = 'de';
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const STORE = 'website-studio-generator-v1';
+  const fmt = n => n.toLocaleString('de-DE');
+  const approxTokens = chars => Math.max(100, Math.round(chars / 3.4 / 100) * 100);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const inlineCode = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+
+  const STYLES = ['Klar & Modern', 'Warm & Nahbar', 'Premium & Edel', 'Kraftvoll & Bodenständig', 'Seriös & Vertrauensvoll',
+    'Frisch & Freundlich', 'Editorial & Kreativ', 'Natürlich & Nachhaltig', 'Dunkel & Atmosphärisch'];
+  const FUNCS = ['Kontaktformular', 'Rückruf-Formular', 'Online-Terminbuchung', 'Reservierung', 'Öffnungszeiten mit Live-Status',
+    'Karte (Zwei-Klick)', 'Bewertungen', 'Galerie', 'Vorher-Nachher-Regler', 'Preisliste', 'Speisekarte', 'Kursplan',
+    'Karriere/Jobs', 'Blog/Ratgeber', 'Newsletter', 'Mehrsprachigkeit', 'Suche', 'Shop-Anbindung', 'WhatsApp-Kontakt',
+    'Mobile Aktionsleiste', 'Hinweisleiste'];
+  const opts = (first, list) => [['', first], ...list.map(v => [v, v])];
+
+  const SECTIONS = [
+    { title: 'Projekt', open: true, fields: [
+      { id: 'f-zweck', key: 'PROJEKTZWECK', label: 'Projektzweck', type: 'select', options: [['', 'Standard: Produktion'],
+        ['produktion', 'Produktion (Livegang)'], ['pitch-demo', 'Pitch-Demo (Akquise)'],
+        ['relaunch', 'Relaunch (alte Seite erneuern)']] },
+      { id: 'f-modus', key: 'ARBEITSMODUS', label: 'Arbeitsmodus', type: 'select', options: [['', 'Standard: Autopilot'],
+        ['autopilot', 'Autopilot'], ['rückfragen', 'Rückfragen (bis zu 7)']] },
+      { id: 'f-freigabe', key: 'FREIGABE NACH KONZEPT', label: 'Freigabe nach Konzept', type: 'select', options: [['', 'Standard: nein'],
+        ['nein', 'Nein, direkt durchbauen'], ['ja', 'Ja, nach Konzept anhalten']] },
+      { id: 'f-technik', key: 'TECHNIK', label: 'Technik', type: 'select', options: [['', 'Automatisch'],
+        ['astro', 'Astro (Claude Code)'], ['html', 'HTML (Chat-Vorschau)']] },
+      { id: 'f-hosting', key: 'HOSTING', label: 'Hosting', type: 'select', options: [['', 'Unbekannt'],
+        ['webspace-php (z. B. IONOS, Strato, all-inkl)', 'Webspace mit PHP (IONOS, Strato …)'],
+        ['netlify', 'Netlify'], ['vercel', 'Vercel'], ['cloudflare', 'Cloudflare']] },
+      { id: 'f-domain', key: 'DOMAIN', label: 'Domain', placeholder: 'z. B. www.beispiel.de', mode: 'url' },
+      { id: 'f-sprachen', key: 'SPRACHEN', label: 'Sprachen', placeholder: 'de' },
+      { id: 'f-zeitrahmen', key: 'ZEITRAHMEN', label: 'Zeitrahmen', placeholder: 'z. B. Livegang Ende Januar' }
+    ] },
+    { title: 'Unternehmen', open: true, fields: [
+      { id: 'f-profil', special: 'profile', label: 'Branchenprofil', type: 'select', hint: 'Bestimmt, welches Profil aus der Branchen-Bibliothek in den Prompt kommt.' },
+      { id: 'f-branche', key: 'BRANCHE', special: 'branche', label: 'Branche (genau)', placeholder: 'z. B. Zahnarztpraxis mit Schwerpunkt Kinder' },
+      { id: 'f-firma', key: 'FIRMENNAME', label: 'Firmenname' },
+      { id: 'f-rechtsform', key: 'RECHTSFORM', label: 'Rechtsform', placeholder: 'z. B. GmbH, e. K., GbR' },
+      { id: 'f-inhaber', key: 'INHABER / GESCHÄFTSFÜHRUNG', label: 'Inhaber / Geschäftsführung' },
+      { id: 'f-adresse', key: 'ADRESSE', label: 'Adresse' },
+      { id: 'f-telefon', key: 'TELEFON', label: 'Telefon', mode: 'tel' },
+      { id: 'f-email', key: 'E-MAIL', label: 'E-Mail', mode: 'email' },
+      { id: 'f-whatsapp', key: 'WHATSAPP', label: 'WhatsApp', mode: 'tel' },
+      { id: 'f-gebiet', key: 'EINZUGSGEBIET', label: 'Ort / Einzugsgebiet' },
+      { id: 'f-gegruendet', key: 'GEGRÜNDET', label: 'Gegründet' },
+      { id: 'f-team', key: 'TEAMGRÖSSE', label: 'Teamgröße' },
+      { id: 'f-oeffnung', key: 'ÖFFNUNGSZEITEN', label: 'Öffnungszeiten', type: 'textarea' },
+      { id: 'f-sonder', key: 'SONDERZEITEN', label: 'Sonderzeiten', type: 'textarea', placeholder: 'Betriebsurlaub, Feiertage, Notdienst' },
+      { id: 'f-website', key: 'BESTEHENDE WEBSITE', label: 'Bestehende Website', placeholder: 'https://', mode: 'url' },
+      { id: 'f-google', key: 'GOOGLE-PROFIL / BEWERTUNGEN', label: 'Google-Profil / Bewertungen', placeholder: 'Link, Schnitt, Anzahl' },
+      { id: 'f-social', key: 'SOCIAL MEDIA', label: 'Social Media', wide: true },
+      { id: 'f-recht', key: 'RECHTSANGABEN', label: 'Rechtsangaben', type: 'textarea', placeholder: 'Register, USt-IdNr., Kammer, Aufsichtsbehörde, Berufshaftpflicht …' }
+    ] },
+    { title: 'Angebot & Positionierung', fields: [
+      { id: 'f-leistungen', key: 'LEISTUNGEN', label: 'Leistungen', type: 'textarea', placeholder: 'Hauptleistung zuerst, gern mit kurzer Beschreibung' },
+      { id: 'f-preise', key: 'PREISE', label: 'Preise', type: 'textarea', placeholder: 'Preise, Preisrahmen oder „keine Preise nennen“' },
+      { id: 'f-zielgruppen', key: 'ZIELGRUPPEN', label: 'Zielgruppen', type: 'textarea' },
+      { id: 'f-usp', key: 'USP / UNTERSCHIED', label: 'Was macht den Betrieb besonders?', type: 'textarea' },
+      { id: 'f-wettbewerber', key: 'WETTBEWERBER', label: 'Wettbewerber', type: 'textarea', placeholder: 'Namen oder URLs' },
+      { id: 'f-fragen', key: 'HÄUFIGE FRAGEN / EINWÄNDE', label: 'Häufige Fragen / Einwände', type: 'textarea' },
+      { id: 'f-belege', key: 'BELEGE', label: 'Belege', type: 'textarea', placeholder: 'Zahlen, Zertifikate, Auszeichnungen, Garantien, Referenzen – nur echte' },
+      { id: 'f-stimmen', key: 'KUNDENSTIMMEN', label: 'Kundenstimmen', type: 'textarea', placeholder: 'Echte Zitate mit Freigabe, Name bzw. Initiale, Quelle' },
+      { id: 'f-geschichte', key: 'GESCHICHTE / PERSÖNLICHES', label: 'Geschichte / Persönliches', type: 'textarea' }
+    ] },
+    { title: 'Ziele', fields: [
+      { id: 'f-hauptziel', key: 'HAUPTZIEL', label: 'Hauptziel', type: 'select', options: opts('Claude entscheidet',
+        ['anfragen', 'anrufe', 'terminbuchungen', 'reservierungen', 'bewerbungen', 'verkäufe', 'information']) },
+      { id: 'f-nebenziele', key: 'NEBENZIELE', label: 'Nebenziele' },
+      { id: 'f-keywords', key: 'KEYWORDS / ORTE', label: 'Keywords / Orte', wide: true },
+      { id: 'f-reaktion', key: 'REAKTIONSZEIT', label: 'Reaktionszeit', placeholder: 'nur wenn verbindlich, z. B. „Antwort in 24 h“', wide: true }
+    ] },
+    { title: 'Marke & Design', fields: [
+      { id: 'f-stil', key: 'STIL', special: 'stil', label: 'Stil (Archetyp)', type: 'select', options: opts('Claude entscheidet', STYLES) },
+      { id: 'f-stil-details', special: 'stil-details', label: 'Stil im Detail', placeholder: 'z. B. hochwertig, nicht rustikal' },
+      { id: 'f-persoenlichkeit', key: 'MARKENPERSÖNLICHKEIT', label: 'Markenpersönlichkeit', placeholder: 'drei Adjektive' },
+      { id: 'f-farben', key: 'FARBEN', label: 'Farben', placeholder: 'Hex-Werte, „aus dem Logo“ oder Beschreibung' },
+      { id: 'f-schriften', key: 'SCHRIFTEN', label: 'Schriften' },
+      { id: 'f-logo', key: 'LOGO', label: 'Logo', type: 'select', options: opts('Claude entscheidet',
+        ['vorhanden (wird mitgeschickt)', 'fehlt → Interim-Wortmarke']) },
+      { id: 'f-bilder', key: 'BILDER', label: 'Bilder', type: 'select', options: opts('Claude entscheidet',
+        ['eigene Fotos (werden mitgeschickt)', 'lizenzfreie Fotos', 'gestaltete Platzhalter']) },
+      { id: 'f-anrede', key: 'ANREDE', label: 'Anrede', type: 'select', options: opts('Standard: Sie', ['Sie', 'du']) },
+      { id: 'f-ton', key: 'TONALITÄT', label: 'Tonalität', placeholder: 'z. B. herzlich, klar, mit Humor' },
+      { id: 'f-gendern', key: 'GENDERN', label: 'Gendern', type: 'select', options: opts('Standard: neutral ohne Sonderzeichen',
+        ['neutral ohne Sonderzeichen', 'Doppelpunkt', 'Sternchen', 'generisches Maskulinum']) },
+      { id: 'f-vorbilder', key: 'VORBILDER', label: 'Vorbilder', type: 'textarea', placeholder: 'Websites, die gefallen – und warum' },
+      { id: 'f-nogos', key: 'NO-GOS', label: 'No-Gos', type: 'textarea' }
+    ] },
+    { title: 'Umfang & Funktionen', fields: [
+      { id: 'f-seiten', key: 'SEITEN', label: 'Seiten', type: 'textarea', placeholder: 'leer lassen = Claude schlägt die Sitemap vor' },
+      { id: 'f-funktionen', key: 'FUNKTIONEN', label: 'Funktionen', type: 'checks' },
+      { id: 'f-tools', key: 'TOOLS / INTEGRATIONEN', label: 'Tools / Integrationen', placeholder: 'z. B. Doctolib, Treatwell, Calendly, Buchungssystem', wide: true },
+      { id: 'f-analytics', key: 'ANALYTICS', label: 'Analytics', type: 'select', options: opts('Standard: keine',
+        ['keine', 'plausible', 'matomo (cookielos)', 'ga4 (benötigt Consent-Banner)']) },
+      { id: 'f-cms', key: 'SELBSTPFLEGE / CMS', label: 'Selbstpflege durch den Kunden', type: 'select', options: opts('Standard: nein', ['nein', 'ja']) }
+    ] },
+    { title: 'Sonstiges', fields: [
+      { id: 'f-besonderes', key: 'BESONDERHEITEN / WÜNSCHE', label: 'Besonderheiten / Wünsche', type: 'textarea' },
+      { id: 'f-material', key: 'MATERIAL / ANHÄNGE', label: 'Material / Anhänge', placeholder: 'z. B. Logo als SVG, 12 Fotos, Preisliste als PDF', wide: true }
+    ] }
+  ];
+
+  const EXAMPLE = {
+    fields: {
+      'f-zweck': 'pitch-demo', 'f-modus': 'autopilot',
+      'f-profil': 'Handwerk, Bau & Sanierung',
+      'f-branche': 'Sanitär, Heizung, Klima – Schwerpunkt Badsanierung',
+      'f-firma': 'Haustechnik Morgenroth GmbH (fiktives Beispiel)',
+      'f-adresse': 'Beispielweg 12, 33602 Bielefeld',
+      'f-telefon': '0521 123 45 67',
+      'f-email': 'info@morgenroth-beispiel.de',
+      'f-gebiet': 'Bielefeld und 25 km Umkreis (Gütersloh, Herford, Bad Salzuflen)',
+      'f-gegruendet': '1996',
+      'f-team': '14 Mitarbeitende, davon 3 Meister',
+      'f-oeffnung': 'Mo–Do 7:30–16:30 Uhr, Fr 7:30–13:00 Uhr',
+      'f-leistungen': 'Badsanierung (Hauptleistung), Heizungsmodernisierung inkl. Wärmepumpe, Wartung, Notdienst für Bestandskunden',
+      'f-zielgruppen': 'Eigenheimbesitzer zwischen 45 und 70, oft mit dem Wunsch nach einem barrierearmen Bad',
+      'f-usp': 'Komplettbad aus einer Hand mit festem Ansprechpartner, 3D-Badplanung vorab, verbindlicher Zeitplan',
+      'f-belege': 'Meisterbetrieb, Innungsmitglied, 4,8 Sterne bei 112 Google-Bewertungen',
+      'f-hauptziel': 'anfragen',
+      'f-nebenziele': 'Bewerbungen von Azubis und Gesellen',
+      'f-keywords': 'Badsanierung Bielefeld, barrierefreies Bad Bielefeld, Wärmepumpe Bielefeld',
+      'f-stil': 'Kraftvoll & Bodenständig',
+      'f-stil-details': 'hochwertig, nicht rustikal',
+      'f-farben': 'Logo-Blau #1B3A5C, gern mit einem warmen Akzent',
+      'f-logo': 'vorhanden (wird mitgeschickt)',
+      'f-anrede': 'Sie',
+      'f-besonderes': 'Sucht dringend Azubis und Gesellen – die Karriere-Seite soll stark sein.'
+    },
+    checks: ['Kontaktformular', 'Vorher-Nachher-Regler', 'Bewertungen', 'Karriere/Jobs', 'WhatsApp-Kontakt', 'Mobile Aktionsleiste']
+  };
+
+  /* ---------- Formular aufbauen ---------- */
+  const host = $('#sections');
+  const profileOptions = [['', 'Automatisch – alle Profile einfügen'], ...D.entries.map(e => [e.title, e.title]),
+    ['__andere', 'Andere Branche – Claude leitet ein Profil ab']];
+
+  function control(f) {
+    if (f.type === 'select') {
+      const list = f.special === 'profile' ? profileOptions : f.options;
+      return `<select id="${f.id}">${list.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join('')}</select>`;
+    }
+    const ph = f.placeholder ? ` placeholder="${esc(f.placeholder)}"` : '';
+    if (f.type === 'textarea') return `<textarea id="${f.id}" rows="2"${ph}></textarea>`;
+    const im = f.mode ? ` inputmode="${f.mode}"` : '';
+    return `<input type="text" id="${f.id}"${ph}${im}>`;
+  }
+
+  for (const sec of SECTIONS) {
+    const det = document.createElement('details');
+    det.className = 'sheet';
+    det.open = !!sec.open;
+    const fields = sec.fields.map(f => {
+      if (f.type === 'checks') {
+        return `<fieldset class="field field--wide checks"><legend>${esc(f.label)}</legend><div class="checks__grid">${
+          FUNCS.map((name, i) => `<label class="check"><input type="checkbox" id="fn-${i}" value="${esc(name)}"><span>${esc(name)}</span></label>`).join('')
+        }</div></fieldset>`;
+      }
+      const wide = f.wide || f.type === 'textarea' || f.special === 'profile';
+      const hint = f.hint ? `<small>${esc(f.hint)}</small>` : '';
+      return `<div class="field${wide ? ' field--wide' : ''}"><label for="${f.id}">${esc(f.label)}</label>${control(f)}${hint}</div>`;
+    }).join('');
+    det.innerHTML = `<summary><span class="sheet__title">${esc(sec.title)}</span><span class="sheet__meta"><span class="count"></span><span class="chev" aria-hidden="true"></span></span></summary><div class="fields">${fields}</div>`;
+    sec.el = det;
+    host.appendChild(det);
+  }
+
+  /* ---------- Prompt zusammensetzen ---------- */
+  const val = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+
+  function collect() {
+    return SECTIONS.map(sec => {
+      const lines = [];
+      let filled = 0;
+      for (const f of sec.fields) {
+        if (f.type === 'checks') {
+          const picked = $$('.checks input:checked', sec.el).map(i => i.value);
+          if (picked.length) { filled++; lines.push([f.key, picked.join(', ')]); }
+          continue;
+        }
+        const v = val(f.id);
+        if (v) filled++;
+        if (f.special === 'profile' || f.special === 'stil-details') continue;
+        if (f.special === 'branche') {
+          const p = val('f-profil');
+          const profile = p && p !== '__andere' ? p : '';
+          if (v) lines.push([f.key, profile ? `${v} (Branchenprofil: ${profile})` : v]);
+          else if (profile) lines.push([f.key, profile]);
+          continue;
+        }
+        if (f.special === 'stil') {
+          const d = val('f-stil-details');
+          const s = [v, d].filter(Boolean).join(' – ');
+          if (s) lines.push([f.key, s]);
+          continue;
+        }
+        if (v) lines.push([f.key, v]);
+      }
+      return { sec, lines, filled, total: sec.fields.length };
+    });
+  }
+
+  function briefingText(groups) {
+    let out = '=== KUNDEN-BRIEFING ===\n';
+    for (const g of groups) {
+      if (!g.lines.length) continue;
+      out += `\n## ${g.sec.title}\n`;
+      for (const [k, v] of g.lines) {
+        const rows = v.split('\n').map(l => l.trim()).filter(Boolean);
+        out += rows.length > 1 ? `${k}:\n${rows.map(r => '  ' + r).join('\n')}\n` : `${k}: ${rows[0]}\n`;
+      }
+    }
+    return out + '\nNicht genannte Punkte entscheidest du nach den Standardwerten und Best Practices des Master-Prompts und dokumentierst deine Annahmen.\nStarte jetzt mit Phase 0.';
+  }
+
+  function libraryFor(mode) {
+    const p = val('f-profil');
+    const all = () => D.entries.map(e => e.body).join('\n\n');
+    if (mode === 'alle' || !p) return { text: all(), label: `alle ${D.entries.length} Branchenprofile` };
+    if (p === '__andere') return { text: 'Für diese Branche gibt es kein Profil in der Bibliothek. Leite eines nach dem Schema oben ab und halte es in `KONZEPT.md` fest.', label: 'kein Profil (Claude leitet eines ab)' };
+    const e = D.entries.find(x => x.title === p);
+    return e ? { text: e.body, label: `Profil „${e.title}“` } : { text: all(), label: `alle ${D.entries.length} Branchenprofile` };
+  }
+
+  const out = $('#out');
+  let current = '';
+
+  function render() {
+    const groups = collect();
+    const mode = $('input[name="ausgabe"]:checked').value;
+    const libMode = $('input[name="profile"]:checked').value;
+    const briefing = briefingText(groups);
+    let hint;
+    if (mode === 'briefing') {
+      current = `Neues Kundenprojekt. Arbeite nach dem Website-Studio-Master-Prompt (Projektanweisungen bzw. CLAUDE.md).\n\n${briefing}`;
+      hint = 'Enthält nur das Briefing. Der Master-Prompt muss in den Projektanweisungen bzw. in CLAUDE.md liegen.';
+      $('#gen-where').textContent = 'Einfügen: in einen neuen Chat im Claude-Projekt oder als BRIEFING.md in den Kundenordner.';
+    } else {
+      const lib = libraryFor(libMode);
+      current = `${D.before}\n\n${D.intro}\n\n${lib.text}\n\n${D.after}\n\n---\n\n${briefing}`;
+      hint = `Enthält Master-Prompt, ${lib.label} und Briefing.`;
+      $('#gen-where').textContent = 'Einfügen: als erste Nachricht in einen neuen Chat oder als CLAUDE.md in Claude Code.';
+    }
+    out.value = current;
+    $('#gen-hint').textContent = hint;
+    const stats = `${fmt(current.length)} Zeichen · ≈ ${fmt(approxTokens(current.length))} Tokens`;
+    $('#gen-stats').textContent = stats;
+    $('#dock-stats').textContent = `≈ ${fmt(approxTokens(current.length))} Tokens`;
+    $$('input[name="profile"]').forEach(r => { r.disabled = mode === 'briefing'; });
+    for (const g of groups) {
+      const c = g.sec.el.querySelector('.count');
+      c.textContent = `${g.filled} von ${g.total}`;
+      c.classList.toggle('is-filled', g.filled > 0);
+    }
+  }
+
+  /* ---------- Speichern (nur in diesem Browser) ---------- */
+  let exampleActive = false;
+  const formControls = () => $$('#sections input[type="text"], #sections select, #sections textarea');
+
+  function snapshot() {
+    const fields = {};
+    formControls().forEach(el => { fields[el.id] = el.value; });
+    return {
+      v: 1, fields,
+      checks: $$('#sections input[type="checkbox"]:checked').map(el => el.value),
+      ausgabe: $('input[name="ausgabe"]:checked').value,
+      profile: $('input[name="profile"]:checked').value,
+      example: exampleActive
+    };
+  }
+  function apply(state) {
+    formControls().forEach(el => { el.value = (state.fields && state.fields[el.id]) || ''; });
+    $$('#sections input[type="checkbox"]').forEach(el => { el.checked = !!(state.checks && state.checks.includes(el.value)); });
+    if (state.ausgabe) { const r = $(`input[name="ausgabe"][value="${state.ausgabe}"]`); if (r) r.checked = true; }
+    if (state.profile) { const r = $(`input[name="profile"][value="${state.profile}"]`); if (r) r.checked = true; }
+    exampleActive = !!state.example;
+    $('#example-note').hidden = !exampleActive;
+  }
+  let saveTimer;
+  function save() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      try { localStorage.setItem(STORE, JSON.stringify(snapshot())); } catch (e) { /* Speicher nicht verfügbar */ }
+    }, 250);
+  }
+  function loadSaved() {
+    try { const raw = localStorage.getItem(STORE); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+  }
+
+  function loadExample() {
+    apply({ fields: EXAMPLE.fields, checks: EXAMPLE.checks, example: true,
+      ausgabe: $('input[name="ausgabe"]:checked').value, profile: $('input[name="profile"]:checked').value });
+  }
+
+  const onEdit = () => {
+    if (exampleActive) { exampleActive = false; $('#example-note').hidden = true; }
+    render(); save();
+  };
+  $('#briefing-form').addEventListener('input', onEdit);
+  $('#briefing-form').addEventListener('change', onEdit);
+  $('#briefing-form').addEventListener('submit', e => e.preventDefault());
+  $$('input[name="ausgabe"], input[name="profile"]').forEach(r => r.addEventListener('change', () => { render(); save(); }));
+
+  $('#btn-example').addEventListener('click', () => { loadExample(); render(); save(); toast('Beispiel geladen.'); });
+  $('#btn-clear').addEventListener('click', () => {
+    const before = snapshot();
+    apply({ fields: {}, checks: [], example: false, ausgabe: before.ausgabe, profile: before.profile });
+    render(); save();
+    toast('Formular geleert.', { label: 'Rückgängig', run: () => { apply(before); render(); save(); } });
+  });
+
+  /* ---------- Kopieren ---------- */
+  function selectIn(el) {
+    if (!el) return;
+    if ('select' in el && typeof el.select === 'function') {
+      el.focus(); el.select();
+      try { el.setSelectionRange(0, el.value.length); } catch (e) { /* ignorieren */ }
+    } else {
+      const range = document.createRange(); range.selectNodeContents(el);
+      const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+    }
+  }
+  function legacyCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0'; ta.style.top = '0';
+    document.body.appendChild(ta); ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove();
+    return ok;
+  }
+  function copy(text, fallbackEl, doneMsg) {
+    const done = doneMsg || 'Kopiert – jetzt in Claude einfügen.';
+    const fail = () => {
+      if (legacyCopy(text)) { toast(done); return; }
+      selectIn(fallbackEl);
+      toast('Text ist markiert – jetzt mit Strg+C bzw. ⌘+C kopieren.');
+    };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => toast(done), fail);
+      } else { fail(); }
+    } catch (e) { fail(); }
+  }
+  $('#btn-copy').addEventListener('click', () => copy(current, out));
+  $('#btn-copy-dock').addEventListener('click', () => copy(current, out));
+  $('#btn-jump').addEventListener('click', () => { out.scrollIntoView({ block: 'start' }); out.focus({ preventScroll: true }); });
+
+  /* ---------- Master-Prompt und Befehle ---------- */
+  const masterOut = $('#master-out');
+  masterOut.value = D.full;
+  $('#master-stats').textContent = `${fmt(D.full.length)} Zeichen · ≈ ${fmt(approxTokens(D.full.length))} Tokens`;
+  $('#master-note').textContent = `Vollständige Fassung mit allen ${D.entries.length} Branchenprofilen. Für Claude Code als CLAUDE.md, für Claude-Projekte als Projektanweisung. Eine kürzere Fassung mit nur einer Branche erzeugst du im Generator.`;
+  $('#btn-copy-master').addEventListener('click', () => copy(D.full, masterOut, 'Master-Prompt kopiert.'));
+
+  $('#cmds').innerHTML = D.commands.map((c, i) => `
+    <article class="cmd">
+      <p class="cmd__name">${esc(c.cmd)}</p>
+      <p class="cmd__effect">${inlineCode(c.effect)}</p>
+      <div class="cmd__ex"><code id="cmd-ex-${i}">${esc(c.example)}</code><button type="button" class="btn btn--ghost btn--sm" data-copy-ref="cmd-ex-${i}">Kopieren</button></div>
+    </article>`).join('');
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-copy], [data-copy-ref]');
+    if (!b) return;
+    const ref = b.dataset.copyRef ? document.getElementById(b.dataset.copyRef) : b.previousElementSibling;
+    const text = b.dataset.copy || (ref ? ref.textContent : '');
+    copy(text, ref, 'Kopiert.');
+  });
+
+  $('#colophon').textContent = `Website-Studio ${D.version} · Rechtliche Hinweise im Prompt mit Stand ${D.stand}. Rechtstexte immer über einen Generator oder anwaltlich prüfen lassen. Deine Eingaben bleiben nur in diesem Browser gespeichert.`;
+
+  /* ---------- Rückmeldung ---------- */
+  const toastEl = $('#toast');
+  let toastTimer;
+  function toast(msg, action) {
+    toastEl.textContent = '';
+    const span = document.createElement('span');
+    span.textContent = msg;
+    toastEl.appendChild(span);
+    if (action) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = action.label;
+      b.addEventListener('click', () => { action.run(); toastEl.classList.remove('is-on'); toastEl.textContent = ''; });
+      toastEl.appendChild(b);
+    }
+    toastEl.classList.add('is-on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toastEl.classList.remove('is-on'); toastEl.textContent = ''; }, action ? 7000 : 3200);
+  }
+
+  /* ---------- Ansichten ---------- */
+  const VIEWS = ['generator', 'master-prompt', 'befehle', 'anleitung'];
+  function showView() {
+    const h = location.hash.slice(1);
+    const v = VIEWS.includes(h) ? h : 'generator';
+    $$('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== v; });
+    $$('.tabs a').forEach(a => {
+      if (a.dataset.view === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+    $('#dock').hidden = v !== 'generator';
+  }
+  window.addEventListener('hashchange', showView);
+
+  /* ---------- Start ---------- */
+  const saved = loadSaved();
+  if (saved && saved.v === 1) apply(saved); else loadExample();
+  render();
+  showView();
+})();
+</script>
